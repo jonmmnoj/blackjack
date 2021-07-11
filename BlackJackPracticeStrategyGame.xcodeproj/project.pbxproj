@@ -13,6 +13,16 @@
 		FC7937722694D2E90000ACB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7937702694D2E90000ACB7 /* Main.storyboard */; };
 		FC7937742694D2EC0000ACB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FC7937732694D2EC0000ACB7 /* Assets.xcassets */; };
 		FC7937772694D2EC0000ACB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC7937752694D2EC0000ACB7 /* LaunchScreen.storyboard */; };
+		FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79377F2694D31B0000ACB7 /* Dealer.swift */; };
+		FC7937842694D31B0000ACB7 /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937802694D31B0000ACB7 /* Hand.swift */; };
+		FC7937852694D31B0000ACB7 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937812694D31B0000ACB7 /* Player.swift */; };
+		FC7937862694D31B0000ACB7 /* GameMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937822694D31B0000ACB7 /* GameMaster.swift */; };
+		FC7937892694D3DF0000ACB7 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937882694D3DF0000ACB7 /* Enums.swift */; };
+		FC79378B2694D4070000ACB7 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79378A2694D4070000ACB7 /* Deck.swift */; };
+		FC79378D2694D4240000ACB7 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79378C2694D4240000ACB7 /* Card.swift */; };
+		FC7937922694D6780000ACB7 /* Dealable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937912694D6780000ACB7 /* Dealable.swift */; };
+		FC7937942694DFF50000ACB7 /* Table.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937932694DFF50000ACB7 /* Table.swift */; };
+		FC7937962694FF4D0000ACB7 /* Rules.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7937952694FF4D0000ACB7 /* Rules.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +34,16 @@
 		FC7937732694D2EC0000ACB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FC7937762694D2EC0000ACB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FC7937782694D2EC0000ACB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FC79377F2694D31B0000ACB7 /* Dealer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dealer.swift; sourceTree = "<group>"; };
+		FC7937802694D31B0000ACB7 /* Hand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hand.swift; sourceTree = "<group>"; };
+		FC7937812694D31B0000ACB7 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		FC7937822694D31B0000ACB7 /* GameMaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameMaster.swift; sourceTree = "<group>"; };
+		FC7937882694D3DF0000ACB7 /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		FC79378A2694D4070000ACB7 /* Deck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
+		FC79378C2694D4240000ACB7 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		FC7937912694D6780000ACB7 /* Dealable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dealable.swift; sourceTree = "<group>"; };
+		FC7937932694DFF50000ACB7 /* Table.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Table.swift; sourceTree = "<group>"; };
+		FC7937952694FF4D0000ACB7 /* Rules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rules.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +76,65 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
-				FC79376A2694D2E90000ACB7 /* AppDelegate.swift */,
-				FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */,
-				FC79376E2694D2E90000ACB7 /* ViewController.swift */,
+				FC7937902694D66C0000ACB7 /* Protocols */,
+				FC79378F2694D4410000ACB7 /* Controllers */,
+				FC79378E2694D43B0000ACB7 /* Delegates */,
+				FC7937872694D3CF0000ACB7 /* Enums */,
+				FC79377E2694D31B0000ACB7 /* Game */,
 				FC7937702694D2E90000ACB7 /* Main.storyboard */,
 				FC7937732694D2EC0000ACB7 /* Assets.xcassets */,
 				FC7937752694D2EC0000ACB7 /* LaunchScreen.storyboard */,
 				FC7937782694D2EC0000ACB7 /* Info.plist */,
 			);
 			path = BlackJackPracticeStrategyGame;
+			sourceTree = "<group>";
+		};
+		FC79377E2694D31B0000ACB7 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				FC79377F2694D31B0000ACB7 /* Dealer.swift */,
+				FC7937802694D31B0000ACB7 /* Hand.swift */,
+				FC7937812694D31B0000ACB7 /* Player.swift */,
+				FC7937822694D31B0000ACB7 /* GameMaster.swift */,
+				FC79378A2694D4070000ACB7 /* Deck.swift */,
+				FC79378C2694D4240000ACB7 /* Card.swift */,
+				FC7937932694DFF50000ACB7 /* Table.swift */,
+				FC7937952694FF4D0000ACB7 /* Rules.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		FC7937872694D3CF0000ACB7 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				FC7937882694D3DF0000ACB7 /* Enums.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		FC79378E2694D43B0000ACB7 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				FC79376A2694D2E90000ACB7 /* AppDelegate.swift */,
+				FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		FC79378F2694D4410000ACB7 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FC79376E2694D2E90000ACB7 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		FC7937902694D66C0000ACB7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				FC7937912694D6780000ACB7 /* Dealable.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +207,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC79378B2694D4070000ACB7 /* Deck.swift in Sources */,
+				FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */,
+				FC7937962694FF4D0000ACB7 /* Rules.swift in Sources */,
+				FC7937922694D6780000ACB7 /* Dealable.swift in Sources */,
+				FC7937862694D31B0000ACB7 /* GameMaster.swift in Sources */,
+				FC7937842694D31B0000ACB7 /* Hand.swift in Sources */,
 				FC79376F2694D2E90000ACB7 /* ViewController.swift in Sources */,
+				FC7937942694DFF50000ACB7 /* Table.swift in Sources */,
 				FC79376B2694D2E90000ACB7 /* AppDelegate.swift in Sources */,
+				FC7937852694D31B0000ACB7 /* Player.swift in Sources */,
+				FC79378D2694D4240000ACB7 /* Card.swift in Sources */,
+				FC7937892694D3DF0000ACB7 /* Enums.swift in Sources */,
 				FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
