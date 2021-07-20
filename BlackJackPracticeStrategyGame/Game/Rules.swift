@@ -87,6 +87,6 @@ class Rules {
     static func hasBlackjack(hand: Hand) -> Bool {
         let hasTen = hand.cards.contains { $0.value == .ten || $0.value == .jack || $0.value == .queen || $0.value == .king }
         let hasAce = hand.cards.contains { $0.value == .ace }
-        return hasTen && hasAce
+        return hasTen && hasAce && hand.cards.count == 2
     }
 }

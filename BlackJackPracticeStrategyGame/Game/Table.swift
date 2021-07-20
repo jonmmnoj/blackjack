@@ -15,6 +15,7 @@ class Table {
     var totalAnimationsNotComplete = 0
     var cardViews: [UILabel] = []
     var cardViewIndex: Int = 0
+    var arrowView: UIImageView
     
     var offScreenCardStartPoint: CGPoint {
         return CGPoint(x: view.frame.width, y: 0)
@@ -26,32 +27,58 @@ class Table {
     
     init(view table: UIView, gameMaster: GameMaster) {
         //table.backgroundColor = .black
+        table.backgroundColor = #colorLiteral(red: 0, green: 0.4666666667, blue: 0.06124987284, alpha: 1)
         self.view = table
         self.gameMaster = gameMaster
+        
+        self.arrowView = UIImageView(image: UIImage(named: "down_arrow"))
     }
     
-    func animateDeal(card: Card, faceUp: Bool = false) {
+    func showIndicator(on hand: Hand) {
+        let point = hand.nextCardPoint
+        let frame = CGRect(x: point.x, y: point.y - 50, width: 25, height: 25)
+        arrowView.frame = frame
+        self.view.addSubview(arrowView)
+        arrowView.alpha = 1
+        
+        UIView.animate(withDuration: 3, delay: 0, usingSpringWithDamping:0.1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            //self.arrowView.alpha = 0
+            self.arrowView.frame = frame.offsetBy(dx: 0, dy: 5)
+        }) { _ in
+            //self.arrowView.removeFromSuperview()
+        }
+    }
+    
+    func stopIndicator() {
+        self.arrowView.removeFromSuperview()
+    }
+    
+    func animateDeal(card: Card, delayAnimation isDelay: Bool = true) {
         if card.view == nil { card.createViews() }
         moveCardOffScreen(card)
         self.view.addSubview(card.view!)
-        animate(card)
+        animate(card, delayAnimation: isDelay)
     }
     
     func animateMove(card: Card) {
-        animate(card)
+        animate(card, move: true)
     }
         
-    private func animate(_ card: Card, rotate: Bool = false) {
+    private func animate(_ card: Card, delayAnimation: Bool = true, move: Bool = false, rotate: Bool = false) {
         self.isBusy = true
         self.totalAnimationsNotComplete += 1
         self.view.bringSubviewToFront(card.view!)
-        UIView.animate(withDuration: 0.5, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
+        let delay = delayAnimation ? TimeInterval(self.totalAnimationsNotComplete) : 0
+        UIView.animate(withDuration: 0.5, delay: delay, options: [.curveLinear , .allowUserInteraction], animations: {
             card.updateFrame()
             if card.isDouble {
                 card.view!.setTransformRotation(toDegrees: 90)
             }
           }, completion: { finished in
             self.animationComplete()
+            if !move {
+                CardCounter.shared.count(card: card)
+            }
           })
     }
     
@@ -75,7 +102,11 @@ class Table {
         //self.isBusy = true
         self.totalAnimationsNotComplete += 1
         
-        UIView.transition(from: card.backView!, to: card.faceView!, duration: 0.5, options: .transitionFlipFromRight, completion: { finished in self.animationComplete() })
+        UIView.transition(from: card.backView!, to: card.faceView!, duration: 0.5, options: .transitionFlipFromRight, completion: { finished in
+            self.animationComplete()
+            CardCounter.shared.count(card: card)
+            
+        })
     }
     
     private func animationComplete() {
@@ -120,7 +151,12 @@ class Table {
                     
                     card.set(dealPoint: newPoint)
                     card.updateFrame()
-                })
+                }, completion: { finished in
+                    //self.animationComplete()
+                    //card.destroyViews()
+                    
+                    
+                  })
             }
         }
     }

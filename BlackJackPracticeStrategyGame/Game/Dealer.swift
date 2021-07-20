@@ -35,7 +35,7 @@ class Dealer: Dealable {
     func dealCardToSelf() {
         let card = getCard()
         if self.activatedHand!.cards.count == 0 {
-            card.dealFaceDown()
+            card.isFaceDown = true
         }
         deal(card: card, to: self.activatedHand!)
     }
@@ -56,7 +56,8 @@ class Dealer: Dealable {
     
     func deal(to player: Player) {
         player.hands.forEach {
-            let card = getCard()
+           let card = getCard()
+            //let card = getTen()
             deal(card: card, to: $0)
         }
     }
@@ -67,9 +68,10 @@ class Dealer: Dealable {
         deal(card: card, to: hand)
     }
     
-    func deal(card: Card, to hand: Hand) {
+    func deal(card: Card, to hand: Hand, delay: Bool = true) {
+        //CardCounter.shared.count(card: card)
         hand.add(card)
-        table.animateDeal(card: card)
+        table.animateDeal(card: card, delayAnimation: delay)
     }
     
     func getCard() -> Card {
@@ -129,13 +131,17 @@ class Dealer: Dealable {
     
     func dealCardsAfterSplit(newHand: Hand, otherHand: Hand, rotate: Bool = false) {
         var card = getCard()
+        //var card = getAce()
         deal(card: card, to: newHand)
         card = getCard()
+        //card = getAce()
         deal(card: card, to: otherHand)
     }
     
     func revealCard() {
         let card = self.activatedHand!.cards.first!
+        card.isFaceDown = false
+        //CardCounter.shared.count(card: card)
         table.animateReveal(card: card)
     }
     
@@ -150,5 +156,13 @@ class Dealer: Dealable {
     
     func moveCards(for player: Player, to direction: MoveCardsDirection) {
         table.moveAllCards(for: player, to: direction)
+    }
+    
+    func indicateDealerIsReadyForPlayerInput(on hand: Hand) {
+        table.showIndicator(on: hand)
+    }
+    
+    func stopIndicator() {
+        table.stopIndicator()
     }
 }

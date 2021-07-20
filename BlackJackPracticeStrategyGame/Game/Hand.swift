@@ -95,13 +95,13 @@ class Hand {
     func set(state: HandState) {
         self.state = state
         if (state == .stand) {
-            self.owner.searchForIncompleteHand()
+            //self.owner.searchForIncompleteHand()
         }
         else if (state == .double) {
-            self.owner.searchForIncompleteHand()
+            //self.owner.searchForIncompleteHand()
         }
         else if (state == .blackjack) {
-            self.owner.searchForIncompleteHand()
+            //self.owner.searchForIncompleteHand()
         }
         
         

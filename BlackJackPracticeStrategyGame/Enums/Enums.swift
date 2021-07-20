@@ -66,7 +66,7 @@ enum GameState {
          stand,
          dealtDouble,
          dealtSplit,
-         bust,
+         busted,
          revealedFaceDownCard,
          movedRevealCard,
          dealtH17,
@@ -86,12 +86,23 @@ enum HandState {
          double,
          won,
          lost,
-         tie,
-         incomplete
-         
+         push,
+         incomplete,
+         surrender
 }
 
 enum MoveCardsDirection {
-    case right,
-         left
+    case right, left
+}
+
+enum PlayerAction: String {
+    case stand, hit, double, split, surrender
+}
+
+enum StrategyAction: String {
+    case split, doNotSplit, splitIfDAS, stand, hit, double, doubleHit, doubleStand, surrender
+}
+
+enum RuleType {
+    case pair, soft, hard
 }

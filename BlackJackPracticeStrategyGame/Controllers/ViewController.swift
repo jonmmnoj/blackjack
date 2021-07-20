@@ -1,6 +1,10 @@
 import UIKit
 
-class ViewController: UIViewController, GameMasterDelegate {
+class ViewController: UIViewController, GameViewDelegate {
+   
+    
+    
+    
     func playerInput(enabled value: Bool) {
         hitButton.isEnabled = value
         standButton.isEnabled = value
@@ -18,7 +22,7 @@ class ViewController: UIViewController, GameMasterDelegate {
         super.viewDidLoad()
         addButtons()
 
-        gameMaster = GameMaster(table: self.view)
+        gameMaster = GameMaster(table: self.view)//, delegate: self)
         gameMaster.delegate = self
         gameMaster.startGame()
     }
@@ -62,18 +66,39 @@ class ViewController: UIViewController, GameMasterDelegate {
     }
     
     @objc func hitButtonAction(_ sender:UIButton!) {
-        gameMaster.playerHits()
+        gameMaster.inputReceived(type: .hit)
     }
     
     @objc func standButtonAction(_ sender:UIButton!) {
-        gameMaster.playerStands()
+        gameMaster.inputReceived(type: .stand)
     }
     
     @objc func splitButtonAction(_ sender:UIButton!) {
-        gameMaster.playerSplits()
+        gameMaster.inputReceived(type: .split)
     }
     
     @objc func doubleButtonAction(_ sender:UIButton!) {
-        gameMaster.playerDoubles()
+        gameMaster.inputReceived(type: .double)
     }
+    
+    func presentCountInputView(countMaster: CountMaster, callback: (Int) -> Void) {
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyBoard.instantiateViewController(withIdentifier: "CountViewController") as! CountViewController
+        vc.countMaster = countMaster
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        //self.definesPresentationContext = true
+        self.present(vc, animated: true, completion: nil)
+        
+        callback(99)
+    }
+    
+    func dismissCountInputView(completion: () -> Void) {
+        self.dismiss(animated: false) {
+            print("dismissed count input view")
+        }
+        completion()
+    }
+    
+    
 }

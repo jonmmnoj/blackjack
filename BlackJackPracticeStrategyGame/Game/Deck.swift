@@ -19,6 +19,34 @@ class Deck {
             }
         }
         self.shuffle()
+        //self.stackDeck()
+    }
+    
+    func stackDeck() {
+        var card = Card(value: .ten, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ten, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .nine, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ten, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ten, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ten, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
+        card = Card(value: .ace, suit: .clubs)
+        self.cards.insert(card, at: 0)
     }
     
     func shuffle() {
