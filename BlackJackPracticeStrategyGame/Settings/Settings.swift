@@ -7,22 +7,113 @@
 
 import Foundation
 
-struct Settings {
+class Settings {
     static let shared = Settings()
-    var dealingSpeed: Float
-    var askForCountAfterRounds: CountRounds
-    var handType: HandType
-    var ENHC: Bool
-    var surrender: Bool
-    var ES10: Bool
-
-    private init() {
-        dealingSpeed = 5
-        askForCountAfterRounds = .oneRound
-        handType = .twoCardHand
-        ENHC = false
-        surrender = false
-        ES10 = false
+    let defaults = UserDefaults.standard
+    
+    private init() {}
+    
+    var dealSpeed: Float {
+        set {
+            defaults.set(newValue, forKey: "dealSpeed")
+        }
+        get {
+            return defaults.object(forKey: "dealSpeed") as? Float ?? 5.0
+        }
+    }
+    var ENHC: Bool {
+        set {
+            defaults.set(newValue, forKey: "ENHC")
+        }
+        get {
+            return defaults.object(forKey: "ENHC") as? Bool ?? false
+        }
+    }
+    var ES10: Bool {
+        set {
+            defaults.set(newValue, forKey: "ES10")
+        }
+        get {
+            return defaults.object(forKey: "ES10") as? Bool ?? false
+        }
+    }
+    var surrender: Bool {
+        set {
+            defaults.set(newValue, forKey: "surrender")
+        }
+        get {
+            return defaults.object(forKey: "surrender") as? Bool ?? true
+        }
+    }
+    var twoCardHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "twoCardHands")
+        }
+        get {
+            return defaults.object(forKey: "twoCardHands") as? Bool ?? true
+        }
+    }
+    var threeCardHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "threeCardHands")
+        }
+        get {
+            return defaults.object(forKey: "threeCardHands") as? Bool ?? false
+        }
+    }
+    var fourCardHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "fourCardHands")
+        }
+        get {
+            return defaults.object(forKey: "fourCardHands") as? Bool ?? false
+        }
+    }
+    var splitHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "splitHands")
+        }
+        get {
+            return defaults.object(forKey: "splitHands") as? Bool ?? true
+        }
+    }
+    var softHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "softHands")
+        }
+        get {
+            return defaults.object(forKey: "softHands") as? Bool ?? true
+        }
+    }
+    var hardHands: Bool {
+        set {
+            defaults.set(newValue, forKey: "hardHands")
+        }
+        get {
+            return defaults.object(forKey: "hardHands") as? Bool ?? true
+        }
+    }
+    var numberOfRoundsBeforeAskCount: CountRounds {
+        set {
+            defaults.set(newValue, forKey: "numberOfRoundsBeforeAskCount")
+        }
+        get {
+            return defaults.object(forKey: "numberOfRoundsBeforeAskCount") as? CountRounds ?? .oneRound
+        }
+    }
+    
+    static func getTypeOfHands() -> [RuleType] {
+        var array: [RuleType] = []
+        if self.shared.splitHands {
+            array.append(.pair)
+        }
+        if self.shared.softHands {
+            array.append(.soft)
+        }
+        if self.shared.hardHands {
+            array.append(.hard)
+        }
+        return array
     }
 }
 

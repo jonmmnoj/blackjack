@@ -12,80 +12,88 @@ import UIKit
 
 
 class GameMaster {
-    var sgd: StrategyGameDecks?
-    var deck = StrategyDeck()
-    
-    var strategyGame: Bool = true
-    var automaticPlay: Bool = false
-    var countGame: Bool = false
-    
+    var gameType: GameType
+    var gameStrategyPattern: GameTypeStrategyPatternProtocol!
     var dealer: Dealer!
     var players: [Player] = []
     var player: Player!
     var delegate: GameViewDelegate! {
         didSet {
-            countMaster.delegate = self.delegate
+            //countMaster.delegate = self.delegate
         }
     }
     var dealerBusy = false
     var table: UIView // ideally, GM does not have to work with table, only dealer, and then dealer works with table?
     //var table: Table
     var gameState: GameState! // save game state when using dealer, dealer might use table, which uses animations, gameMaster has to wait for animations to finish, table tells master when animations are finished
-    var countMaster: CountMaster
+    //var countMaster: CountMaster
+    var navBarHeight: CGFloat!
+    var dealerHand: Hand {
+        return Hand(dealToPoint: CGPoint(x: 10, y: 60 + navBarHeight), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
+    }
+    var playerHand: Hand {
+        return Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 250), adjustmentX: 50, adjustmentY: 50, owner: player)
+    }
     
-    init(table: UIView) {
+    init(gameType: GameType, table: UIView) {
+        self.gameType = gameType
         self.table = table
-        //self.delegate = delegate
-        self.countMaster = CountMaster()
-        //countMaster.delegate = self.delegate
-        setupDealer(table: table)
-        setupPlayer()
-        
     }
     
     func startGame() {
-     
+        gameStrategyPattern = gameType.getStrategyPattern(gameMaster: self)
+        setupDealer(table: table)
+        setupPlayer()
         dealCards()
+    }
+    
+    func dealCards() {
+        gameStrategyPattern.dealCards()
+        self.gameState = .dealtCards
     }
     
     func setupDealer(table view: UIView) {
         let table = Table(view: view, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
         self.dealer = Dealer(table: table)
-        let hand = Hand(dealToPoint: CGPoint(x: 10, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
+        let hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)
     }
     
     func setupPlayer() {
         let player = Player()
-        let hand = Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
-        player.add(hand: hand)
         self.players.append(player)
+        self.player = players.first!
         self.players.forEach {
             self.dealer.access(to: $0)
         }
-        self.player = players.first!
+        
+        let hand = playerHand//Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
+        player.add(hand: hand)
+        
+        
+        
     }
     
     func tasksForEndOfRound() {
+        gameStrategyPattern.tasksForEndOfRound()
         // call CardCounterMaster, see if it's time to ask the player what the count is.
         // CCM.isTimeToAskForCount?() //
-        if countGame && countMaster.isTimeToAskForCount() {
-            countMaster.endOfRoundTasks(gameMaster: self, completion: {
-                self.prepareForNewRound()
-            })// let countMaster call back to GameMaster when task is complete
-            print("GM waiting on CM")
-        } else {
-            prepareForNewRound()
-            
-        }
+//        if countGame && countMaster.isTimeToAskForCount() {
+//            countMaster.endOfRoundTasks(gameMaster: self, completion: {
+//                self.prepareForNewRound()
+//            })// let countMaster call back to GameMaster when task is complete
+//            print("GM waiting on CM")
+//        } else {
+//            prepareForNewRound()
+//        }
     }
     
     func prepareForNewRound() {
         // maybe player could do this? like reset the hand he has, give the player a position on the table, like a starting point for all the player's cards
-        var hand = Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
+        var hand = playerHand//Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
         player.add(hand: hand)
         // same thinking for dealer
-        hand = Hand(dealToPoint: CGPoint(x: 10, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
+        hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)
         
         dealCards()
@@ -98,30 +106,7 @@ extension GameMaster {
     func inputReceived(type: PlayerAction) {
         self.dealer.stopIndicator()
         self.delegate.playerInput(enabled: false)
-        
-        // if strategy drill
-        // get strategy action, and compare with type, show view to display right/wrong
-        // let user dismiss view to continue to next round
-        if strategyGame {
-            let correctAction = getPlayerAction()
-            let result = correctAction == type
-            print("\(result). Your action: \(type), Correct action: \(correctAction)")
-            discardAllHands()
-        
-        } else {
-            switch type{
-            case .hit:
-                playerHits()
-            case .stand:
-                playerStands()
-            case .double:
-                playerDoubles()
-            case .split:
-                playerSplits()
-            case .surrender:
-                break
-            }
-        }
+        gameStrategyPattern.inputReceived(type: type)
     }
     
     func playerHits() {
@@ -273,38 +258,6 @@ extension GameMaster {
         }
     }
     
-    
-    func dealCards() {
-        if sgd == nil {
-            sgd = StrategyGameDecks()
-            deck = sgd!.threeCardHandDeck
-            deck.rounds.shuffle()
-        }
-        let r = deck.nextRound()
-        let pCards = r.playerCards
-        let dCards = r.dealerCards
-        var card = Card(value: pCards[0], suit: .clubs)
-        dealer.deal(card: card, to: player.activatedHand!, delay: false)
-        card = Card(value: pCards[1], suit: .clubs)
-        dealer.deal(card:card, to: player.activatedHand!, delay: false)
-        card = Card(value: pCards[2], suit: .clubs)
-        dealer.deal(card: card, to: player.activatedHand!, delay: false)
-        card = Card(value: dCards[0], suit: .clubs)
-        card.isFaceDown = true
-        dealer.deal(card:card ,to: dealer.activatedHand!, delay: false)
-        card = Card(value: dCards[0], suit: .clubs)
-        dealer.deal(card: card ,to: dealer.activatedHand!, delay: false)
-        
-        
-        
-//        self.dealer.dealCardToPlayers()
-//        self.dealer.dealCardToSelf()
-//        self.dealer.dealCardToPlayers()
-//        self.dealer.dealCardToSelf()
-        
-        self.gameState = .dealtCards
-    }
-    
     func getPlayerAction() -> PlayerAction {
         var playerCardValues: [Int] = []
         for card in player.activatedHand!.cards {
@@ -319,17 +272,13 @@ extension GameMaster {
     }
     
     func waitForPlayerInput() {
-        if automaticPlay {
+        if gameStrategyPattern.automaticPlay {
             let pAction = getPlayerAction()
             inputReceived(type: pAction)
         } else {
-            
             dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
             delegate.playerInput(enabled: true)
         }
-        
-        
-        
     }
     
     func discard(hand: Hand) {
@@ -345,7 +294,7 @@ extension GameMaster {
     }
     
     func discardAllHands() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.dealer.discard(hand: self.dealer.activatedHand!)
             self.player.hands.forEach {
                 self.dealer.discard(hand: $0)
@@ -362,7 +311,7 @@ extension GameMaster {
 //        hand.set(state: .bust)
 //        self.discard(hand: hand)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             hand.set(state: .bust)
             self.gameState = .busted
             self.resume()

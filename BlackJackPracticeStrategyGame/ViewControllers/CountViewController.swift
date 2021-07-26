@@ -8,14 +8,16 @@
 import Foundation
 import UIKit
 
-class CountViewController: UIViewController, UITextFieldDelegate {
+class CountViewController: UIViewController, UITextFieldDelegate, FeedbackViewDelegate {
+    
+    
     @IBOutlet weak var decrease: UIButton!
     @IBOutlet weak var increase: UIButton!
     @IBOutlet weak var positiveNegative: UIButton!
     @IBOutlet weak var submit: UIButton!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var dismiss: UIButton!
-    @IBOutlet weak var feedbackView: CounterFeebackView!
+    @IBOutlet weak var feedbackView: FeedbackView!
     @IBOutlet weak var submitView: UIView!
     
     var countMaster: CountMaster!
@@ -23,6 +25,7 @@ class CountViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         feedbackView.isHidden = true
+        feedbackView.delegate = self
         
         textField.text = "0"
         
@@ -86,15 +89,19 @@ class CountViewController: UIViewController, UITextFieldDelegate {
         // close view and
     }
     
-   
-    @IBAction func dismiss(_ sender: UIButton) {
-        countMaster.dismissCountView()
-    }
+//
+//    @IBAction func dismiss(_ sender: UIButton) {
+//        //countMaster.dismissCountView()
+//    }
     
     @IBAction func postiveNegative(_ sender: UIButton) {
         if let text = textField.text {
             textField.text = String(Int(text)! * -1)
         }
+    }
+    
+    func dimiss() {
+        countMaster.dismissCountView()
     }
 }
 

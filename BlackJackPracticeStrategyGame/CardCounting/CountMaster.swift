@@ -23,7 +23,7 @@ class CountMaster {
     
     func isTimeToAskForCount() -> Bool {
         numberOfRoundsPlayed += 1
-        let setting = Settings.shared.askForCountAfterRounds.numericValue
+        let setting = Settings.shared.numberOfRoundsBeforeAskCount.numericValue
         if setting == 0 { return false }
         return numberOfRoundsPlayed % setting == 0
     }
@@ -48,9 +48,9 @@ class CountMaster {
     }
     
     func dismissCountView() {
-        delegate.dismissCountInputView() {
+        delegate.dismissViewController() {
             //self.gameMaster!.prepareForNewRound()
-            taskComplete()
+            self.taskComplete()
         }
     }
 }

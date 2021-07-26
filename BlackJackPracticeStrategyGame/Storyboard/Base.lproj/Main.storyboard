@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ub9-Wl-6rM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Game View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GameViewController" id="BYZ-38-t0r" customClass="GameViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -122,7 +122,7 @@
                                     <constraint firstItem="jVK-ea-a0O" firstAttribute="centerX" secondItem="RWC-h0-lFW" secondAttribute="centerX" id="zaB-FD-0bW"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mSu-Qr-5Os" customClass="CounterFeebackView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mSu-Qr-5Os" customClass="FeedbackView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
                                 <rect key="frame" x="32" y="273" width="350" height="350"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BTP-95-6G5">
@@ -140,7 +140,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="dismiss:" destination="L7i-Wz-RYB" eventType="touchUpInside" id="3Ot-DN-U0c"/>
+                                            <action selector="dismiss:" destination="mSu-Qr-5Os" eventType="touchUpInside" id="N6D-EF-7iQ"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Actual:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bYD-kl-q4Q">
@@ -204,6 +204,168 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nOo-hU-veM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1089.8550724637682" y="55.580357142857139"/>
+        </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="lWU-pu-hky">
+            <objects>
+                <viewController storyboardIdentifier="SettingsViewController" id="Qmw-Ok-ntr" customClass="SettingsViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7dU-CX-R7B">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="JwE-yI-gdJ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="vLC-n5-4M8"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pxb-sr-lfc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1583" y="-647"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Ifo-wl-HiH">
+            <objects>
+                <navigationController id="ub9-Wl-6rM" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fG8-1K-AsR">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="d2d-6w-WWA" kind="relationship" relationship="rootViewController" id="2rp-sJ-vtt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mSJ-9k-zen" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2758" y="81"/>
+        </scene>
+        <!--Main Menu View Controller-->
+        <scene sceneID="kLF-oL-wTq">
+            <objects>
+                <viewController id="d2d-6w-WWA" customClass="MainMenuViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GW5-W6-fcy">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HG4-KQ-dX8">
+                                <rect key="frame" x="176" y="363" width="63" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Free Play"/>
+                                <connections>
+                                    <action selector="freePlay:" destination="d2d-6w-WWA" eventType="touchUpInside" id="Vs0-4u-Fui"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GV-Mk-4yv">
+                                <rect key="frame" x="156" y="488" width="102" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Running Count"/>
+                                <connections>
+                                    <action selector="runningCount:" destination="d2d-6w-WWA" eventType="touchUpInside" id="uiY-Gs-2K3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZWt-tC-659">
+                                <rect key="frame" x="157" y="423" width="100" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Basic Strategy"/>
+                                <connections>
+                                    <action selector="basicStrategy:" destination="d2d-6w-WWA" eventType="touchUpInside" id="Tnl-hq-v0J"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="LyU-Ni-Z5z"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="f01-44-goy"/>
+                    <connections>
+                        <outlet property="basicStrategyButton" destination="ZWt-tC-659" id="fId-pa-WPZ"/>
+                        <outlet property="freePlayButton" destination="HG4-KQ-dX8" id="leC-eV-a8H"/>
+                        <outlet property="runningCountButton" destination="5GV-Mk-4yv" id="fJW-S3-CrF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E39-Jr-WlC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1445" y="80"/>
+        </scene>
+        <!--Basic Strategy View Controller-->
+        <scene sceneID="aO4-Ll-01F">
+            <objects>
+                <viewController storyboardIdentifier="BasicStrategyViewController" id="yU0-yG-yOl" customClass="BasicStrategyViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ehk-vV-y7r">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MD7-VX-vXS" customClass="FeedbackView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
+                                <rect key="frame" x="32" y="273" width="350" height="350"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bzb-57-Wj3">
+                                        <rect key="frame" x="100" y="25" width="150" height="150"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="150" id="oDw-V9-7Ps"/>
+                                            <constraint firstAttribute="width" secondItem="bzb-57-Wj3" secondAttribute="height" multiplier="1:1" id="uhT-uc-h02"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4D-f4-prE">
+                                        <rect key="frame" x="20" y="288" width="310" height="42"/>
+                                        <color key="backgroundColor" systemColor="linkColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <state key="normal" title="Dismiss">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="dismiss:" destination="MD7-VX-vXS" eventType="touchUpInside" id="3yP-C8-ia2"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Actual:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fz4-Xd-XZl">
+                                        <rect key="frame" x="0.0" y="228" width="350" height="23"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Answer: X" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sqn-rp-233">
+                                        <rect key="frame" x="0.0" y="195" width="350" height="23"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="MD7-VX-vXS" secondAttribute="height" multiplier="1:1" id="2n2-Js-A6r"/>
+                                    <constraint firstItem="fz4-Xd-XZl" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" id="4gn-3T-tYl"/>
+                                    <constraint firstItem="Sqn-rp-233" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="5wF-Xb-7pa"/>
+                                    <constraint firstItem="bzb-57-Wj3" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="AeV-0x-4l4"/>
+                                    <constraint firstItem="U4D-f4-prE" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" constant="20" id="ByB-bv-ZKm"/>
+                                    <constraint firstAttribute="bottom" secondItem="U4D-f4-prE" secondAttribute="bottom" constant="20" id="Fzg-n9-lcf"/>
+                                    <constraint firstItem="fz4-Xd-XZl" firstAttribute="top" secondItem="Sqn-rp-233" secondAttribute="bottom" constant="10" id="HU7-1c-bsT"/>
+                                    <constraint firstAttribute="height" constant="350" id="Pij-tx-q08"/>
+                                    <constraint firstItem="bzb-57-Wj3" firstAttribute="top" secondItem="MD7-VX-vXS" secondAttribute="top" constant="25" id="Pu8-vm-2Gp"/>
+                                    <constraint firstAttribute="trailing" secondItem="U4D-f4-prE" secondAttribute="trailing" constant="20" id="SCX-95-apz"/>
+                                    <constraint firstItem="Sqn-rp-233" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" id="dJD-Jt-LWv"/>
+                                    <constraint firstAttribute="trailing" secondItem="fz4-Xd-XZl" secondAttribute="trailing" id="faa-jH-vRU"/>
+                                    <constraint firstItem="U4D-f4-prE" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="jUE-GH-NvU"/>
+                                    <constraint firstAttribute="trailing" secondItem="Sqn-rp-233" secondAttribute="trailing" id="vLE-0L-Saa"/>
+                                    <constraint firstItem="Sqn-rp-233" firstAttribute="top" secondItem="bzb-57-Wj3" secondAttribute="bottom" constant="20" id="xkq-Hs-RVY"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="actualLabel" destination="fz4-Xd-XZl" id="y8m-Po-PgD"/>
+                                    <outlet property="dismissButton" destination="U4D-f4-prE" id="oYe-hn-ZEw"/>
+                                    <outlet property="imageView" destination="bzb-57-Wj3" id="sdz-P2-Sn3"/>
+                                    <outlet property="yourAnswerLabel" destination="Sqn-rp-233" id="KfH-FR-8SU"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="qk9-gs-k32"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.85025044624379142" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="MD7-VX-vXS" firstAttribute="centerY" secondItem="ehk-vV-y7r" secondAttribute="centerY" id="1MH-E6-gXA"/>
+                            <constraint firstItem="MD7-VX-vXS" firstAttribute="centerX" secondItem="ehk-vV-y7r" secondAttribute="centerX" id="XiF-pC-MIz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="feedbackView" destination="MD7-VX-vXS" id="jHR-ER-1ez"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="13K-PA-LPD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2052" y="43"/>
         </scene>
     </scenes>
     <resources>

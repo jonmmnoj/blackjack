@@ -9,105 +9,30 @@ import Foundation
 import UIKit
 
 class StrategyGameDecks {
-    var twoCardHandDeck: StrategyDeck
-    var threeCardHandDeck: StrategyDeck
-    var fourCardHandDeck: StrategyDeck
-    
-    
-    
-    
-    init() {
-        
-        var twoCardHands: [[CardValue]] = []
-        var threeCardHands: [[CardValue]] = []
-        var fourCardHands: [[CardValue]] = []
-        
-        let values: [CardValue] = [.ace, .two, .three, .four, .five, .six, .seven, .eight, .nine, .ten, .jack, .queen, .king ]
-        
-        var added = 0
-        var bust = 0
-        var twentyone = 0
-        var split = 0
-        
-        twoCardHands = []
-        
-        for i in 0...values.count - 1 {
-            //print("entered loop for i: \(i)")
-            for j in i...values.count - 1 {
-                if isBlackJack(value1: values[i], value2: values[j]) {
-                    twentyone += 1
-                    continue
-                }
-                twoCardHands.append([values[i], values[j]])
-                added += 1
-                //print("\(values[i]) \(values[j])")
-            }
-        }
-        
-        threeCardHands = []
-        added = 0
-        bust = 0
-        twentyone = 0
-        split = 0
-        for i in 0...twoCardHands.count - 1 {
-            //print("entered loop for i: \(i)")
-            if twoCardHands[i][0] == twoCardHands[i][1] {
-                split += 1
-                continue
-            }
-            for j in 0...values.count - 1 {
-                if isValue21(value1: twoCardHands[i][0], value2: twoCardHands[i][1], value3: values[j]) { continue }
-                if isBust(value1: twoCardHands[i][0], value2: twoCardHands[i][1], value3: values[j]) { continue }
-                threeCardHands.append([twoCardHands[i][0], twoCardHands[i][1], values[j]])
-            }
-        }
-        
-        //print("3 card hands: added: \(added), busted: \(bust), twentyones: \(twentyone), splits: \(split)")
-        
-        fourCardHands = []
-        added = 0
-        bust = 0
-        twentyone = 0
-        split = 0
-        
-        for i in 0...threeCardHands.count - 1 {
-            //print("entered loop for i: \(i)")
-//            if twoCardHands[i][0] == twoCardHands[i][1] {
-//                split += 1
-//                continue
-//            }
-            for j in 0...values.count - 1 {
-                if isValue21(value1: threeCardHands[i][0], value2: threeCardHands[i][1], value3: threeCardHands[i][2], value4: values[j]) {
-                    //print("Is 21: \(threeCardHands[i][0]) \(threeCardHands[i][1]) \(threeCardHands[i][2]) \(values[j])")
-                    twentyone += 1
-                    continue
-                }
-                if isBust(value1: threeCardHands[i][0], value2: threeCardHands[i][1], value3: threeCardHands[i][2], value4: values[j]) {
-                    //print("Is Bust: \(threeCardHands[i][0]) \(threeCardHands[i][1]) \(threeCardHands[i][2]) \(values[j])")
-                    bust += 1
-                    continue
-                }
-                threeCardHands.append([threeCardHands[i][0], threeCardHands[i][1], threeCardHands[i][2], values[j]])
-                added += 1
-                //print("Added: \(threeCardHands[i][0]) \(threeCardHands[i][1]) \(threeCardHands[i][2]) \(values[j])")
-            }
-        }
-        
-        
-        //print("4 card hands: added: \(added), busted: \(bust), twentyones: \(twentyone),
-        twoCardHandDeck = StrategyDeck()
+    // count 248
+    static var twoCardHandDeck: StrategyDeck {
+        let deck = StrategyDeck(type: .twoCards)
         for i in 0...twoCardHands.count - 1 {
             let hand = twoCardHands[i]
             for j in 0...values.count - 1{
-                let action = BasicStrategy.getPlayerAction(dealerCardValue: values[j].rawValue, playerCardValues: [hand[0].rawValue, hand[1].rawValue])
+                let action = BasicStrategy.getPlayerAction(dealerCardValue: values[j], playerCardValues: [hand[0], hand[1]])
                 let pc = [ hand[0], hand[1]]
                 let dc = [values[j]]
+                
+                if !StrategyGameDecks.keepHandForStrategyDeck(playerCardValues: pc, dealerCardValue: dc[0]) {
+                    continue
+                }
                 let SR = StrategyRound(playerCards: pc, dealerCards: dc, action: action)
-                twoCardHandDeck.rounds.append(SR)
+                deck.rounds.append(SR)
             }
         }
-        
-        threeCardHandDeck = StrategyDeck()
+        print(deck.rounds.count)
+        return deck
+    }
+    
+    // count 765
+    static var threeCardHandDeck: StrategyDeck {
+        let deck = StrategyDeck(type: .threeCards)
         for i in 0...twoCardHands.count - 1 {
             // check for split
             if twoCardHands[i][0] == twoCardHands[i][1] {
@@ -116,9 +41,9 @@ class StrategyGameDecks {
             let hand = twoCardHands[i]
             for j in 0...values.count - 1 {
                 // j is the dealers card
-                let playerCardValues = [hand[0].rawValue, hand[1].rawValue]//, values[j].rawValue]
+                let playerCardValues = [hand[0], hand[1]]//, values[j].rawValue]
                 // see if this combination of palyer cardsa and dealer card is supposed to be hit
-                let action = BasicStrategy.getPlayerAction(dealerCardValue: values[j].rawValue, playerCardValues: playerCardValues)
+                let action = BasicStrategy.getPlayerAction(dealerCardValue: values[j], playerCardValues: playerCardValues)
                 if action == .hit {
                     for k in 0...values.count - 1 {
                         // k is the possible hit cards
@@ -130,69 +55,81 @@ class StrategyGameDecks {
                             continue
                         }
                         let dc = [ values[j]]
-                        let a = BasicStrategy.getPlayerAction(dealerCardValue: values[j].rawValue, playerCardValues: [hand[0].rawValue, hand[1].rawValue, values[k].rawValue])
+                        if !StrategyGameDecks.keepHandForStrategyDeck(playerCardValues: [hand[0], hand[1], values[k]], dealerCardValue: dc[0]) {
+                            continue
+                        }
+                        
+                        let a = BasicStrategy.getPlayerAction(dealerCardValue: values[j], playerCardValues: [hand[0], hand[1], values[k]])
                         let SR = StrategyRound(playerCards: pc, dealerCards: dc, action: a)
-                        threeCardHandDeck.rounds.append(SR)
+                        deck.rounds.append(SR)
                     }
                 }
             }
         }
-        
-        fourCardHandDeck = StrategyDeck()
-        // same idea as three deck
-//        var roundNum = 0
-//        for round in threeCardHandDeck.rounds {
-//            print(roundNum)
-//            roundNum += 1
-//            let hand = round.playerCards
-//            for j in 0...values.count - 1 {
-//                // j is the dealers card
-//                let playerCardValues = [hand[0].value.rawValue, hand[1].value.rawValue, hand[2].value.rawValue]//, values[j].rawValue]
-//                // see if this combination of palyer cardsa and dealer card is supposed to be hit
-//                let action = BS.getPlayerAction(dealerCardValue: values[j].rawValue, playerCardValues: playerCardValues)
-//                if action == .hit {
-//                    for k in 0...values.count - 1 {
-//                        if isValue21(value1: hand[0].value, value2: hand[1].value, value3: hand[2].value, value4: values[k]) { continue }
-//                        if isBust(value1: hand[0].value, value2: hand[1].value, value3: hand[2].value, value4: values[k]) { continue }
-//                        let pc = [Card(value: hand[0].value, suit: .clubs), Card(value: hand[1].value, suit: .clubs), Card(value: hand[2].value, suit: .clubs), Card(value: values[k], suit: .clubs)]
-//                        let dc = [Card(value: values[j], suit: .clubs)]
-//                        let a = BS.getPlayerAction(dealerCardValue: values[j].rawValue, playerCardValues: [hand[0].value.rawValue, hand[1].value.rawValue, hand[2].value.rawValue, values[k].rawValue])
-//                        let SR = StrategyRound(playerCards: pc, dealerCards: dc, action: a)
-//                        fourCardHandDeck.rounds.append(SR)
-//                    }
-//                }
-//            }
-//        
-//        //threeCardHandDeck.printRounds()
-//        
-//        //6292
-//        // 4360
-//        }
-        
-        print(threeCardHandDeck.rounds.count)
-        //threeCardHandDeck = StrategyDeck()
-        print(fourCardHandDeck.rounds.count)
-        fourCardHandDeck = StrategyDeck()
-        
-        
-
-        
+        print(deck.rounds.count)
+        return deck
+    }
+    
+    // count 11610
+    static var fourCardHandDeck: StrategyDeck {
+        let deck = StrategyDeck(type: .fourCards)
+        for i in 0...threeCardHands.count - 1 {
+            
+            let hand = threeCardHands[i]
+            for j in 0...values.count - 1 {
+                // j is the dealers card
+                let playerCardValues = [hand[0], hand[1], hand[2]]//, values[j].rawValue]
+                // see if this combination of palyer cardsa and dealer card is supposed to be hit
+                let action = BasicStrategy.getPlayerAction(dealerCardValue: values[j], playerCardValues: playerCardValues)
+                if action == .hit {
+                    for k in 0...values.count - 1 {
+                        // k is the possible hit cards
+                        var pc = playerCardValues
+                        pc.append(values[k])
+                        if isBust(value1: hand[0], value2: hand[1], value3: hand[2], value4: values[k]) {
+                            continue
+                        }
+                        if isValue21(value1: hand[0], value2: hand[1], value3: hand[2], value4: values[k]) {
+                            continue
+                        }
+                        let dc = [ values[j]]
+                        if !StrategyGameDecks.keepHandForStrategyDeck(playerCardValues: pc, dealerCardValue: dc[0]) {
+                            continue
+                        }
+                        
+                        let a = BasicStrategy.getPlayerAction(dealerCardValue: values[j], playerCardValues: pc)
+                        let SR = StrategyRound(playerCards: pc, dealerCards: dc, action: a)
+                        deck.rounds.append(SR)
+                    }
+                }
+            }
+        }
+        print(deck.rounds.count)
+        return deck
     }
     
     static func keepHandForStrategyDeck(playerCardValues: [Int], dealerCardValue: Int) -> Bool {
         let type = BasicStrategy.getRuleType(playerCardValues: playerCardValues)
+        if type == .hard {
+            // TODO: Why did I put a check for 1 -- OH BLACKJACK CHECK maybe?
+                // in mean time I'll put a condition fro four card hand
+            if (!playerCardValues.contains(1) || playerCardValues.count == 4) && playerCardValues.reduce(0, +) > 17 {
+                return false
+            }
+        }
+        let prv = BasicStrategy.getPlayerRuleValue(rule: type, playerCardValues: playerCardValues)
         switch type {
         case .pair:
-            return keepPairHand(playerCardValues: playerCardValues, dealerCardValue: dealerCardValue)
+            return keepPairHand(playerRuleValue: prv, dealerCardValue: dealerCardValue)
         case .soft:
-            return keepSoftHand(playerCardValues: playerCardValues, dealerCardValue: dealerCardValue)
+            return keepSoftHand(playerRuleValue: prv, dealerCardValue: dealerCardValue)
         case .hard:
-            return keepHardHand(playerCardValues: playerCardValues, dealerCardValue: dealerCardValue)
+            return keepHardHand(playerRuleValue: prv, dealerCardValue: dealerCardValue)
         }
     }
     
-    static private func keepPairHand(playerCardValues: [Int], dealerCardValue: Int) -> Bool {
-        switch dealerCardValue {
+    static private func keepPairHand(playerRuleValue: Int, dealerCardValue: Int) -> Bool {
+        switch playerRuleValue {
         case 10:
             return dealerCardValue >= 4 && dealerCardValue <= 6
         case 9:
@@ -216,8 +153,8 @@ class StrategyGameDecks {
         }
     }
     
-    static private func keepSoftHand(playerCardValues: [Int], dealerCardValue: Int) -> Bool {
-        switch dealerCardValue {
+    static private func keepSoftHand(playerRuleValue: Int, dealerCardValue: Int) -> Bool {
+        switch playerRuleValue {
         case 9:
             return dealerCardValue >= 6 && dealerCardValue <= 7
         case 8:
@@ -239,8 +176,8 @@ class StrategyGameDecks {
         }
     }
     
-    static private func keepHardHand(playerCardValues: [Int], dealerCardValue: Int) -> Bool {
-        switch dealerCardValue {
+    static private func keepHardHand(playerRuleValue: Int, dealerCardValue: Int) -> Bool {
+        switch playerRuleValue {
         case 17:
             return dealerCardValue == 1 || dealerCardValue >= 9 && dealerCardValue <= 10
         case 16:
@@ -266,36 +203,48 @@ class StrategyGameDecks {
             return false
         }
     }
+    
+    static func isBlackJack(value1: CardValue, value2: CardValue) -> Bool {
+        let array: [CardValue] = [value1, value2]
+        let hasTen = array.contains(.ten) || array.contains(.jack)
+        //{ $0 == .ten || $0 == .jack || $0 == .queen || $0 == .king }
+        let hasAce = array.contains { $0 == .ace }
+        return hasTen && hasAce
+    }
+
+
+    static func isValue21(value1: Int, value2: Int, value3: Int, value4: Int? = nil) -> Bool {
+        let hand = Hand(dealToPoint: CGPoint(x: 0, y: 0), adjustmentX: 0, adjustmentY: 0, owner: Dealer(table: Table(view: UIView(), gameMaster: GameMaster(gameType: .freePlay, table: UIView()))))
+        
+        hand.add(Card(value: CardValue(rawValue: value1)!, suit: .clubs))
+        hand.add(Card(value: CardValue(rawValue: value2)!, suit: .clubs))
+        hand.add(Card(value: CardValue(rawValue: value3)!, suit: .clubs))
+        if value4 != nil { hand.add(Card(value: CardValue(rawValue: value4!)!, suit: .clubs)) }
+        
+        return Rules.value(of: hand) == 21
+        
+    }
+
+    static func isBust(value1: Int, value2: Int, value3: Int, value4: Int? = nil) -> Bool {
+        let hand = Hand(dealToPoint: CGPoint(x: 0, y: 0), adjustmentX: 0, adjustmentY: 0, owner: Dealer(table: Table(view: UIView(), gameMaster: GameMaster(gameType: .freePlay, table: UIView()))))
+        
+        hand.add(Card(value: CardValue(rawValue: value1)!, suit: .clubs))
+        hand.add(Card(value: CardValue(rawValue: value2)!, suit: .clubs))
+        hand.add(Card(value: CardValue(rawValue: value3)!, suit: .clubs))
+        if value4 != nil { hand.add(Card(value: CardValue(rawValue: value4!)!, suit: .clubs)) }
+        
+        return Rules.didBust(hand: hand)
+    }
+    
+    static let values: [Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+    
+    static var twoCardHands: [[Int]] {
+        return [ [1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],[2,10],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[4,4],[4,5],[4,6],[4,7],[4,8],[4,9],[4,10],[5,5],[5,6],[5,7],[5,8],[5,9],[5,10],[6,6],[6,7],[6,8],[6,9],[6,10],[7,7],[7,8],[7,9],[7,10],[8,8],[8,9],[8,10],[9,9],[9,10],[10,10]]
+    }
+    
+    static var threeCardHands: [[Int]] {
+        return [[1,2,4],[1,2,5],[1,2,2],[1,2,3],[1,2,4],[1,2,5],[1,2,1],[1,2,2],[1,2,3],[1,2,4],[1,2,5],[1,2,6],[1,2,9],[1,2,10],[1,2,1],[1,2,2],[1,2,3],[1,2,4],[1,2,5],[1,2,6],[1,2,7],[1,2,9],[1,2,10],[1,2,5],[1,2,5],[1,3,3],[1,3,4],[1,3,1],[1,3,2],[1,3,3],[1,3,4],[1,3,10],[1,3,1],[1,3,2],[1,3,3],[1,3,4],[1,3,5],[1,3,8],[1,3,9],[1,3,10],[1,3,1],[1,3,2],[1,3,3],[1,3,4],[1,3,5],[1,3,6],[1,3,8],[1,3,9],[1,3,10],[1,3,4],[1,3,4],[1,4,10],[1,4,2],[1,4,3],[1,4,10],[1,4,1],[1,4,2],[1,4,3],[1,4,9],[1,4,10],[1,4,1],[1,4,2],[1,4,3],[1,4,4],[1,4,5],[1,4,7],[1,4,8],[1,4,9],[1,4,10],[1,4,3],[1,4,10],[1,4,3],[1,4,10],[1,4,10],[1,5,9],[1,5,10],[1,5,1],[1,5,2],[1,5,9],[1,5,10],[1,5,1],[1,5,2],[1,5,8],[1,5,9],[1,5,10],[1,5,1],[1,5,2],[1,5,3],[1,5,4],[1,5,6],[1,5,7],[1,5,8],[1,5,9],[1,5,10],[1,5,2],[1,5,9],[1,5,10],[1,5,2],[1,5,9],[1,5,10],[1,5,9],[1,5,10],[1,6,8],[1,6,9],[1,6,10],[1,6,1],[1,6,8],[1,6,9],[1,6,1],[1,6,2],[1,6,3],[1,6,5],[1,6,6],[1,6,7],[1,6,8],[1,6,9],[1,6,1],[1,6,8],[1,6,9],[1,6,1],[1,6,8],[1,6,9],[1,6,10],[1,6,8],[1,6,9],[1,6,10],[1,7,7],[1,7,8],[1,7,9],[1,7,10],[1,7,7],[1,7,8],[1,7,9],[1,7,10],[1,7,7],[1,7,8],[1,7,9],[1,7,10],[2,3,5],[2,3,6],[2,3,10],[2,3,4],[2,3,10],[2,3,1],[2,3,4],[2,3,9],[2,3,10],[2,3,1],[2,3,4],[2,3,7],[2,3,8],[2,3,9],[2,3,10],[2,3,1],[2,3,2],[2,3,3],[2,3,4],[2,3,7],[2,3,8],[2,3,9],[2,3,10],[2,3,1],[2,3,2],[2,3,3],[2,3,4],[2,3,7],[2,3,8],[2,3,9],[2,3,10],[2,3,1],[2,3,2],[2,3,3],[2,3,4],[2,3,5],[2,3,6],[2,3,7],[2,3,8],[2,3,9],[2,3,10],[2,3,4],[2,3,5],[2,3,6],[2,3,10],[2,3,5],[2,3,6],[2,3,10],[2,3,5],[2,3,6],[2,3,10],[2,4,4],[2,4,5],[2,4,9],[2,4,10],[2,4,1],[2,4,3],[2,4,9],[2,4,10],[2,4,1],[2,4,3],[2,4,8],[2,4,9],[2,4,10],[2,4,1],[2,4,3],[2,4,6],[2,4,7],[2,4,8],[2,4,9],[2,4,10],[2,4,1],[2,4,2],[2,4,3],[2,4,6],[2,4,7],[2,4,8],[2,4,9],[2,4,10],[2,4,1],[2,4,2],[2,4,3],[2,4,6],[2,4,7],[2,4,8],[2,4,9],[2,4,10],[2,4,1],[2,4,2],[2,4,3],[2,4,4],[2,4,5],[2,4,6],[2,4,7],[2,4,8],[2,4,9],[2,4,10],[2,4,3],[2,4,4],[2,4,5],[2,4,9],[2,4,10],[2,4,4],[2,4,5],[2,4,9],[2,4,10],[2,4,4],[2,4,5],[2,4,9],[2,4,10],[2,5,3],[2,5,4],[2,5,8],[2,5,9],[2,5,10],[2,5,1],[2,5,2],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,7],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,5],[2,5,6],[2,5,7],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,5],[2,5,6],[2,5,7],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,5],[2,5,6],[2,5,7],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,3],[2,5,4],[2,5,5],[2,5,6],[2,5,7],[2,5,8],[2,5,9],[2,5,1],[2,5,2],[2,5,3],[2,5,4],[2,5,8],[2,5,9],[2,5,1],[2,5,3],[2,5,4],[2,5,8],[2,5,9],[2,5,10],[2,5,3],[2,5,4],[2,5,8],[2,5,9],[2,5,10],[2,6,2],[2,6,3],[2,6,7],[2,6,8],[2,6,9],[2,6,7],[2,6,8],[2,6,6],[2,6,7],[2,6,8],[2,6,1],[2,6,4],[2,6,5],[2,6,6],[2,6,7],[2,6,8],[2,6,1],[2,6,4],[2,6,5],[2,6,6],[2,6,7],[2,6,8],[2,6,1],[2,6,4],[2,6,5],[2,6,6],[2,6,7],[2,6,8],[2,6,1],[2,6,2],[2,6,3],[2,6,4],[2,6,5],[2,6,6],[2,6,7],[2,6,8],[2,6,2],[2,6,3],[2,6,7],[2,6,8],[2,6,2],[2,6,3],[2,6,7],[2,6,8],[2,6,9],[2,6,2],[2,6,3],[2,6,7],[2,6,8],[2,6,9],[2,7,2],[2,7,6],[2,7,7],[2,7,8],[2,7,6],[2,7,7],[2,7,1],[2,7,2],[2,7,3],[2,7,4],[2,7,5],[2,7,6],[2,7,7],[2,7,2],[2,7,6],[2,7,7],[2,7,2],[2,7,6],[2,7,7],[2,7,8],[2,7,2],[2,7,6],[2,7,7],[2,7,8],[2,8,5],[2,8,6],[2,8,7],[2,8,5],[2,8,6],[2,8,7],[2,10,3],[2,10,4],[2,10,5],[2,10,3],[2,10,4],[2,10,2],[2,10,3],[2,10,4],[2,10,1],[2,10,2],[2,10,3],[2,10,4],[2,10,3],[2,10,4],[2,10,3],[2,10,4],[2,10,5],[2,10,3],[2,10,4],[2,10,5],[3,4,3],[3,4,4],[3,4,8],[3,4,9],[3,4,10],[3,4,1],[3,4,2],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,7],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,5],[3,4,6],[3,4,7],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,5],[3,4,6],[3,4,7],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,5],[3,4,6],[3,4,7],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,3],[3,4,4],[3,4,5],[3,4,6],[3,4,7],[3,4,8],[3,4,9],[3,4,1],[3,4,2],[3,4,3],[3,4,4],[3,4,8],[3,4,9],[3,4,1],[3,4,3],[3,4,4],[3,4,8],[3,4,9],[3,4,10],[3,4,3],[3,4,4],[3,4,8],[3,4,9],[3,4,10],[3,5,2],[3,5,3],[3,5,7],[3,5,8],[3,5,9],[3,5,7],[3,5,8],[3,5,6],[3,5,7],[3,5,8],[3,5,1],[3,5,4],[3,5,5],[3,5,6],[3,5,7],[3,5,8],[3,5,1],[3,5,4],[3,5,5],[3,5,6],[3,5,7],[3,5,8],[3,5,1],[3,5,4],[3,5,5],[3,5,6],[3,5,7],[3,5,8],[3,5,1],[3,5,2],[3,5,3],[3,5,4],[3,5,5],[3,5,6],[3,5,7],[3,5,8],[3,5,2],[3,5,3],[3,5,7],[3,5,8],[3,5,2],[3,5,3],[3,5,7],[3,5,8],[3,5,9],[3,5,2],[3,5,3],[3,5,7],[3,5,8],[3,5,9],[3,6,2],[3,6,6],[3,6,7],[3,6,8],[3,6,6],[3,6,7],[3,6,1],[3,6,2],[3,6,3],[3,6,4],[3,6,5],[3,6,6],[3,6,7],[3,6,2],[3,6,6],[3,6,7],[3,6,2],[3,6,6],[3,6,7],[3,6,8],[3,6,2],[3,6,6],[3,6,7],[3,6,8],[3,7,5],[3,7,6],[3,7,7],[3,7,5],[3,7,6],[3,7,7],[3,9,3],[3,9,4],[3,9,5],[3,9,3],[3,9,4],[3,9,2],[3,9,3],[3,9,4],[3,9,1],[3,9,2],[3,9,3],[3,9,4],[3,9,3],[3,9,4],[3,9,3],[3,9,4],[3,9,5],[3,9,3],[3,9,4],[3,9,5],[3,10,2],[3,10,3],[3,10,4],[3,10,1],[3,10,2],[3,10,3],[3,10,2],[3,10,3],[3,10,2],[3,10,3],[3,10,4],[3,10,2],[3,10,3],[3,10,4],[4,5,2],[4,5,6],[4,5,7],[4,5,8],[4,5,6],[4,5,7],[4,5,1],[4,5,2],[4,5,3],[4,5,4],[4,5,5],[4,5,6],[4,5,7],[4,5,2],[4,5,6],[4,5,7],[4,5,2],[4,5,6],[4,5,7],[4,5,8],[4,5,2],[4,5,6],[4,5,7],[4,5,8],[4,6,5],[4,6,6],[4,6,7],[4,6,5],[4,6,6],[4,6,7],[4,8,3],[4,8,4],[4,8,5],[4,8,3],[4,8,4],[4,8,2],[4,8,3],[4,8,4],[4,8,1],[4,8,2],[4,8,3],[4,8,4],[4,8,3],[4,8,4],[4,8,3],[4,8,4],[4,8,5],[4,8,3],[4,8,4],[4,8,5],[4,9,2],[4,9,3],[4,9,4],[4,9,1],[4,9,2],[4,9,3],[4,9,2],[4,9,3],[4,9,2],[4,9,3],[4,9,4],[4,9,2],[4,9,3],[4,9,4],[4,10,1],[4,10,2],[4,10,3],[4,10,1],[4,10,2],[4,10,1],[4,10,2],[4,10,1],[4,10,2],[4,10,3],[4,10,1],[4,10,2],[4,10,3],[5,7,3],[5,7,4],[5,7,5],[5,7,3],[5,7,4],[5,7,2],[5,7,3],[5,7,4],[5,7,1],[5,7,2],[5,7,3],[5,7,4],[5,7,3],[5,7,4],[5,7,3],[5,7,4],[5,7,5],[5,7,3],[5,7,4],[5,7,5],[5,8,2],[5,8,3],[5,8,4],[5,8,1],[5,8,2],[5,8,3],[5,8,2],[5,8,3],[5,8,2],[5,8,3],[5,8,4],[5,8,2],[5,8,3],[5,8,4],[5,9,1],[5,9,2],[5,9,3],[5,9,1],[5,9,2],[5,9,1],[5,9,2],[5,9,1],[5,9,2],[5,9,3],[5,9,1],[5,9,2],[5,9,3],[5,10,1],[5,10,2],[5,10,1],[5,10,1],[5,10,1],[5,10,2],[5,10,1],[5,10,2],[6,7,2],[6,7,3],[6,7,4],[6,7,1],[6,7,2],[6,7,3],[6,7,2],[6,7,3],[6,7,2],[6,7,3],[6,7,4],[6,7,2],[6,7,3],[6,7,4],[6,8,1],[6,8,2],[6,8,3],[6,8,1],[6,8,2],[6,8,1],[6,8,2],[6,8,1],[6,8,2],[6,8,3],[6,8,1],[6,8,2],[6,8,3],[6,9,1],[6,9,2],[6,9,1],[6,9,1],[6,9,1],[6,9,2],[6,9,1],[6,9,2],[6,10,1],[6,10,1],[6,10,1],[7,8,1],[7,8,2],[7,8,1],[7,8,1],[7,8,1],[7,8,2],[7,8,1],[7,8,2],[7,9,1],[7,9,1],[7,9,1],]
+    }
 }
 
-func isBlackJack(value1: CardValue, value2: CardValue) -> Bool {
-    let array: [CardValue] = [value1, value2]
-    let hasTen = array.contains(.ten) || array.contains(.jack)
-    //{ $0 == .ten || $0 == .jack || $0 == .queen || $0 == .king }
-    let hasAce = array.contains { $0 == .ace }
-    return hasTen && hasAce
-}
 
-
-func isValue21(value1: CardValue, value2: CardValue, value3: CardValue, value4: CardValue? = nil) -> Bool {
-    let hand = Hand(dealToPoint: CGPoint(x: 0, y: 0), adjustmentX: 0, adjustmentY: 0, owner: Dealer(table: Table(view: UIView(), gameMaster: GameMaster(table: UIView()))))
-    
-    hand.add(Card(value: value1, suit: .clubs))
-    hand.add(Card(value: value2, suit: .clubs))
-    hand.add(Card(value: value3, suit: .clubs))
-    if value4 != nil { hand.add(Card(value: value4!, suit: .clubs)) }
-    
-    return Rules.value(of: hand) == 21
-    
-}
-
-func isBust(value1: CardValue, value2: CardValue, value3: CardValue, value4: CardValue? = nil) -> Bool {
-    let hand = Hand(dealToPoint: CGPoint(x: 0, y: 0), adjustmentX: 0, adjustmentY: 0, owner: Dealer(table: Table(view: UIView(), gameMaster: GameMaster(table: UIView()))))
-    
-    hand.add(Card(value: value1, suit: .clubs))
-    hand.add(Card(value: value2, suit: .clubs))
-    hand.add(Card(value: value3, suit: .clubs))
-    if value4 != nil { hand.add(Card(value: value4!, suit: .clubs)) }
-    
-    return Rules.didBust(hand: hand)
-}

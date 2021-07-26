@@ -7,7 +7,12 @@
 
 import UIKit
 
-class CounterFeebackView: UIView {
+protocol FeedbackViewDelegate {
+    func dimiss()
+}
+
+class FeedbackView: UIView {
+    var delegate: FeedbackViewDelegate?
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var actualLabel: UILabel!
@@ -33,9 +38,22 @@ class CounterFeebackView: UIView {
     
     func updateView(isCorrect: Bool, input: Int, actualCount: Int) {
         let s = isCorrect ? "right" : "wrong"
+        imageView.image = UIImage(named: s)
         yourAnswerLabel.text = "Your answer: \(input)"
         actualLabel.text = "Actual: \(actualCount)"
+        
+    }
+    
+    func updateViewForBasicStrategy(isCorrect: Bool, playerAction: PlayerAction, correctAction: PlayerAction) {
+        let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
+        yourAnswerLabel.text = "Your answer: \(playerAction.rawValue)"
+        actualLabel.text = "Actual: \(correctAction.rawValue)"
+        
+    }
+    
+    @IBAction func dismiss(_ sender: UIButton) {
+        delegate?.dimiss()
     }
 
 }

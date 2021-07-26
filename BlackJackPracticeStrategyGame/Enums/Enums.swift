@@ -25,7 +25,7 @@ enum CardSuit: String, CaseIterable {
 }
 
 enum CardValue: Int, CaseIterable {
-    case ace,
+    case ace = 1,
          two,
          three,
          four,
@@ -105,4 +105,29 @@ enum StrategyAction: String {
 
 enum RuleType {
     case pair, soft, hard
+}
+
+enum GameType: String {
+    case freePlay, basicStrategy, runningCount, trueCount, deviations
+    
+    func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
+        switch self {
+        case .freePlay:
+            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
+        case .basicStrategy:
+            return BasicStrategyGameType(gameMaster: gameMaster)
+        case .runningCount:
+            return RunningCount(gameMaster: gameMaster)
+        default:
+            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
+//        case .trueCount:
+//            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
+//        case .deviations:
+//            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
+        }
+    }
+}
+
+enum StrategyDeckType: Int {
+    case twoCards = 2, threeCards, fourCards
 }

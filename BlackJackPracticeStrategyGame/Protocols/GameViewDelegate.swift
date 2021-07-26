@@ -10,5 +10,6 @@ import Foundation
 protocol GameViewDelegate {
     func playerInput(enabled: Bool)
     func presentCountInputView(countMaster: CountMaster, callback: (Int) -> Void)
-    func dismissCountInputView(completion: () -> Void)
+    func dismissViewController(completion: (() -> Void)?)
+    func presentBasicStrategyFeedbackView(playerAction: PlayerAction, correctAction: PlayerAction)
 }
