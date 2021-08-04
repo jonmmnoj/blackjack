@@ -101,7 +101,7 @@ class BasicStrategy {
                     total += value
                 }
             }
-            ruleType = total >= 10 ? .hard : .soft
+            ruleType = total > 10 ? .hard : .soft
         } else {
             ruleType = .hard
         }

@@ -14,8 +14,9 @@ protocol GameTypeStrategyPatternProtocol {
     //var automaticPlay: Bool { get set }
     func dealCards()
     //waitForPlayerInput()
-    func inputReceived(type: PlayerAction)
+    func inputReceived(action: PlayerAction)
     func tasksForEndOfRound()
+    func waitForPlayerInput()
 }
 
 extension GameTypeStrategyPatternProtocol {
@@ -28,4 +29,5 @@ extension GameTypeStrategyPatternProtocol {
     var automaticPlay: Bool {
         return false
     }
+    
 }

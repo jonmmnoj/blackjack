@@ -30,4 +30,10 @@ class RunningCount: FreePlayGameTypeStrategy {
         }
     }
     
+    override func waitForPlayerInput() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let pAction = self.gameMaster.getPlayerAction()
+            self.gameMaster.inputReceived(type: pAction)
+        }
+    }
 }

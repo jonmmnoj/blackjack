@@ -9,11 +9,21 @@ import Foundation
 import UIKit
 
 class Card {
-    static var height: CGFloat = 200.0
+    static var height: CGFloat = Settings.shared.cardSize
     static var width: CGFloat {
-        return (self.height * 0.708).rounded()
+        return (self.height * 0.708).rounded() //0.708
     }
-    
+    var rotateAnimation: Bool {
+        return isDouble || isSplitAce
+    }
+    var isSplitAce: Bool = false {
+        didSet {
+            if isSplitAce {
+                
+            }
+        }
+    }
+    var hand: Hand?
     var value: CardValue
     var suit: CardSuit
     var view: UIView?
@@ -22,6 +32,7 @@ class Card {
     var dealPoint: CGPoint!
     var isFaceDown: Bool = false
     var isDouble: Bool = false
+    var wasDealt: Bool = false
     
     init(value: CardValue, suit: CardSuit) {
         self.value = value

@@ -6,99 +6,172 @@
 //
 
 import Foundation
+import UIKit
 
 class Settings {
     static let shared = Settings()
-    let defaults = UserDefaults.standard
-    
     private init() {}
+    
+    let defaults = Defaults()
+    
+    var cardSize: CGFloat {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "cardSize")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "cardSize") as? CGFloat ?? 150.0
+        }
+    }
+    
+    var cardWidth: CGFloat {
+        get {
+            return (cardSize * 0.708).rounded()
+        }
+    }
     
     var dealSpeed: Float {
         set {
-            defaults.set(newValue, forKey: "dealSpeed")
+            UserDefaults.standard.set(newValue, forKey: "dealSpeed")
         }
         get {
-            return defaults.object(forKey: "dealSpeed") as? Float ?? 5.0
+            
+            return UserDefaults.standard.object(forKey: "dealSpeed") as? Float ?? defaults.dealSpeed
         }
     }
     var ENHC: Bool {
         set {
-            defaults.set(newValue, forKey: "ENHC")
+            UserDefaults.standard.set(newValue, forKey: "ENHC")
         }
         get {
-            return defaults.object(forKey: "ENHC") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: "ENHC") as? Bool ?? defaults.ENHC
         }
     }
     var ES10: Bool {
         set {
-            defaults.set(newValue, forKey: "ES10")
+            UserDefaults.standard.set(newValue, forKey: "ES10")
         }
         get {
-            return defaults.object(forKey: "ES10") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: "ES10") as? Bool ?? false
         }
     }
     var surrender: Bool {
         set {
-            defaults.set(newValue, forKey: "surrender")
+            UserDefaults.standard.set(newValue, forKey: "surrender")
         }
         get {
-            return defaults.object(forKey: "surrender") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: "surrender") as? Bool ?? defaults.surrender
         }
     }
     var twoCardHands: Bool {
         set {
-            defaults.set(newValue, forKey: "twoCardHands")
+            UserDefaults.standard.set(newValue, forKey: "twoCardHands")
         }
         get {
-            return defaults.object(forKey: "twoCardHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: "twoCardHands") as? Bool ?? true
         }
     }
     var threeCardHands: Bool {
         set {
-            defaults.set(newValue, forKey: "threeCardHands")
+            UserDefaults.standard.set(newValue, forKey: "threeCardHands")
         }
         get {
-            return defaults.object(forKey: "threeCardHands") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: "threeCardHands") as? Bool ?? false
         }
     }
     var fourCardHands: Bool {
         set {
-            defaults.set(newValue, forKey: "fourCardHands")
+            UserDefaults.standard.set(newValue, forKey: "fourCardHands")
         }
         get {
-            return defaults.object(forKey: "fourCardHands") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: "fourCardHands") as? Bool ?? false
         }
     }
     var splitHands: Bool {
         set {
-            defaults.set(newValue, forKey: "splitHands")
+            UserDefaults.standard.set(newValue, forKey: "splitHands")
         }
         get {
-            return defaults.object(forKey: "splitHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: "splitHands") as? Bool ?? true
         }
     }
     var softHands: Bool {
         set {
-            defaults.set(newValue, forKey: "softHands")
+            UserDefaults.standard.set(newValue, forKey: "softHands")
         }
         get {
-            return defaults.object(forKey: "softHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: "softHands") as? Bool ?? true
         }
     }
     var hardHands: Bool {
         set {
-            defaults.set(newValue, forKey: "hardHands")
+            UserDefaults.standard.set(newValue, forKey: "hardHands")
         }
         get {
-            return defaults.object(forKey: "hardHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: "hardHands") as? Bool ?? true
         }
     }
-    var numberOfRoundsBeforeAskCount: CountRounds {
+    var numberOfRoundsBeforeAskCount: String {
         set {
-            defaults.set(newValue, forKey: "numberOfRoundsBeforeAskCount")
+            UserDefaults.standard.set(newValue, forKey: "numberOfRoundsBeforeAskCount")
         }
         get {
-            return defaults.object(forKey: "numberOfRoundsBeforeAskCount") as? CountRounds ?? .oneRound
+            return UserDefaults.standard.object(forKey: "numberOfRoundsBeforeAskCount") as? String ??  "once at the end"
+        }
+    }
+    var numberOfDecks: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "numberOfDecks")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "numberOfDecks") as? Int ?? defaults.numberOfDecks
+        }
+    }
+    var dealerHitsSoft17: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "dealHitsSoft17")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "dealHitsSoft17") as? Bool ?? defaults.dealerHitsSoft17
+        }
+    }
+    var resplitAces: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "resplitAces")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "resplitAces") as? Bool ?? defaults.resplitAces
+        }
+    }
+    var doubleAfterSplit: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "doubleAfterSplit")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "doubleAfterSplit") as? Bool ?? defaults.doubleAfterSplit
+        }
+    }
+    var notifyMistakes: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "notifyMistakes")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "notifyMistakes") as? Bool ?? defaults.notifyMistakes
+        }
+    }
+    var showHandTotal: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "showHandTotal")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "showHandTotal") as? Bool ?? defaults.showHandTotal
+        }
+    }
+    var showDiscardTray: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "showDiscardTray")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "showDiscardTray") as? Bool ?? defaults.showHandTotal
         }
     }
     
@@ -115,27 +188,31 @@ class Settings {
         }
         return array
     }
-}
-
-enum CountRounds: String {
-    case oneRound = "1 round",
-         threeRounds = "3 rounds",
-         fiveRounds = "5 rounds",
-         onceAtEnd = "once at the end"
     
-    var numericValue: Int {
-        switch self {
-            case .oneRound: return 1
-            case .threeRounds: return 3
-            case .fiveRounds: return 5
-            case .onceAtEnd: return 0
-        }
+    static var dealSpeedFactor: Float {
+        let dealSpeed = self.shared.dealSpeed
+        return 1.0 / dealSpeed
+    }
+    
+    
+    
+    struct Defaults {
+        var dealSpeed: Float = 1.0
+        var ENHC: Bool = false
+        var numberOfDecks = 6
+        var dealerHitsSoft17 = true
+        var surrender = true
+        var resplitAces = false
+        var doubleAfterSplit = true
+        var notifyMistakes = true
+        var showHandTotal = false
+        var showDiscardTray = false
     }
 }
 
-enum HandType: String {
-    case twoCardHand = "2 card hand",
-         threeFourCardHand = "3 and 4 card hand",
-         twoThreeFourCardHand = "2, 3 and 4 card hand"
-    
-}
+//enum HandType: String {
+//    case twoCardHand = "2 card hand",
+//         threeFourCardHand = "3 and 4 card hand",
+//         twoThreeFourCardHand = "2, 3 and 4 card hand"
+//    
+//}

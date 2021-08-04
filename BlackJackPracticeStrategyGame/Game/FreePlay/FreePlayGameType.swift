@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     
@@ -24,10 +25,26 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
         dealer.dealCardToSelf()
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
+        //dealer.dealCardToPlayers()
     }
     
-    func inputReceived(type: PlayerAction) {
-        switch type{
+    func inputReceived(action: PlayerAction) {
+        let correctAction = gameMaster.getPlayerAction()
+        if action != correctAction && Settings.shared.notifyMistakes {
+            gameMaster.delegate.alertMistake(message: "You \(action.rawValue.uppercased()) but correct strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
+                if fix {
+                    self.gameMaster.waitForPlayerInput()
+                } else {
+                    self.accept(action)
+                }
+            })
+        } else {
+            accept(action)
+        }
+    }
+    
+    private func accept(_ action: PlayerAction) {
+        switch action{
         case .hit:
             gameMaster.playerHits()
         case .stand:
@@ -43,5 +60,10 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     
     func tasksForEndOfRound() {
         gameMaster.prepareForNewRound()
+    }
+    
+    func waitForPlayerInput() {
+        dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
+        gameMaster.delegate.playerInput(enabled: true)
     }
 }

@@ -11,7 +11,7 @@ class Rules {
     static func didBust(hand: Hand) -> Bool {
         return Rules.value(of: hand) > 21
     }
-
+    
     static func isOver21(hand: Hand) -> Bool {
         if hand.hasAce {
             return valueOfHandWithAces(for: hand) > 21
@@ -58,10 +58,13 @@ class Rules {
         return array.reduce(0, +)
     }
     
-    static func isHardSeventeenOrGreater(hand: Hand) -> Bool {
+    // this allows checks for soft 17
+    static func isSoftOrHardSeventeenOrGreater(hand: Hand) -> Bool {
         let value = Rules.value(of: hand)
         if value == 17 {
-            return isHardSeventeen(hand: hand)
+            // if deal to soft 17, then this returns true
+            // otherwise, need to test if 17 is hard or not
+            return Settings.shared.dealerHitsSoft17 ? isHardSeventeen(hand: hand) : true
         } else {
             return value > 17
         }
@@ -88,5 +91,26 @@ class Rules {
         let hasTen = hand.cards.contains { $0.value == .ten || $0.value == .jack || $0.value == .queen || $0.value == .king }
         let hasAce = hand.cards.contains { $0.value == .ace }
         return hasTen && hasAce && hand.cards.count == 2
+    }
+    
+    static func value(of cards: [Card]) -> Int {
+        let array = cards.filter { card in
+            return card.wasDealt && !card.isFaceDown
+        }
+        let h = Hand(dealToPoint: .zero, adjustmentX: 0, adjustmentY:0, owner: Player())
+        h.cards = array
+        let value = Rules.value(of: h)
+        return value
+    }
+    
+    static func value(of ints: [Int]) -> Int {
+        var array: [Card] = []
+        for int in ints {
+            array.append(Card(value: CardValue(rawValue: int)!, suit: .clubs))
+        }
+        let h = Hand(dealToPoint: .zero, adjustmentX: 0, adjustmentY:0, owner: Player())
+        h.cards = array
+        let value = Rules.value(of: h)
+        return value
     }
 }

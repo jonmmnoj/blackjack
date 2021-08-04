@@ -26,8 +26,6 @@ class Rule {
         return dealerCardValue == self.dealerCardValue && playerRuleValue == self.playerRuleValue
     }
     
-    
-    
 //    func isMatch(dealerCard: Int, playerCards: [Int], action: StrategyAction) -> Bool {
 //        return dealerCard == self.dealerCard && playerCards.elementsEqual(self.playerCards) && action == self.action
 //    }

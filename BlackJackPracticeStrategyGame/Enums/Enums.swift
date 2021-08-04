@@ -19,7 +19,6 @@ enum CardSuit: String, CaseIterable {
         case .diamonds: return "D"
         case .clubs: return "C"
         case .spades: return "S"
-        
         }
     }
 }
@@ -69,6 +68,7 @@ enum GameState {
          busted,
          revealedFaceDownCard,
          movedRevealCard,
+         dealtToAtLeast17,
          dealtH17,
          dealS17,
          countHands,
@@ -76,6 +76,7 @@ enum GameState {
          discardedAllHands,
          createSplit,
          movedAllCards,
+         tappedBackButton,
          test
 }
 
@@ -88,27 +89,47 @@ enum HandState {
          lost,
          push,
          incomplete,
-         surrender
+         surrender,
+         splitAces
 }
 
 enum MoveCardsDirection {
-    case right, left
+    case right,
+         left
 }
 
 enum PlayerAction: String {
-    case stand, hit, double, split, surrender
+    case stand,
+         hit,
+         double,
+         split,
+         surrender
 }
 
 enum StrategyAction: String {
-    case split, doNotSplit, splitIfDAS, stand, hit, double, doubleHit, doubleStand, surrender
+    case split,
+         doNotSplit,
+         splitIfDAS,
+         stand,
+         hit,
+         double,
+         doubleHit,
+         doubleStand,
+         surrender
 }
 
 enum RuleType {
-    case pair, soft, hard
+    case pair,
+         soft,
+         hard
 }
 
 enum GameType: String {
-    case freePlay, basicStrategy, runningCount, trueCount, deviations
+    case freePlay,
+         basicStrategy,
+         runningCount,
+         trueCount,
+         deviations
     
     func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
         switch self {
@@ -118,16 +139,35 @@ enum GameType: String {
             return BasicStrategyGameType(gameMaster: gameMaster)
         case .runningCount:
             return RunningCount(gameMaster: gameMaster)
+        case .deviations:
+            return DeviationGameTypeHelper(gameMaster: gameMaster)
         default:
             return FreePlayGameTypeStrategy(gameMaster: gameMaster)
 //        case .trueCount:
 //            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
-//        case .deviations:
-//            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
+        
         }
     }
 }
 
 enum StrategyDeckType: Int {
-    case twoCards = 2, threeCards, fourCards
+    case twoCards = 2,
+         threeCards,
+         fourCards
+}
+
+enum CountRounds: String {
+    case oneRound = "one round",
+         threeRounds = "three rounds",
+         fiveRounds = "five rounds",
+         onceAtEnd = "once at the end"
+    
+    var numericValue: Int {
+        switch self {
+            case .oneRound: return 1
+            case .threeRounds: return 3
+            case .fiveRounds: return 5
+            case .onceAtEnd: return 0
+        }
+    }
 }

@@ -8,6 +8,12 @@
 import Foundation
 
 extension BasicStrategy {
+    static func ruleLookup(type: RuleType, dealerCardValue: Int, playerRuleValue: Int) -> Rule {
+        let array: [Rule] = type == .pair ? pairRules : type == .soft ? softRules : hardRules
+        let rule = array.first(where: { $0.dealerCardValue == dealerCardValue && $0.playerRuleValue == playerRuleValue /*&& $0.deviation != nil*/})
+        return rule!
+    }
+    
     static var pairRules: [Rule] {
         return [
             Rule(type: .pair, dealerCardValue: 2, playerRuleValue: 1, action: .split),
@@ -124,6 +130,17 @@ extension BasicStrategy {
     
     static var softRules: [Rule] {
         return [ // ace is implied
+            Rule(type: .soft, dealerCardValue: 2, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 3, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 4, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 5, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 6, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 7, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 8, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 9, playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 10,playerRuleValue: 10, action: .stand),
+            Rule(type: .soft, dealerCardValue: 1, playerRuleValue: 10, action: .stand),
+            
             Rule(type: .soft, dealerCardValue: 2, playerRuleValue: 9, action: .stand),
             Rule(type: .soft, dealerCardValue: 3, playerRuleValue: 9, action: .stand),
             Rule(type: .soft, dealerCardValue: 4, playerRuleValue: 9, action: .stand),
@@ -234,9 +251,9 @@ extension BasicStrategy {
             Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 16, action: .stand),
             Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 16, action: .hit),
             Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 16, action: .hit),
-            Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 16, action: .hit),
-            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 16, action: .hit),
-            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 16, action: .hit),
+            Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 16, action: .hit, deviation: Deviation(count: "4+", action: .stand)),
+            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 16, action: .hit, deviation: Deviation(count: "0+", action: .stand)),
+            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 16, action: .hit, deviation: Deviation(count: "3+", action: .stand)),
             
             Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 15, action: .stand),
             Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 15, action: .stand),
@@ -246,8 +263,8 @@ extension BasicStrategy {
             Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 15, action: .hit),
             Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 15, action: .hit),
             Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 15, action: .hit),
-            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 15, action: .hit),
-            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 15, action: .hit),
+            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 15, action: .hit, deviation: Deviation(count: "4+", action: .stand)),
+            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 15, action: .hit, deviation: Deviation(count: "5+", action: .stand)),
             
             Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 14, action: .stand),
             Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 14, action: .stand),
@@ -301,15 +318,15 @@ extension BasicStrategy {
             Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 10, action: .doubleHit),
             Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 10, action: .doubleHit),
             Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 10, action: .doubleHit),
-            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 10, action: .hit),
-            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 10, action: .hit),
+            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 10, action: .hit, deviation: Deviation(count: "4+", action: .doubleHit)),
+            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 10, action: .hit, deviation: Deviation(count: "3+", action: .doubleHit)),
             
-            Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 9, action: .hit),
+            Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 9, action: .hit, deviation: Deviation(count: "1+", action: .doubleHit)),
             Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 9, action: .doubleHit),
             Rule(type: .hard, dealerCardValue: 4, playerRuleValue: 9, action: .doubleHit),
             Rule(type: .hard, dealerCardValue: 5, playerRuleValue: 9, action: .doubleHit),
             Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 9, action: .doubleHit),
-            Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 9, action: .hit),
+            Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 9, action: .hit, deviation: Deviation(count: "3+", action: .doubleHit)),
             Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 9, action: .hit),
             Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 9, action: .hit),
             Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 9, action: .hit),
@@ -319,7 +336,7 @@ extension BasicStrategy {
             Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 4, playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 5, playerRuleValue: 8, action: .hit),
-            Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 8, action: .hit),
+            Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 8, action: .hit, deviation: Deviation(count: "2+", action: .doubleHit)),
             Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 8, action: .hit),

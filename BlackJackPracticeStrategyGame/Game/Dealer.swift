@@ -18,6 +18,7 @@ class Dealer: Dealable {
     var hands: [Hand] = [] // dealer only has one had so this is not the best design
     var activatedHand: Hand?
     var table: Table
+    var isDealer = true
     
     init(table: Table, numberOfDecks: Int = 1) {
         self.table = table
@@ -34,18 +35,12 @@ class Dealer: Dealable {
     
     func dealCardToSelf() {
         let card = getCard()
+        //let card = Card(value: .six, suit: .clubs) // SOFT 17 TEST
         if self.activatedHand!.cards.count == 0 {
             card.isFaceDown = true
+            //card.value = .ace
         }
         deal(card: card, to: self.activatedHand!)
-    }
-    
-    func dealToHard17() -> Void {
-        while !Rules.isHardSeventeenOrGreater(hand: self.activatedHand!) {
-            let card = getCard()
-            self.deal(card: card, to: self.activatedHand!)
-        }
-        return
     }
     
     func dealCardToPlayers() {
@@ -54,22 +49,34 @@ class Dealer: Dealable {
         }
     }
     
+    //let values: [CardValue] = [.ace, .ten, .five]
+    //var i = 0
     func deal(to player: Player) {
         player.hands.forEach {
-           let card = getCard()
-            //let card = getTen()
+            let card = getCard()
+            //let card = Card(value: .two, suit: .diamonds)
+            //let card = Card(value: values[i], suit: .diamonds)
+            //i += 1
             deal(card: card, to: $0)
         }
     }
     
+    func dealtToAtLeast17() -> Void {
+        while !Rules.isSoftOrHardSeventeenOrGreater(hand: self.activatedHand!) {
+            let card = getCard()
+            self.deal(card: card, to: self.activatedHand!)
+        }
+        return
+    }
+    
     func deal(to hand: Hand, isDouble: Bool = false) {
         let card = getCard()
+        //let card = Card(value: .two, suit: .diamonds)
         card.isDouble = isDouble
         deal(card: card, to: hand)
     }
     
     func deal(card: Card, to hand: Hand, delay: Bool = true) {
-        //CardCounter.shared.count(card: card)
         hand.add(card)
         table.animateDeal(card: card, delayAnimation: delay)
     }
@@ -130,24 +137,30 @@ class Dealer: Dealable {
     }
     
     func dealCardsAfterSplit(newHand: Hand, otherHand: Hand, rotate: Bool = false) {
+        let isSplitAce = newHand.cards.first!.value == .ace ? true : false
+        if isSplitAce {
+            newHand.set(state: .splitAces)
+            otherHand.set(state: .splitAces)
+        }
         var card = getCard()
-        //var card = getAce()
+        //var card = Card(value: .ten, suit: .diamonds)//
+        card.isSplitAce = isSplitAce
         deal(card: card, to: newHand)
         card = getCard()
-        //card = getAce()
+        //card = Card(value: .ten, suit: .diamonds)
+        card.isSplitAce = isSplitAce
         deal(card: card, to: otherHand)
     }
     
     func revealCard() {
         let card = self.activatedHand!.cards.first!
         card.isFaceDown = false
-        //CardCounter.shared.count(card: card)
         table.animateReveal(card: card)
     }
     
     func moveCardToNewPositionOnTable() {
         let card = self.activatedHand!.cards.last!
-        self.activatedHand!.set(adjustmentX: 50, adjustmentY: 0)
+        self.activatedHand!.set(adjustmentX: Settings.shared.cardSize * 0.2, adjustmentY: 0) //50
         self.activatedHand!.resetNextCardPoint()
         self.activatedHand!.adjustDealPoint()
         card.set(dealPoint: self.activatedHand!.nextCardPoint)

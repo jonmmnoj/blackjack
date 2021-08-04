@@ -15,6 +15,7 @@ class Player: Dealable {
     var activatedHand: Hand? // nil implies all hands are complete ie no action to take
     var hands: [Hand] = []
     var isFinished: Bool = false
+    var isDealer = false
     
     init() {
 

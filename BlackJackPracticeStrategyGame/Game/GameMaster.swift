@@ -12,39 +12,42 @@ import UIKit
 
 
 class GameMaster {
+
     var gameType: GameType
-    var gameStrategyPattern: GameTypeStrategyPatternProtocol!
+    lazy var gameStrategyPattern: GameTypeStrategyPatternProtocol = {
+        return gameType.getStrategyPattern(gameMaster: self)
+    }()
     var dealer: Dealer!
     var players: [Player] = []
     var player: Player!
-    var delegate: GameViewDelegate! {
-        didSet {
-            //countMaster.delegate = self.delegate
-        }
-    }
+    var delegate: GameViewDelegate!
     var dealerBusy = false
-    var table: UIView // ideally, GM does not have to work with table, only dealer, and then dealer works with table?
+    var tableView: UIView // ideally, GM does not have to work with table, only dealer, and then dealer works with table?
     //var table: Table
     var gameState: GameState! // save game state when using dealer, dealer might use table, which uses animations, gameMaster has to wait for animations to finish, table tells master when animations are finished
     //var countMaster: CountMaster
-    var navBarHeight: CGFloat!
+    var navBarHeight: CGFloat = 0
     var dealerHand: Hand {
-        return Hand(dealToPoint: CGPoint(x: 10, y: 60 + navBarHeight), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
+        let x = Settings.shared.showDiscardTray ? 0 + Settings.shared.cardWidth + 3 : tableView.center.x - Settings.shared.cardWidth
+        return Hand(dealToPoint: CGPoint(x: x , y: 50), adjustmentX: Card.width + 2, adjustmentY: 0, owner: self.dealer) // old x: table.center.x - Settings.shared.cardWidth
     }
     var playerHand: Hand {
-        return Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 250), adjustmentX: 50, adjustmentY: 50, owner: player)
+        return Hand(dealToPoint: CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30), adjustmentX: Settings.shared.cardSize * 0.2, adjustmentY: Settings.shared.cardSize * 0.2, owner: player)
     }
     
     init(gameType: GameType, table: UIView) {
         self.gameType = gameType
-        self.table = table
+        self.tableView = table
     }
     
     func startGame() {
-        gameStrategyPattern = gameType.getStrategyPattern(gameMaster: self)
-        setupDealer(table: table)
+        CardCounter.shared.reset()
+        //gameStrategyPattern = gameType.getStrategyPattern(gameMaster: self)
+        setupDealer(table: tableView)
         setupPlayer()
-        dealCards()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.dealCards()
+        }
     }
     
     func dealCards() {
@@ -66,26 +69,12 @@ class GameMaster {
         self.players.forEach {
             self.dealer.access(to: $0)
         }
-        
         let hand = playerHand//Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
         player.add(hand: hand)
-        
-        
-        
     }
     
     func tasksForEndOfRound() {
         gameStrategyPattern.tasksForEndOfRound()
-        // call CardCounterMaster, see if it's time to ask the player what the count is.
-        // CCM.isTimeToAskForCount?() //
-//        if countGame && countMaster.isTimeToAskForCount() {
-//            countMaster.endOfRoundTasks(gameMaster: self, completion: {
-//                self.prepareForNewRound()
-//            })// let countMaster call back to GameMaster when task is complete
-//            print("GM waiting on CM")
-//        } else {
-//            prepareForNewRound()
-//        }
     }
     
     func prepareForNewRound() {
@@ -106,7 +95,7 @@ extension GameMaster {
     func inputReceived(type: PlayerAction) {
         self.dealer.stopIndicator()
         self.delegate.playerInput(enabled: false)
-        gameStrategyPattern.inputReceived(type: type)
+        gameStrategyPattern.inputReceived(action: type)
     }
     
     func playerHits() {
@@ -119,16 +108,32 @@ extension GameMaster {
     func playerDoubles() {
         let player = self.players.first!
         let hand = player.activatedHand!
+        
+        // NOTE:  Should this condition logic go in the GameTypeProtocol class, eg. FreePlayGameType class??
+        if hand.cards.count > 2 {
+            print("alert: > 2 cards")
+            waitForPlayerInput()
+            return
+        }
+        if hand.isSplitHand && !Settings.shared.doubleAfterSplit {
+            print("alert: no DAS")
+            waitForPlayerInput()
+            return
+        }
+        
         self.dealer.deal(to: hand, isDouble: true)
         self.gameState = .dealtDouble
     }
     
     func playerSplits() {
         let hand = player.activatedHand!
-        if !hand.canSplit {
-            print("can't split")
-            return
-        }
+        
+        // NOTE:  Should this condition logic go in the GameTypeProtocol class, eg. FreePlayGameType class??
+//        if !hand.canSplit {
+//            print("can't split")
+//            waitForPlayerInput()
+//            return
+//        }
         self.dealer.splitHand(for: hand)
         self.gameState = .dealtSplit
     }
@@ -136,7 +141,7 @@ extension GameMaster {
     func playerStands() {
         let hand = player.activatedHand!
         hand.set(state: .stand)
-        if hand.isSplitHand {
+        if !hand.isFirstHand {
             moveCards(to: .left)
         } else {
             playerHasMoreHandsOrDealersTurn()
@@ -146,7 +151,7 @@ extension GameMaster {
     func playerSurrenders() {
         let hand = player.activatedHand!
         hand.set(state: .surrender)
-        if hand.isSplitHand {
+        if !hand.isFirstHand {
             moveCards(to: .left)
         } else {
             playerHasMoreHandsOrDealersTurn()
@@ -156,9 +161,7 @@ extension GameMaster {
 
 extension GameMaster {
     func resume() {
-        //print("\(gameState.debugDescription)")
         switch gameState {
-        
         case .dealtCards:
             // assume one hand game -- need to change for 2-hand games
            //if dealer has ace ask insurance
@@ -178,56 +181,54 @@ extension GameMaster {
                 waitForPlayerInput()
             }
         case .dealtDouble:
-            //check for bust
             let hand = player.activatedHand!
             if (Rules.didBust(hand: hand)) {
                 handleBust(hand: hand)
             } else {
                 hand.set(state: .double)
-                if hand.isSplitHand {
+                if !hand.isFirstHand {
                     moveCards(to: .left)
                 } else {
                     playerHasMoreHandsOrDealersTurn()
                 }
             }
         case .dealtSplit:
-            moveCards(to: .right)
+            if player.activatedHand!.state == .splitAces {
+                revealFaceDownCard()
+            } else {
+                moveCards(to: .right)
+            }
         case .movedAllCards:
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
                 self.player.activatedHand!.set(state: .blackjack)
-                //self.dealer.discard(hand: player.activatedHand!)
-                //self.gameState = .discardedHand
                 discard(hand: player.activatedHand!)
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
         case .discardedHand, .busted:
-            if player.activatedHand!.isSplitHand {
+            if player.activatedHand!.isSplitHand && !player.activatedHand!.isFirstHand {
                 moveCards(to: .left)
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
         case .revealedFaceDownCard:
-            if Rules.isHardSeventeenOrGreater(hand: self.dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
+            if Rules.isSoftOrHardSeventeenOrGreater(hand: self.dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
                 discardAllHands()
             } else {
-                self.dealer.moveCardToNewPositionOnTable()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.dealer.moveCardToNewPositionOnTable()
+                }
                 self.gameState = .movedRevealCard
             }
         case .movedRevealCard:
-            self.dealer.dealToHard17()
-            self.gameState = .dealtH17
-        case .dealtH17:
-            // figure out hands that won lost tie
-            // discard all and deal again
+            self.dealer.dealtToAtLeast17()
+            self.gameState = .dealtToAtLeast17
+        case .dealtToAtLeast17:
             self.discardAllHands()
-        
         case .discardedAllHands:
             tasksForEndOfRound()
-            //prepareForNewRound()
-            //dealCards()
-        
-        
+        case .tappedBackButton:
+            print("back button")
         default:
             print("GameMaster.resume() default case")
         }
@@ -251,8 +252,13 @@ extension GameMaster {
             revealFaceDownCard()
         } else if playerHasBlackjack {
             self.player.activatedHand!.set(state: .blackjack)
-            //self.dealer.discard(hand: player.activatedHand!)
-            discard(hand: player.activatedHand!)
+            if player.activatedHand!.isFirstHand {
+                self.delegate.playerInput(enabled: false)
+                revealFaceDownCard()
+            } else {
+                discard(hand: player.activatedHand!)
+            }
+        
         } else {
             waitForPlayerInput()
         }
@@ -272,29 +278,36 @@ extension GameMaster {
     }
     
     func waitForPlayerInput() {
-        if gameStrategyPattern.automaticPlay {
-            let pAction = getPlayerAction()
-            inputReceived(type: pAction)
-        } else {
-            dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
-            delegate.playerInput(enabled: true)
-        }
+        gameStrategyPattern.waitForPlayerInput()
+        
+//        if gameStrategyPattern.automaticPlay {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                let pAction = self.getPlayerAction()
+//                self.inputReceived(type: pAction)
+//            }
+//        } else {
+//            dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
+//            delegate.playerInput(enabled: true)
+//        }
     }
     
     func discard(hand: Hand) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.dealer.discard(hand: self.player.activatedHand!)
             self.gameState = .discardedHand
         }
     }
     
     func revealFaceDownCard() {
-        self.dealer.revealCard()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.dealer.revealCard()
+        }
         self.gameState = .revealedFaceDownCard
     }
     
     func discardAllHands() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        let wait: Double = gameType == .runningCount ? 2.0 : 1.0
+        DispatchQueue.main.asyncAfter(deadline: .now() + wait) {
             self.dealer.discard(hand: self.dealer.activatedHand!)
             self.player.hands.forEach {
                 self.dealer.discard(hand: $0)
@@ -305,22 +318,26 @@ extension GameMaster {
     }
     
     func handleBust(hand: Hand) {
-        
-
-
-//        hand.set(state: .bust)
-//        self.discard(hand: hand)
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             hand.set(state: .bust)
             self.gameState = .busted
-            self.resume()
+            
+            
+            //self.resume()
+            
+            // NOTE/UPDATE: Code was just calling resume().... instead of discarding.... I think skippped discarding for some reason but I don't remember the exact reason.  Was it to do with card counting? Anyway, going to comment out resume() and call discard() instead, and can put a gameType condition, or whatever is needed, to make the option to skip discarding and just resume play, ie. don't discard any hands until the round is over, and all cards are discarded at the same time.
+            // UPDATE: maybe it was to avoid discarding first hand when bust...?
+            
+            if hand.isFirstHand {
+                self.resume()
+            } else {
+                self.discard(hand: hand)
+            }
         }
-        
     }
     
     func askForInsurance() {
-        // todo
+        // TODO:
     }
     
     func checkIfSplit(hand: Hand) {

@@ -11,6 +11,7 @@ protocol Dealable {
     var activatedHand: Hand? { get set }
     var hands: [Hand] { get set }
     func searchForIncompleteHand()
+    var isDealer: Bool { get set }
 }
 
 extension Dealable {
