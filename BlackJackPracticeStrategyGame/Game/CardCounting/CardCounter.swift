@@ -51,7 +51,39 @@ class CardCounter {
     }
     
     func printCount() {
-        print("Count updated to: \(runningCount)")
+        //print("Count updated to: \(runningCount)")
+    }
+    
+    func doesDeviationApply(_ deviation: Deviation) -> Bool {
+        var apply: Bool = false
+        let deviationTrueCount = deviation.getCount()
+        let direction = deviation.direction
+        if deviationTrueCount == nil {
+            apply = true
+        } else {
+            if deviationTrueCount! == 0 { // Use the RUNNING count when 0
+                if direction == "+" {
+                    if self.runningCount > 0 {
+                        apply = true
+                    }
+                } else {
+                    if self.runningCount < 0 {
+                        apply = true
+                    }
+                }
+            }
+            if direction == "+" {
+                if self.getTrueCount() >= deviationTrueCount! {
+                    apply = true
+                }
+            } else {
+                if self.getTrueCount() <= deviationTrueCount! {
+                    apply = true
+                }
+            }
+        }
+        
+        return apply
     }
     
 }

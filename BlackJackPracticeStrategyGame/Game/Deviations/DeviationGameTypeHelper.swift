@@ -12,7 +12,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
 
     var gameMaster: GameMaster
     var decks: [StrategyDeck]
-    var rule: Rule!
+    var deviation: Deviation!
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
@@ -26,7 +26,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         let deck = decks.randomElement()!
         let result = deck.nextRoundThatIsDeviation()//nextRound()
         let round = result.0
-        self.rule = result.1
+        self.deviation = result.1
         let pCards = round.playerCards
         let dCards = round.dealerCards
         for card in pCards {
@@ -41,10 +41,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     }
     
     func inputReceived(action: PlayerAction) {
-//        let correctAction = gameMaster.getPlayerAction()
-//        let result = correctAction == action
-//        print("\(result). Your action: \(action), Correct action: \(correctAction)")
-//        gameMaster.delegate.presentBasicStrategyFeedbackView(playerAction: action, correctAction: correctAction)
+
     }
     
     func tasksForEndOfRound() {
@@ -55,60 +52,48 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         //dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
         //gameMaster.delegate.playerInput(enabled: true)
         
-        let pvc = PopUpViewController()
-        pvc.setupContentView = { containerView in
-            containerView.backgroundColor = UIColor.black.withAlphaComponent(0)
             let inputView = DeviationInputView(frame: .zero)
-            containerView.addSubview(inputView)
-            inputView.snp.makeConstraints { make in
-                make.center.equalTo(containerView)
-                make.width.greaterThanOrEqualTo(containerView.snp.width).offset(-50)
-                //make.left.equalTo(table)(50)
-               // make.right.equalTo(table).offset(-50)
-                make.height.equalTo(250)
-            }
-            inputView.submitHandler = { action, number in
-                print("submit value: \(number)")
-                // compare action/number with rule
+            inputView.submitHandler = { action, count, direction in
                 
-                let isActionCorrect = action == self.rule.deviation!.getAction(numberOfPlayerCards: self.gameMaster.player.activatedHand!.cards.count)
-                let isCountCorrect = number == self.rule.deviation!.getCount()
+                let action = StrategyAction(rawValue: action.rawValue)
                 
-                if isActionCorrect && isCountCorrect {
-                    print("deviation report: correct input")
-                } else {
-                    print("deviation report: wrong input")
+                //let deviationType: DeviationType = Deviation.getType()
+                
+                //let surrenderDeviation = self.rule.surrender?.getDeviation()
+                //let ruleDeviation = self.rule.getDeviation()//self.rule.deviations!.first(where: { $0.type == deviationType })!
+                
+                //let deviationRule = self.rule.getDeviation(numberOfCards: self.gameMaster.player.activatedHand!.cards.count)!//surrenderDeviation != nil && self.gameMaster.player.activatedHand!.cards.count == 2 ? surrenderDeviation! : ruleDeviation!
+                
+                var correctAction = self.deviation.action
+                if correctAction == .doubleHit || correctAction == .doubleStand {
+                    correctAction = .double
                 }
                 
+                let isActionCorrect = action == correctAction//deviationRule.getAction(numberOfPlayerCards: self.gameMaster.player.activatedHand!.cards.count)
+                let isCountCorrect = count == self.deviation.getCount()
+                let isDirectionCorrect = direction == self.deviation.direction
                 
-                self.gameMaster.delegate.dismissViewController(completion: nil)
+                if isActionCorrect && isCountCorrect && isDirectionCorrect {
+                    print("deviation report: CORRECT input")
+                } else {
+                    print("deviation report: WRONG input")
+                }
+                print("Your answer: \(count)\(direction), \(action!.rawValue)")
+                print("Correct answer: \(self.deviation.getCount() ?? 99)\(self.deviation.direction ?? "nil"), \(correctAction)")
+                
+                inputView.removeFromSuperview()
                 self.gameMaster.discardAllHands()
             }
+        
+        let tableView = gameMaster.tableView
+        tableView.addSubview(inputView)
+        inputView.snp.makeConstraints { make in
+            make.center.equalTo(tableView)
+            make.width.greaterThanOrEqualTo(tableView.snp.width).offset(-50)
+            //make.left.equalTo(table)(50)
+           // make.right.equalTo(table).offset(-50)
+            make.height.equalTo(250)
         }
-        gameMaster.delegate.presentViewController(pvc)
-        
-//        let table = gameMaster.tableView
-//        let inputView = DeviationInputView(frame: .zero)
-//        gameMaster.tableView.addSubview(inputView)
-//        inputView.snp.makeConstraints { make in
-//            make.center.equalTo(table)
-//            make.width.greaterThanOrEqualTo(table.snp.width).offset(-50)
-//            //make.left.equalTo(table)(50)
-//           // make.right.equalTo(table).offset(-50)
-//            make.height.equalTo(300)
-//        }
-//        inputView.completion = { correct in
-//            print("submit value: \(correct)")
-//        }
-        
-        
-        
-        
-        // SHOW DEV INPUT, WITH CALLBACK FOR SUBMIT BUTTON
-        // GET INPUT RETURNED ON TAP SUBMIT BUTTON
-            // CHECK WITH RULES, CORRECT/INCORRECT
-            // SHOW FEEDBACK VIEW, PROVIDE LABEL DATA, INCLUDE CALLBACK FOR DISMISS
-        // ACTION DISMISS CALLED BACK
-            // GM: SET STATE DISCARD ALL, THEN: RESUME
     }
+
 }

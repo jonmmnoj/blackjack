@@ -31,7 +31,7 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     func inputReceived(action: PlayerAction) {
         let correctAction = gameMaster.getPlayerAction()
         if action != correctAction && Settings.shared.notifyMistakes {
-            gameMaster.delegate.alertMistake(message: "You \(action.rawValue.uppercased()) but correct strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
+            gameMaster.delegate.alertMistake(message: "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
                 if fix {
                     self.gameMaster.waitForPlayerInput()
                 } else {

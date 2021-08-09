@@ -115,7 +115,7 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: "numberOfRoundsBeforeAskCount")
         }
         get {
-            return UserDefaults.standard.object(forKey: "numberOfRoundsBeforeAskCount") as? String ??  "once at the end"
+            return UserDefaults.standard.object(forKey: "numberOfRoundsBeforeAskCount") as? String ?? defaults.numberOfRoundsBeforeAskCount.rawValue
         }
     }
     var numberOfDecks: Int {
@@ -174,6 +174,14 @@ class Settings {
             return UserDefaults.standard.object(forKey: "showDiscardTray") as? Bool ?? defaults.showHandTotal
         }
     }
+    var deviations: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "deviations")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "deviations") as? Bool ?? defaults.deviations
+        }
+    }
     
     static func getTypeOfHands() -> [RuleType] {
         var array: [RuleType] = []
@@ -207,6 +215,8 @@ class Settings {
         var notifyMistakes = true
         var showHandTotal = false
         var showDiscardTray = false
+        var deviations = true
+        var numberOfRoundsBeforeAskCount = CountRounds.oneRound
     }
 }
 

@@ -16,6 +16,8 @@ class DeviationInputView: UIView {
     @IBOutlet var splitButton: UIButton!
     @IBOutlet var surrenderButton: UIButton!
     @IBOutlet var textField: UITextField!
+    @IBOutlet var actionSegmentedControl: UISegmentedControl!
+    @IBOutlet var lessGreaterThanSegmentedControl: UISegmentedControl!
     
     @IBOutlet weak var decrease: UIButton!
     @IBOutlet weak var increase: UIButton!
@@ -28,8 +30,9 @@ class DeviationInputView: UIView {
         return [hitButton, standButton, doubleButton, splitButton, surrenderButton]
     }()
     
-    var playerAction: StrategyAction?
-    var submitHandler: ((StrategyAction, Int) -> Void)!
+    var playerAction: PlayerAction = .hit
+    var lessThanGreaterThan: String = "+"
+    var submitHandler: ((PlayerAction, Int, String) -> Void)!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,9 +55,41 @@ class DeviationInputView: UIView {
         secondRowStackView.layoutMargins.right = margin
         
         resetButtonsStyle()
+        
+        // when rule is 0... just show running count segment control, eg. A,8 vs 6
+        // when rule has nil count, just show action segment control, eg. 17 vs A
     
     }
     
+    @IBAction func strategyActionSegementControlAction(_ sender: UISegmentedControl!) {
+        playerAction = .hit
+        switch sender.selectedSegmentIndex {
+        case 0:
+            playerAction = .hit
+        case 1:
+            playerAction = .stand
+        case 2:
+            playerAction = .double
+        case 3:
+            playerAction = .split
+        case 4:
+            playerAction = .surrender
+        default:
+            playerAction = .hit
+        
+        }
+    }
+    
+    @IBAction func lessGreaterThanSegementControlAction(_ sender: UISegmentedControl!) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            lessThanGreaterThan = "-"
+        case 1:
+            lessThanGreaterThan = "+"
+        default:
+            lessThanGreaterThan = "+"
+        }
+    }
     
     
     @IBAction func hitAction(_ sender: UIButton!) {
@@ -149,18 +184,6 @@ class DeviationInputView: UIView {
    
 
     @IBAction func submitAction(_ sender: UIButton!) {
-        guard let playerAction = self.playerAction else {
-            return
-        }
-        
-        let num = getInt()
-        print("number: \(num) & action: \(playerAction)")
-        
-      
-        
-        
-        submitHandler(playerAction, num)
-        
-        
+        submitHandler(playerAction, getInt(), lessThanGreaterThan)
     }
 }

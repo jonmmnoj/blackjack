@@ -10,14 +10,11 @@ import QuickTableViewController
 
 protocol GameTypeSettings {
     var tableSettings: [Section] { get }
-    func registerCustomViews(for tableView: UITableView)
-//    static func getSettingsHelper(vc: SettingsViewController, gameType: GameType) -> GameTypeSettings
     var title: String { get set }
+    func registerCustomViews(for tableView: UITableView)
     
 }
 
 extension GameTypeSettings {
-    func registerCustomViews(for tableView: UITableView) {
-        
-    }
+    func registerCustomViews(for tableView: UITableView) {}
 }

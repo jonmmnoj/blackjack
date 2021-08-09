@@ -24,6 +24,12 @@ class StrategyGameDecks {
         return array//.randomElement()!
     }
     
+//    static func getRandomRound() {
+//        let decks = getDecks()
+//        let deck = decks.randomElement()
+//        deck?.nextRoundThatIsDeviation()
+//    }
+    
     static var twoCardHandDeck: StrategyDeck {
         let deck = StrategyDeck(type: .twoCards)
         for i in 0...twoCardHands.count - 1 {
@@ -181,6 +187,11 @@ class StrategyGameDecks {
                 return false
             }
         }
+//        else if type == .soft {
+//            if (playerCardValues.count > 2) {
+//                return false
+//            }
+//        }
         let prv = BasicStrategy.getPlayerRuleValue(rule: type, playerCardValues: playerCardValues)
         switch type {
         case .pair:

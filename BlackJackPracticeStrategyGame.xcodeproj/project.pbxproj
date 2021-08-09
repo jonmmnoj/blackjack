@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -37,6 +37,24 @@
 		FC610EBA26B840000089C7C9 /* DeviationGameTypeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EB926B840000089C7C9 /* DeviationGameTypeHelper.swift */; };
 		FC610EBC26B84B600089C7C9 /* DeviationsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EBB26B84B600089C7C9 /* DeviationsSettings.swift */; };
 		FC610EBE26B863E10089C7C9 /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EBD26B863E10089C7C9 /* PopUpViewController.swift */; };
+		FC610EFF26BC55230089C7C9 /* RowCellObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EEA26BC55230089C7C9 /* RowCellObserver.swift */; };
+		FC610F0026BC55230089C7C9 /* ChartProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EEB26BC55230089C7C9 /* ChartProtocol.swift */; };
+		FC610F0126BC55230089C7C9 /* PrettyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EED26BC55230089C7C9 /* PrettyDelegate.swift */; };
+		FC610F0326BC55230089C7C9 /* FillinChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF026BC55230089C7C9 /* FillinChart.swift */; };
+		FC610F0426BC55230089C7C9 /* CellContentEnumeration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF226BC55230089C7C9 /* CellContentEnumeration.swift */; };
+		FC610F0526BC55230089C7C9 /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF326BC55230089C7C9 /* Charts.swift */; };
+		FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF426BC55230089C7C9 /* PECountry.swift */; };
+		FC610F0726BC55230089C7C9 /* PrettyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF526BC55230089C7C9 /* PrettyDataSource.swift */; };
+		FC610F0826BC55230089C7C9 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF726BC55230089C7C9 /* MainViewController.swift */; };
+		FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF826BC55230089C7C9 /* ChartViewController.swift */; };
+		FC610F0A26BC55230089C7C9 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF926BC55230089C7C9 /* TabBarController.swift */; };
+		FC610F0B26BC55230089C7C9 /* PrettyHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC610EFB26BC55230089C7C9 /* PrettyHeaderView.xib */; };
+		FC610F0C26BC55230089C7C9 /* PrettyRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EFC26BC55230089C7C9 /* PrettyRowCell.swift */; };
+		FC610F0D26BC55230089C7C9 /* PrettyRowCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC610EFD26BC55230089C7C9 /* PrettyRowCell.xib */; };
+		FC610F0E26BC55230089C7C9 /* PrettyHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EFE26BC55230089C7C9 /* PrettyHeaderView.swift */; };
+		FC610F1026BC55430089C7C9 /* Chart.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC610F0F26BC55430089C7C9 /* Chart.storyboard */; };
+		FC610F1326BC57090089C7C9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = FC610F1226BC57090089C7C9 /* OrderedCollections */; };
+		FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */; };
 		FC79376B2694D2E90000ACB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376A2694D2E90000ACB7 /* AppDelegate.swift */; };
 		FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */; };
 		FC79376F2694D2E90000ACB7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376E2694D2E90000ACB7 /* GameViewController.swift */; };
@@ -94,6 +112,26 @@
 		FC610EB926B840000089C7C9 /* DeviationGameTypeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationGameTypeHelper.swift; sourceTree = "<group>"; };
 		FC610EBB26B84B600089C7C9 /* DeviationsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationsSettings.swift; sourceTree = "<group>"; };
 		FC610EBD26B863E10089C7C9 /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
+		FC610EC026BB3FAD0089C7C9 /* PrettyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = PrettyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC610ECF26BB414C0089C7C9 /* Chart.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Chart.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC610EE526BB42750089C7C9 /* Chart2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Chart2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC610EEA26BC55230089C7C9 /* RowCellObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RowCellObserver.swift; sourceTree = "<group>"; };
+		FC610EEB26BC55230089C7C9 /* ChartProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartProtocol.swift; sourceTree = "<group>"; };
+		FC610EED26BC55230089C7C9 /* PrettyDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDelegate.swift; sourceTree = "<group>"; };
+		FC610EF026BC55230089C7C9 /* FillinChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillinChart.swift; sourceTree = "<group>"; };
+		FC610EF226BC55230089C7C9 /* CellContentEnumeration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellContentEnumeration.swift; sourceTree = "<group>"; };
+		FC610EF326BC55230089C7C9 /* Charts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
+		FC610EF426BC55230089C7C9 /* PECountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PECountry.swift; sourceTree = "<group>"; };
+		FC610EF526BC55230089C7C9 /* PrettyDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDataSource.swift; sourceTree = "<group>"; };
+		FC610EF726BC55230089C7C9 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		FC610EF826BC55230089C7C9 /* ChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
+		FC610EF926BC55230089C7C9 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		FC610EFB26BC55230089C7C9 /* PrettyHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrettyHeaderView.xib; sourceTree = "<group>"; };
+		FC610EFC26BC55230089C7C9 /* PrettyRowCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyRowCell.swift; sourceTree = "<group>"; };
+		FC610EFD26BC55230089C7C9 /* PrettyRowCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrettyRowCell.xib; sourceTree = "<group>"; };
+		FC610EFE26BC55230089C7C9 /* PrettyHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyHeaderView.swift; sourceTree = "<group>"; };
+		FC610F0F26BC55430089C7C9 /* Chart.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chart.storyboard; sourceTree = "<group>"; };
+		FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsSettings.swift; sourceTree = "<group>"; };
 		FC7937672694D2E90000ACB7 /* BlackJackPracticeStrategyGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlackJackPracticeStrategyGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC79376A2694D2E90000ACB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +163,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC610F1326BC57090089C7C9 /* OrderedCollections in Frameworks */,
 				9E1843084AF29E86476F95F3 /* Pods_BlackJackPracticeStrategyGame.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,6 +174,9 @@
 		74E0513417739938491E9FED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FC610EE526BB42750089C7C9 /* Chart2.framework */,
+				FC610ECF26BB414C0089C7C9 /* Chart.framework */,
+				FC610EC026BB3FAD0089C7C9 /* PrettyExample.app */,
 				6AE22D6AD31DF36DF2FE3DBB /* Pods_BlackJackPracticeStrategyGame.framework */,
 			);
 			name = Frameworks;
@@ -171,6 +213,7 @@
 				FC610E9E26AF71840089C7C9 /* BasicStrategySettings.swift */,
 				FC610EA726B0B9AC0089C7C9 /* FreePlaySettings.swift */,
 				FC610EBB26B84B600089C7C9 /* DeviationsSettings.swift */,
+				FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -234,6 +277,77 @@
 			path = Rules;
 			sourceTree = "<group>";
 		};
+		FC610EE826BC53AE0089C7C9 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				FC610F0F26BC55430089C7C9 /* Chart.storyboard */,
+				FC610EFA26BC55230089C7C9 /* Cells */,
+				FC610EF626BC55230089C7C9 /* Controllers */,
+				FC610EF126BC55230089C7C9 /* Data */,
+				FC610EEC26BC55230089C7C9 /* Delegates */,
+				FC610EE926BC55230089C7C9 /* Protocols */,
+				FC610EEF26BC55230089C7C9 /* QuizRelated */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
+		FC610EE926BC55230089C7C9 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EEA26BC55230089C7C9 /* RowCellObserver.swift */,
+				FC610EEB26BC55230089C7C9 /* ChartProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		FC610EEC26BC55230089C7C9 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EED26BC55230089C7C9 /* PrettyDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		FC610EEF26BC55230089C7C9 /* QuizRelated */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EF026BC55230089C7C9 /* FillinChart.swift */,
+			);
+			path = QuizRelated;
+			sourceTree = "<group>";
+		};
+		FC610EF126BC55230089C7C9 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EF226BC55230089C7C9 /* CellContentEnumeration.swift */,
+				FC610EF326BC55230089C7C9 /* Charts.swift */,
+				FC610EF426BC55230089C7C9 /* PECountry.swift */,
+				FC610EF526BC55230089C7C9 /* PrettyDataSource.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FC610EF626BC55230089C7C9 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EF726BC55230089C7C9 /* MainViewController.swift */,
+				FC610EF826BC55230089C7C9 /* ChartViewController.swift */,
+				FC610EF926BC55230089C7C9 /* TabBarController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		FC610EFA26BC55230089C7C9 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FC610EFB26BC55230089C7C9 /* PrettyHeaderView.xib */,
+				FC610EFC26BC55230089C7C9 /* PrettyRowCell.swift */,
+				FC610EFD26BC55230089C7C9 /* PrettyRowCell.xib */,
+				FC610EFE26BC55230089C7C9 /* PrettyHeaderView.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		FC79375E2694D2E90000ACB7 = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +369,7 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
+				FC610EE826BC53AE0089C7C9 /* Charts */,
 				FC610EBF26B8BA050089C7C9 /* Rules */,
 				FC610EAB26B4A8190089C7C9 /* CustomViews */,
 				FC79377E2694D31B0000ACB7 /* Game */,
@@ -348,6 +463,9 @@
 			dependencies = (
 			);
 			name = BlackJackPracticeStrategyGame;
+			packageProductDependencies = (
+				FC610F1226BC57090089C7C9 /* OrderedCollections */,
+			);
 			productName = BlackJackPracticeStrategyGame;
 			productReference = FC7937672694D2E90000ACB7 /* BlackJackPracticeStrategyGame.app */;
 			productType = "com.apple.product-type.application";
@@ -375,6 +493,9 @@
 				Base,
 			);
 			mainGroup = FC79375E2694D2E90000ACB7;
+			packageReferences = (
+				FC610F1126BC57090089C7C9 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = FC7937682694D2E90000ACB7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -392,6 +513,9 @@
 				FC7937772694D2EC0000ACB7 /* LaunchScreen.storyboard in Resources */,
 				FC610EB526B8336C0089C7C9 /* DeviationInputView.xib in Resources */,
 				FC7937742694D2EC0000ACB7 /* Assets.xcassets in Resources */,
+				FC610F1026BC55430089C7C9 /* Chart.storyboard in Resources */,
+				FC610F0B26BC55230089C7C9 /* PrettyHeaderView.xib in Resources */,
+				FC610F0D26BC55230089C7C9 /* PrettyRowCell.xib in Resources */,
 				FC610EA326AF8BDA0089C7C9 /* SliderTableViewCell.xib in Resources */,
 				FC7937722694D2E90000ACB7 /* Main.storyboard in Resources */,
 			);
@@ -451,24 +575,36 @@
 				FC610E9B26AF3D0C0089C7C9 /* StrategyDeck.swift in Sources */,
 				FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */,
 				FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */,
+				FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */,
+				FC610F0426BC55230089C7C9 /* CellContentEnumeration.swift in Sources */,
 				FC92B52326A733F40082DA32 /* BasicStrategy+Extension.swift in Sources */,
+				FC610F0826BC55230089C7C9 /* MainViewController.swift in Sources */,
 				FC92B51D26A61ABF0082DA32 /* Rule.swift in Sources */,
 				FC7937962694FF4D0000ACB7 /* Rules.swift in Sources */,
 				FC610EBC26B84B600089C7C9 /* DeviationsSettings.swift in Sources */,
 				FC610EAA26B2E7C80089C7C9 /* TabBarViewController.swift in Sources */,
+				FC610F0E26BC55230089C7C9 /* PrettyHeaderView.swift in Sources */,
+				FC610F0C26BC55230089C7C9 /* PrettyRowCell.swift in Sources */,
 				FC610E9D26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift in Sources */,
 				FC7937922694D6780000ACB7 /* Dealable.swift in Sources */,
+				FC610EFF26BC55230089C7C9 /* RowCellObserver.swift in Sources */,
 				FC7937862694D31B0000ACB7 /* GameMaster.swift in Sources */,
 				FC7937842694D31B0000ACB7 /* Hand.swift in Sources */,
 				FC4E622626A1C34B00D1AF93 /* CountViewController.swift in Sources */,
 				FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */,
 				FC610EAD26B4A8880089C7C9 /* DiscardTrayView.swift in Sources */,
+				FC610F0126BC55230089C7C9 /* PrettyDelegate.swift in Sources */,
+				FC610F0026BC55230089C7C9 /* ChartProtocol.swift in Sources */,
+				FC610F0A26BC55230089C7C9 /* TabBarController.swift in Sources */,
 				FC92B52126A61B120082DA32 /* StrategyGameDecks.swift in Sources */,
 				FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */,
+				FC610F0726BC55230089C7C9 /* PrettyDataSource.swift in Sources */,
+				FC610F0526BC55230089C7C9 /* Charts.swift in Sources */,
 				FC610EBE26B863E10089C7C9 /* PopUpViewController.swift in Sources */,
 				FC79376F2694D2E90000ACB7 /* GameViewController.swift in Sources */,
 				FC610EA826B0B9AC0089C7C9 /* FreePlaySettings.swift in Sources */,
 				FC610E9326A8FC4D0089C7C9 /* RunningCountGameType.swift in Sources */,
+				FC610F0326BC55230089C7C9 /* FillinChart.swift in Sources */,
 				FC7937942694DFF50000ACB7 /* Table.swift in Sources */,
 				FC610E9526A9AD880089C7C9 /* MainMenuViewController.swift in Sources */,
 				FC610EB126B61D350089C7C9 /* StrategyGameDecks+Extension.swift in Sources */,
@@ -477,6 +613,8 @@
 				FC610EA526AF9D440089C7C9 /* RunningCountSettings.swift in Sources */,
 				FC7937852694D31B0000ACB7 /* Player.swift in Sources */,
 				FC79378D2694D4240000ACB7 /* Card.swift in Sources */,
+				FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */,
+				FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */,
 				FC610EA226AF8BDA0089C7C9 /* SliderTableViewCell.swift in Sources */,
 				FC03265C269BECDE002B13D0 /* BasicStrategy.swift in Sources */,
 				FC92B52526A85AE00082DA32 /* GameTypeStrategyPattern.swift in Sources */,
@@ -695,6 +833,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC610F1126BC57090089C7C9 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC610F1226BC57090089C7C9 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC610F1126BC57090089C7C9 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FC79375F2694D2E90000ACB7 /* Project object */;
 }

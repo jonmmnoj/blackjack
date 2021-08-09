@@ -73,16 +73,15 @@
                                             <action selector="input:" destination="L7i-Wz-RYB" eventType="editingDidEnd" id="ejV-Rj-6O3"/>
                                         </connections>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KvF-SZ-q2Z">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KvF-SZ-q2Z">
                                         <rect key="frame" x="225" y="150" width="50" height="50"/>
-                                        <color key="backgroundColor" systemColor="linkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="KvF-SZ-q2Z" secondAttribute="height" multiplier="1:1" id="5Fd-KY-hka"/>
                                             <constraint firstAttribute="width" constant="50" id="eu3-mK-LDC"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <state key="normal" title="&gt;">
+                                        <state key="normal" image="plus.rectangle" catalog="system">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
                                         </state>
                                         <connections>
                                             <action selector="increase:" destination="L7i-Wz-RYB" eventType="touchUpInside" id="JTg-C1-wOr"/>
@@ -99,23 +98,22 @@
                                             <action selector="submit:" destination="L7i-Wz-RYB" eventType="touchUpInside" id="FBF-CC-Qyo"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SMg-JD-IJR">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SMg-JD-IJR">
                                         <rect key="frame" x="75" y="150" width="50" height="50"/>
-                                        <color key="backgroundColor" systemColor="linkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="bh4-WO-yf2"/>
                                             <constraint firstAttribute="width" secondItem="SMg-JD-IJR" secondAttribute="height" multiplier="1:1" id="n1q-5q-krq"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                        <state key="normal" title="&lt;">
+                                        <state key="normal" image="minus.rectangle" catalog="system">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
                                         </state>
                                         <connections>
                                             <action selector="decrease:" destination="L7i-Wz-RYB" eventType="touchUpInside" id="MvH-LT-cZq"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="b0g-bc-SG7" firstAttribute="top" secondItem="jVK-ea-a0O" secondAttribute="bottom" constant="12" id="0T0-49-tnu"/>
                                     <constraint firstItem="KvF-SZ-q2Z" firstAttribute="leading" secondItem="jVK-ea-a0O" secondAttribute="trailing" constant="25" id="6Zn-tg-61b"/>
@@ -170,7 +168,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="6o7-kR-0o2" firstAttribute="centerX" secondItem="mSu-Qr-5Os" secondAttribute="centerX" id="0jT-pX-PKu"/>
                                     <constraint firstAttribute="bottom" secondItem="6o7-kR-0o2" secondAttribute="bottom" constant="20" id="0ll-4D-1V2"/>
@@ -408,7 +406,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="MD7-VX-vXS" secondAttribute="height" multiplier="1:1" id="2n2-Js-A6r"/>
                                     <constraint firstItem="fz4-Xd-XZl" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" id="4gn-3T-tYl"/>
@@ -451,14 +449,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="minus.rectangle" catalog="system" width="128" height="93"/>
+        <image name="plus.rectangle" catalog="system" width="128" height="93"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

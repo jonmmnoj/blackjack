@@ -129,7 +129,8 @@ enum GameType: String {
          basicStrategy,
          runningCount,
          trueCount,
-         deviations
+         deviations,
+         charts
     
     func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
         switch self {
@@ -170,4 +171,9 @@ enum CountRounds: String {
             case .onceAtEnd: return 0
         }
     }
+}
+
+enum DeviationType {
+    case hard17,
+         soft17
 }

@@ -7,18 +7,23 @@
 
 import UIKit
 
+
 class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("tab bar vc will disappear")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //Assign self for delegate for that ViewController can respond to UITabBarControllerDelegate methods
         self.delegate = self
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        //AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
         super.viewWillAppear(animated)
-        
+
         // Create Tab one
         let vc = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
         vc.gameType = .freePlay
@@ -41,18 +46,21 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         vc3.gameType = .runningCount
         vc3.edgesForExtendedLayout = .all
         let tabTwoBarItem3 = UITabBarItem(title: "Running Count", image: UIImage(named: "defaultImage3.png"), selectedImage: UIImage(named: "selectedImage3.png"))
-        
         vc3.tabBarItem = tabTwoBarItem3
         
         let vc4 = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
         vc4.gameType = .deviations
         vc4.edgesForExtendedLayout = .all
         let tabTwoBarItem4 = UITabBarItem(title: "Deviations", image: UIImage(named: "defaultImage3.png"), selectedImage: UIImage(named: "selectedImage3.png"))
-        
         vc4.tabBarItem = tabTwoBarItem4
         
+        let vc5 = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+        vc5.gameType = .charts
+        let tabTwoBarItem5 = UITabBarItem(title: "Charts", image: UIImage(named: "defaultImage3.png"), selectedImage: UIImage(named: "selectedImage3.png"))
+        vc5.tabBarItem = tabTwoBarItem5
         
-        self.viewControllers = [vc4, vc, vc2, vc3]
+        
+        self.viewControllers = [vc4, vc2, vc5, vc3, vc]
     }
     
     // UITabBarControllerDelegate method

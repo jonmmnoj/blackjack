@@ -106,20 +106,21 @@ class DeviationsSettings: GameTypeSettings {
             ]),
 
             Section(title: "Number of Cards", rows: [
-                SwitchRow(text: "2 card hands", switchValue: settings.twoCardHands, customization: {cell,row in
+                SwitchRow(text: "2 card hands", detailText: .subtitle("Split, Soft and Hard hands"), switchValue: settings.twoCardHands, customization: {cell,row in
                     self.twoHandCell = cell
                 },
                           action: { _ in
                     self.settings.twoCardHands = !self.settings.twoCardHands
                             print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
+                    self.setupSoftControl()
                 }),
-                SwitchRow(text: "3 card hands", switchValue: settings.threeCardHands, customization: {cell,row in
+                SwitchRow(text: "3 card hands", detailText: .subtitle("Hard hands"), switchValue: settings.threeCardHands, customization: {cell,row in
                     self.threeHandCell = cell
                 }, action: { _ in
                     self.settings.threeCardHands = !self.settings.threeCardHands
                 }),
-                SwitchRow(text: "4 card hands", switchValue: settings.fourCardHands, customization: {cell,row in
+                SwitchRow(text: "4 card hands", detailText: .subtitle("Hard hands"), switchValue: settings.fourCardHands, customization: {cell,row in
                     self.fourHandCell = cell
                 }, action: { _ in
                     self.settings.fourCardHands = !self.settings.fourCardHands
@@ -216,6 +217,21 @@ class DeviationsSettings: GameTypeSettings {
             (splitCell.accessoryView as! UISwitch).isEnabled = false
             (splitCell.accessoryView as! UISwitch).setOn(false, animated: true)
             (self.splitCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+        }
+    }
+    private func setupSoftControl() {
+        if settings.twoCardHands {
+            softCell.isUserInteractionEnabled = true
+            softCell.textLabel!.isEnabled = true
+            (softCell.accessoryView as! UISwitch).isEnabled = true
+            (softCell.accessoryView as! UISwitch).setOn(settings.softHands, animated: true)
+            (self.softCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+        } else {
+            softCell.isUserInteractionEnabled = false
+            softCell.textLabel!.isEnabled = false
+            (softCell.accessoryView as! UISwitch).isEnabled = false
+            (softCell.accessoryView as! UISwitch).setOn(false, animated: true)
+            (self.softCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
         }
     }
 }
