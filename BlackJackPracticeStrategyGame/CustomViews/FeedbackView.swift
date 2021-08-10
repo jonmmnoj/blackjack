@@ -44,11 +44,23 @@ class FeedbackView: UIView {
         
     }
     
-    func updateViewForBasicStrategy(isCorrect: Bool, playerAction: PlayerAction, correctAction: PlayerAction) {
+    func updateViewForBasicStrategy(isCorrect: Bool, playerAction: String, correctAction: String) {
         let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
-        yourAnswerLabel.text = "Your answer: \(playerAction.rawValue)"
-        actualLabel.text = "Actual: \(correctAction.rawValue)"
+        yourAnswerLabel.text = "Your answer: \(playerAction)"
+        actualLabel.text = "\(correctAction)"
+        actualLabel.textColor = .systemGreen
+        actualLabel.font = .boldSystemFont(ofSize: 18)
+        
+    }
+    
+    func updateViewForDeviation(isCorrect: Bool, playerAction: String, correctAction: String) {
+        let s = isCorrect ? "right" : "wrong"
+        imageView.image = UIImage(named: s)
+        yourAnswerLabel.text = "Your answer: \(playerAction)"
+        actualLabel.text = "\(correctAction)"
+        actualLabel.textColor = .systemGreen
+        actualLabel.font = .boldSystemFont(ofSize: 100)
         
     }
     

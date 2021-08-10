@@ -184,6 +184,17 @@ class Table {
             }
         }
     }
+    
+//    func show(view inputView: DeviationInputView) {
+//        self.view.addSubview(inputView)
+//        inputView.snp.makeConstraints { make in
+//            make.center.equalTo(self.view)
+//            make.width.greaterThanOrEqualTo(self.view.snp.width).offset(-50)
+//            //make.left.equalTo(table)(50)
+//           // make.right.equalTo(table).offset(-50)
+//            make.height.lessThanOrEqualTo(250)
+//        }
+//    }
 }
 
 extension UIView {

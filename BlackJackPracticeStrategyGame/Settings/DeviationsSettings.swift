@@ -106,7 +106,7 @@ class DeviationsSettings: GameTypeSettings {
             ]),
 
             Section(title: "Number of Cards", rows: [
-                SwitchRow(text: "2 card hands", detailText: .subtitle("Split, Soft and Hard hands"), switchValue: settings.twoCardHands, customization: {cell,row in
+                SwitchRow(text: "2 card hands",  switchValue: settings.twoCardHands, customization: {cell,row in
                     self.twoHandCell = cell
                 },
                           action: { _ in
@@ -114,13 +114,13 @@ class DeviationsSettings: GameTypeSettings {
                             print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
                     self.setupSoftControl()
-                }),
-                SwitchRow(text: "3 card hands", detailText: .subtitle("Hard hands"), switchValue: settings.threeCardHands, customization: {cell,row in
+                }), //detailText: .subtitle("Pair, Soft and Hard hands. Hit, Stand, Double, Split and Surrender"),
+                SwitchRow(text: "3 card hands", detailText: .subtitle("Hard hands only. Hit and Stand only"), switchValue: settings.threeCardHands, customization: {cell,row in
                     self.threeHandCell = cell
                 }, action: { _ in
                     self.settings.threeCardHands = !self.settings.threeCardHands
                 }),
-                SwitchRow(text: "4 card hands", detailText: .subtitle("Hard hands"), switchValue: settings.fourCardHands, customization: {cell,row in
+                SwitchRow(text: "4 card hands", detailText: .subtitle("Hard hands only. Hit and Stand only"), switchValue: settings.fourCardHands, customization: {cell,row in
                     self.fourHandCell = cell
                 }, action: { _ in
                     self.settings.fourCardHands = !self.settings.fourCardHands

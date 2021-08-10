@@ -8,35 +8,42 @@
 import UIKit
 
 class DeviationInputView: UIView {
-    @IBOutlet var contentView: UIView!
-    @IBOutlet var submitButton: UIButton!
-    @IBOutlet var hitButton: UIButton!
-    @IBOutlet var standButton: UIButton!
-    @IBOutlet var doubleButton: UIButton!
-    @IBOutlet var splitButton: UIButton!
-    @IBOutlet var surrenderButton: UIButton!
-    @IBOutlet var textField: UITextField!
-    @IBOutlet var actionSegmentedControl: UISegmentedControl!
-    @IBOutlet var lessGreaterThanSegmentedControl: UISegmentedControl!
-    
-    @IBOutlet weak var decrease: UIButton!
-    @IBOutlet weak var increase: UIButton!
-    @IBOutlet weak var positiveNegative: UIButton!
-    
-    
-    @IBOutlet var secondRowStackView: UIStackView!
-    
-    lazy var actionButtons: [UIButton] = {
-        return [hitButton, standButton, doubleButton, splitButton, surrenderButton]
-    }()
-    
+    var deviation: Deviation!
     var playerAction: PlayerAction = .hit
     var lessThanGreaterThan: String = "+"
-    var submitHandler: ((PlayerAction, Int, String) -> Void)!
+    var runningCount: String = "+"
+    var deviationSubmitHandler: ((PlayerAction, Int, String, String) -> Void)!
+    var runningCountSubmitHandler: ((Int) -> Void)!
+    
+    @IBOutlet var contentView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var submitButton: UIButton!
+    @IBOutlet weak var decrease: UIButton!
+    @IBOutlet weak var increase: UIButton!
+   
+    @IBOutlet var textField: UITextField!
+    @IBOutlet var textFieldStackView: UIStackView!
+
+    @IBOutlet var actionSegmentedControl: UISegmentedControl!
+    @IBOutlet var actionStackView: UIStackView!
+    
+    @IBOutlet var lessGreaterThanSegmentedControl: UISegmentedControl!
+    @IBOutlet var lessGreaterThanStackView: UIStackView!
+    
+    @IBOutlet var runningCountSegmentedControl: UISegmentedControl!
+    @IBOutlet var runningCountStackView: UIStackView!
+
+    init(frame: CGRect, deviation: Deviation) {
+        super.init(frame: frame)
+        self.deviation = deviation
+        commonInit()
+        initDeviation()
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
+        initRunningCount()
     }
     
     required init?(coder: NSCoder) {
@@ -50,15 +57,31 @@ class DeviationInputView: UIView {
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         
-        let margin = hitButton.frame.width * 0.5 + 8
-        secondRowStackView.layoutMargins.left = margin
-        secondRowStackView.layoutMargins.right = margin
-        
-        resetButtonsStyle()
-        
-        // when rule is 0... just show running count segment control, eg. A,8 vs 6
-        // when rule has nil count, just show action segment control, eg. 17 vs A
+        if !Settings.shared.surrender {
+            actionSegmentedControl.setEnabled(false, forSegmentAt: 4)
+        }
+    }
     
+    private func initRunningCount() {
+        titleLabel.text = "Running Count"
+        actionStackView.isHidden = true
+        //textFieldStackView.isHidden = true
+        lessGreaterThanStackView.isHidden = true
+        runningCountStackView.isHidden = true
+    }
+    
+    private func initDeviation() {
+        titleLabel.text = "Deviation"
+        if deviation.count == nil { // count not relevant, eg 17 v A
+            textFieldStackView.isHidden = true
+            lessGreaterThanStackView.isHidden = true
+            runningCountStackView.isHidden = true
+        }else if deviation.count == 0 { // running count, eg 16 v 10
+            textFieldStackView.isHidden = true
+            lessGreaterThanStackView.isHidden = true
+        } else { // true count
+            runningCountStackView.isHidden = true
+        }
     }
     
     @IBAction func strategyActionSegementControlAction(_ sender: UISegmentedControl!) {
@@ -91,55 +114,19 @@ class DeviationInputView: UIView {
         }
     }
     
-    
-    @IBAction func hitAction(_ sender: UIButton!) {
-        playerAction = .hit
-        resetButtonsStyle()
-        styleSelectedButton(sender)
-    }
-    
-    @IBAction func standAction(_ sender: UIButton!) {
-        playerAction = .stand
-        resetButtonsStyle()
-        styleSelectedButton(sender)
-    }
-    
-    @IBAction func doubleAction(_ sender: UIButton!) {
-        playerAction = .double
-        resetButtonsStyle()
-        styleSelectedButton(sender)
-    }
-    
-    @IBAction func splitAction(_ sender: UIButton!) {
-        playerAction = .split
-        resetButtonsStyle()
-        styleSelectedButton(sender)
-    }
-    
-    @IBAction func surrenderAction(_ sender: UIButton!) {
-        playerAction = .surrender   
-        resetButtonsStyle()
-        styleSelectedButton(sender)
-    }
-    
-    private func resetButtonsStyle() {
-        for button in actionButtons {
-            resetButtonStyle(button)
+    @IBAction func runningCountSegementControlAction(_ sender: UISegmentedControl!) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            runningCount = "-"
+        case 1:
+            runningCount = "+"
+        default:
+            runningCount = "+"
         }
     }
     
-    private func resetButtonStyle(_ button: UIButton) {
-        button.backgroundColor = .systemBackground
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.systemBlue.cgColor
-    }
     
-    private func styleSelectedButton(_ button: UIButton) {
-        button.backgroundColor = .systemGreen
-        button.setTitleColor(.white, for: .normal)
-        //button.tintColor = .white
-    }
+    
     
     
     
@@ -165,12 +152,6 @@ class DeviationInputView: UIView {
         updateTextField(number: i)
     }
     
-    @IBAction func postiveNegative(_ sender: UIButton) {
-        if let text = textField.text {
-            textField.text = String(Int(text)! * -1)
-        }
-    }
-    
     func getInt() -> Int {
         let s = textField.text ?? ""
         let i = Int(s) ?? 0
@@ -181,9 +162,13 @@ class DeviationInputView: UIView {
         textField.text = String(number)
         submitButton.isEnabled = true
     }
-   
 
     @IBAction func submitAction(_ sender: UIButton!) {
-        submitHandler(playerAction, getInt(), lessThanGreaterThan)
+        if deviation != nil {
+            deviationSubmitHandler(playerAction, getInt(), lessThanGreaterThan, runningCount)
+        } else {
+            runningCountSubmitHandler(getInt())
+        }
+        
     }
 }

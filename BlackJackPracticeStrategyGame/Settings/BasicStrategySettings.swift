@@ -106,20 +106,20 @@ class BasicStrategySettings: GameTypeSettings {
             ]),
 
             Section(title: "Number of Cards Dealt", rows: [
-                SwitchRow(text: "2 card hands", detailText: .subtitle("Split, Soft and Hard hands"), switchValue: settings.twoCardHands, customization: {cell,row in
+                SwitchRow(text: "2 card hands", switchValue: settings.twoCardHands, customization: {cell,row in
                     self.twoHandCell = cell
                 },
                           action: { _ in
                     self.settings.twoCardHands = !self.settings.twoCardHands
                             print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
-                }),
-                SwitchRow(text: "3 card hands", detailText: .subtitle("Soft and Hard hands"), switchValue: settings.threeCardHands, customization: {cell,row in
+                }), //, detailText: .subtitle("Split, Soft and Hard hands")
+                SwitchRow(text: "3 card hands", detailText: .subtitle("Soft and Hard hands only"), switchValue: settings.threeCardHands, customization: {cell,row in
                     self.threeHandCell = cell
                 }, action: { _ in
                     self.settings.threeCardHands = !self.settings.threeCardHands
                 }),
-                SwitchRow(text: "4 card hands", detailText: .subtitle("Soft and Hard hands"), switchValue: settings.fourCardHands, customization: {cell,row in
+                SwitchRow(text: "4 card hands", detailText: .subtitle("Soft and Hard hands only"), switchValue: settings.fourCardHands, customization: {cell,row in
                     self.fourHandCell = cell
                 }, action: { _ in
                     self.settings.fourCardHands = !self.settings.fourCardHands

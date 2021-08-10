@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
-    
+    var countMaster = CountMaster()
     
     var automaticPlay: Bool {
         return false
@@ -18,6 +18,8 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
+        countMaster.delegate = gameMaster.delegate
+        countMaster.gameMaster = gameMaster
     }
     
     func dealCards() {
@@ -54,12 +56,19 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
         case .split:
             gameMaster.playerSplits()
         case .surrender:
-            break
+            gameMaster.playerSurrenders()
         }
     }
     
     func tasksForEndOfRound() {
-        gameMaster.prepareForNewRound()
+        if  countMaster.isTimeToAskForCount() {
+            countMaster.endOfRoundTasks(gameMaster: gameMaster, completion: {
+                self.gameMaster.prepareForNewRound()
+            })// let countMaster call back to GameMaster when task is complete
+            //print("GM waiting on CM")
+        } else {
+            gameMaster.prepareForNewRound()
+        }
     }
     
     func waitForPlayerInput() {

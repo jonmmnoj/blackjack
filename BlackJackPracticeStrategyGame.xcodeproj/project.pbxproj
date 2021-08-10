@@ -55,6 +55,7 @@
 		FC610F1026BC55430089C7C9 /* Chart.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC610F0F26BC55430089C7C9 /* Chart.storyboard */; };
 		FC610F1326BC57090089C7C9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = FC610F1226BC57090089C7C9 /* OrderedCollections */; };
 		FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */; };
+		FC610F1C26C2E3A50089C7C9 /* TrueCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */; };
 		FC79376B2694D2E90000ACB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376A2694D2E90000ACB7 /* AppDelegate.swift */; };
 		FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */; };
 		FC79376F2694D2E90000ACB7 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC79376E2694D2E90000ACB7 /* GameViewController.swift */; };
@@ -132,6 +133,7 @@
 		FC610EFE26BC55230089C7C9 /* PrettyHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyHeaderView.swift; sourceTree = "<group>"; };
 		FC610F0F26BC55430089C7C9 /* Chart.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chart.storyboard; sourceTree = "<group>"; };
 		FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsSettings.swift; sourceTree = "<group>"; };
+		FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCountViewController.swift; sourceTree = "<group>"; };
 		FC7937672694D2E90000ACB7 /* BlackJackPracticeStrategyGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlackJackPracticeStrategyGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC79376A2694D2E90000ACB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FC79376C2694D2E90000ACB7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -223,7 +225,6 @@
 			children = (
 				FC4E6221269E86D200D1AF93 /* CardCounter.swift */,
 				FC4E622326A110AD00D1AF93 /* CountMaster.swift */,
-				FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */,
 			);
 			path = CardCounting;
 			sourceTree = "<group>";
@@ -348,6 +349,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		FC610F1A26C217240089C7C9 /* RunningCount */ = {
+			isa = PBXGroup;
+			children = (
+				FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */,
+			);
+			path = RunningCount;
+			sourceTree = "<group>";
+		};
 		FC79375E2694D2E90000ACB7 = {
 			isa = PBXGroup;
 			children = (
@@ -369,10 +378,10 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
-				FC610EE826BC53AE0089C7C9 /* Charts */,
 				FC610EBF26B8BA050089C7C9 /* Rules */,
 				FC610EAB26B4A8190089C7C9 /* CustomViews */,
 				FC79377E2694D31B0000ACB7 /* Game */,
+				FC610EE826BC53AE0089C7C9 /* Charts */,
 				FC4E621D269E806A00D1AF93 /* Settings */,
 				FC79378F2694D4410000ACB7 /* ViewControllers */,
 				FC549BA126A8F44E00FFD50E /* Storyboard */,
@@ -398,6 +407,7 @@
 				FC610EB826B83FE50089C7C9 /* Deviations */,
 				FC610EA626B0A8E10089C7C9 /* FreePlay */,
 				FC03265A269BECC4002B13D0 /* BasicStrategy */,
+				FC610F1A26C217240089C7C9 /* RunningCount */,
 				FC4E621E269E807000D1AF93 /* CardCounting */,
 			);
 			path = Game;
@@ -431,6 +441,7 @@
 				FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */,
 				FC610EA926B2E7C80089C7C9 /* TabBarViewController.swift */,
 				FC610EBD26B863E10089C7C9 /* PopUpViewController.swift */,
+				FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -572,6 +583,7 @@
 			files = (
 				FC79378B2694D4070000ACB7 /* Deck.swift in Sources */,
 				FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */,
+				FC610F1C26C2E3A50089C7C9 /* TrueCountViewController.swift in Sources */,
 				FC610E9B26AF3D0C0089C7C9 /* StrategyDeck.swift in Sources */,
 				FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */,
 				FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */,

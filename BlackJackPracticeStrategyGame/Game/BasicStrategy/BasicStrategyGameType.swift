@@ -39,9 +39,9 @@ class BasicStrategyGameType: GameTypeStrategyPatternProtocol {
     func inputReceived(action: PlayerAction) {
         let correctAction = gameMaster.getPlayerAction()
         let result = correctAction == action
-        print("\(result). Your action: \(action), Correct action: \(correctAction)")
-        gameMaster.delegate.presentBasicStrategyFeedbackView(playerAction: action, correctAction: correctAction)
-        
+        gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: result, playerAction: action.rawValue.uppercased(), correctAction: correctAction.rawValue.uppercased()) {
+                self.gameMaster.discardAllHands()
+            }
     }
     
     func tasksForEndOfRound() {

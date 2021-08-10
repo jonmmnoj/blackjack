@@ -11,14 +11,15 @@ import UIKit
 class BasicStrategyViewController: UIViewController, FeedbackViewDelegate {
     var delegate: GameViewDelegate!
     var complete: (() -> Void)!
-    var playerAction: PlayerAction!
-    var correctAction: PlayerAction!
+    var playerAction: String!
+    var correctAction: String!
+    var isCorrect: Bool!
     
     @IBOutlet weak var feedbackView: FeedbackView!
 
     override func viewWillAppear(_ animated: Bool) {
         feedbackView.delegate = self
-        feedbackView.updateViewForBasicStrategy(isCorrect: playerAction == correctAction, playerAction: playerAction , correctAction: correctAction)
+        feedbackView.updateViewForBasicStrategy(isCorrect: isCorrect, playerAction: playerAction , correctAction: correctAction)
     }
     
     func dimiss() {

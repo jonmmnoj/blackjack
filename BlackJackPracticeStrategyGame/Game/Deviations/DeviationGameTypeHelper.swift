@@ -52,37 +52,20 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         //dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
         //gameMaster.delegate.playerInput(enabled: true)
         
-            let inputView = DeviationInputView(frame: .zero)
-            inputView.submitHandler = { action, count, direction in
+        let inputView = DeviationInputView(frame: .zero, deviation: self.deviation)
+            inputView.deviationSubmitHandler = { action, count, tcDirection, rcDirection in
                 
-                let action = StrategyAction(rawValue: action.rawValue)
+                let inputAction = StrategyAction(rawValue: action.rawValue)!
+                let text = self.getInputText(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
+                let correctText = self.getCorrectText()
+                let isInputCorrect = self.isInputCorrect(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
                 
-                //let deviationType: DeviationType = Deviation.getType()
-                
-                //let surrenderDeviation = self.rule.surrender?.getDeviation()
-                //let ruleDeviation = self.rule.getDeviation()//self.rule.deviations!.first(where: { $0.type == deviationType })!
-                
-                //let deviationRule = self.rule.getDeviation(numberOfCards: self.gameMaster.player.activatedHand!.cards.count)!//surrenderDeviation != nil && self.gameMaster.player.activatedHand!.cards.count == 2 ? surrenderDeviation! : ruleDeviation!
-                
-                var correctAction = self.deviation.action
-                if correctAction == .doubleHit || correctAction == .doubleStand {
-                    correctAction = .double
+                self.gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: isInputCorrect, playerAction: text, correctAction: correctText) {
+                    self.gameMaster.discardAllHands()
                 }
-                
-                let isActionCorrect = action == correctAction//deviationRule.getAction(numberOfPlayerCards: self.gameMaster.player.activatedHand!.cards.count)
-                let isCountCorrect = count == self.deviation.getCount()
-                let isDirectionCorrect = direction == self.deviation.direction
-                
-                if isActionCorrect && isCountCorrect && isDirectionCorrect {
-                    print("deviation report: CORRECT input")
-                } else {
-                    print("deviation report: WRONG input")
-                }
-                print("Your answer: \(count)\(direction), \(action!.rawValue)")
-                print("Correct answer: \(self.deviation.getCount() ?? 99)\(self.deviation.direction ?? "nil"), \(correctAction)")
                 
                 inputView.removeFromSuperview()
-                self.gameMaster.discardAllHands()
+                //self.gameMaster.discardAllHands()
             }
         
         let tableView = gameMaster.tableView
@@ -92,8 +75,54 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
             make.width.greaterThanOrEqualTo(tableView.snp.width).offset(-50)
             //make.left.equalTo(table)(50)
            // make.right.equalTo(table).offset(-50)
-            make.height.equalTo(250)
+            make.height.lessThanOrEqualTo(250)
         }
+    }
+    
+    private func isInputCorrect(action: StrategyAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> Bool {
+        
+        let correctAction = getCorrectAction()
+        let devCount = deviation.count
+        if devCount == nil {
+            return action == correctAction
+        } else if devCount == 0 {
+            return action == correctAction && rcDirection == deviation.direction
+        } else {
+            return action == correctAction && inputCount == devCount && tcDirection == deviation.direction
+        }
+    }
+    
+    private func getInputText(action: StrategyAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> String {
+        let devCount = deviation.count
+        let action = action.rawValue.uppercased()
+        if devCount == nil {
+            return "\(action)"
+        } else if devCount == 0 {
+            return "\(rcDirection) RC \(action)"
+        } else {
+            return "TC \(inputCount)\(tcDirection) \(action)"
+        }
+    }
+    
+    private func getCorrectText() -> String {
+        let correctAction = getCorrectAction().rawValue.uppercased()
+        let devCount = deviation.count
+        
+        if devCount == nil {
+            return "\(correctAction)"
+        } else if devCount == 0 {
+            return "\(deviation.direction!) RC \(correctAction)"
+        } else {
+            return "TC \(devCount!)\(deviation.direction!) \(correctAction)"
+        }
+    }
+    
+    private func getCorrectAction() -> StrategyAction {
+        var correctAction = self.deviation.action
+        if correctAction == .doubleHit || correctAction == .doubleStand {
+            correctAction = .double
+        }
+        return correctAction
     }
 
 }

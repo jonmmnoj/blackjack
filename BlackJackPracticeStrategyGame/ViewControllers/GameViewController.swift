@@ -191,14 +191,16 @@ extension GameViewController: GameViewDelegate {
         completion?()
     }
     
-    func presentBasicStrategyFeedbackView(playerAction: PlayerAction, correctAction: PlayerAction) {
+    func presentBasicStrategyFeedbackView(isCorrect: Bool, playerAction: String, correctAction: String, completion: @escaping () -> Void) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyBoard.instantiateViewController(withIdentifier: "BasicStrategyViewController") as! BasicStrategyViewController
         vc.delegate = self
         vc.complete = {
             //self.gameMaster.prepareForNewRound()
-            self.gameMaster.discardAllHands()
+            //self.gameMaster.discardAllHands()
+            completion()
         }
+        vc.isCorrect = isCorrect
         vc.playerAction = playerAction
         vc.correctAction = correctAction
         vc.modalPresentationStyle = .overCurrentContext

@@ -214,8 +214,8 @@ class FreePlaySettings: GameTypeSettings {
                             self.settings.notifyMistakes = self.settings.defaults.notifyMistakes
                         }
                         
-                        if Settings.shared.numberOfRoundsBeforeAskCount != "once at the end" {
-                            let indexPath = IndexPath(row: 3, section: 3)
+                        if Settings.shared.numberOfRoundsBeforeAskCount != Settings.shared.defaults.numberOfRoundsBeforeAskCount.rawValue {
+                            let indexPath = IndexPath(row: 0, section: 3)
                             self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                             self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
                         }
