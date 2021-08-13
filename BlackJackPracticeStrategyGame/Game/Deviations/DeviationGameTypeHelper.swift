@@ -49,9 +49,6 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     }
     
     func waitForPlayerInput() {
-        //dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
-        //gameMaster.delegate.playerInput(enabled: true)
-        
         let inputView = DeviationInputView(frame: .zero, deviation: self.deviation)
             inputView.deviationSubmitHandler = { action, count, tcDirection, rcDirection in
                 

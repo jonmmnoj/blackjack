@@ -29,7 +29,9 @@ class Table {
     }
     
     init(view table: UIView, gameMaster: GameMaster) {
-        table.backgroundColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
+        table.backgroundColor = Settings.shared.defaults.tableColor
+        
+        
         self.view = table
         self.gameMaster = gameMaster
         self.arrowView = UIImageView(image: UIImage(named: "down_arrow"))
@@ -37,6 +39,11 @@ class Table {
         if !Settings.shared.showDiscardTray {
             discardTray.isHidden = true
         }
+        
+        gradient.frame = view.bounds
+        //view.layer.addSublayer(gradient, at: 0)
+        view.layer.insertSublayer(gradient, at: 0)
+        
     }
     
     func showIndicator(on hand: Hand) {
@@ -195,6 +202,24 @@ class Table {
 //            make.height.lessThanOrEqualTo(250)
 //        }
 //    }
+    
+    lazy var gradient: CAGradientLayer = {
+        let gradient = CAGradientLayer()
+        gradient.type = .radial
+        gradient.colors = [
+            UIColor.clear.cgColor,
+            //Settings.shared.defaults.tableColor
+            UIColor.black.withAlphaComponent(0.3).cgColor,
+//            UIColor.green.cgColor,
+//            UIColor.yellow.cgColor,
+//            UIColor.orange.cgColor,
+//            UIColor.red.cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
+        let endY = 0.5 + view.frame.size.width / view.frame.size.height / 2
+        gradient.endPoint = CGPoint(x: 1, y: endY)
+        return gradient
+    }()
 }
 
 extension UIView {

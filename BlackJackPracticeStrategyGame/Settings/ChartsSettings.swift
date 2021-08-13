@@ -29,8 +29,6 @@ class ChartsSettings: GameTypeSettings {
 
                     let sb = UIStoryboard(name: "Chart", bundle: nil)
                     let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
-                    //navigationController?.pushViewController(vc, animated: true)
-                    //vc.modalPresentationStyle = .fullScreen
                     self.vc.present(tbc, animated: false)
                 }),
             ]),

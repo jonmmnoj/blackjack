@@ -142,6 +142,8 @@ enum GameType: String {
             return RunningCount(gameMaster: gameMaster)
         case .deviations:
             return DeviationGameTypeHelper(gameMaster: gameMaster)
+        case .trueCount:
+            return TrueCountGameHelper(gameMaster: gameMaster)
         default:
             return FreePlayGameTypeStrategy(gameMaster: gameMaster)
 //        case .trueCount:
@@ -176,4 +178,8 @@ enum CountRounds: String {
 enum DeviationType {
     case hard17,
          soft17
+}
+
+enum Colors {
+    case green
 }

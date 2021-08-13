@@ -233,6 +233,17 @@ extension BasicStrategy {
     
     static var hardRules: [Rule] {
         return [
+            Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 4, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 5, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 18, action: .stand),
+            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 18, action: .stand),
+                 
             Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 17, action: .stand),
             Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 17, action: .stand),
             Rule(type: .hard, dealerCardValue: 4, playerRuleValue: 17, action: .stand),
@@ -348,6 +359,17 @@ extension BasicStrategy {
             Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 8, action: .hit),
             Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 8, action: .hit),
+            
+            Rule(type: .hard, dealerCardValue: 2, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 3, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 4, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 5, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 6, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 7, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 8, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 9, playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 10,playerRuleValue: 7, action: .hit),
+            Rule(type: .hard, dealerCardValue: 1, playerRuleValue: 7, action: .hit),
         ]
     }
 }

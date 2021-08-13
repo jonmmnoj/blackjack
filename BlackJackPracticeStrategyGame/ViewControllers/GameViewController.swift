@@ -5,7 +5,8 @@ class GameViewController: UIViewController {
     var gameMaster: GameMaster!
     var gameType: GameType!
     var showInputButtons: Bool {
-        return gameType != .runningCount && gameType != .deviations
+        let gameTypes: [GameType] = [.runningCount, .deviations, .trueCount]
+        return !gameTypes.contains(gameType)
     }
     
     lazy var homeButton: UIButton = {
@@ -174,16 +175,6 @@ extension GameViewController: GameViewDelegate {
         surrenderButton.isEnabled = value
     }
     
-    func presentCountInputView(countMaster: CountMaster, callback: (Int) -> Void) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(withIdentifier: "CountViewController") as! CountViewController
-        vc.countMaster = countMaster
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.modalTransitionStyle = .crossDissolve
-        self.present(vc, animated: true, completion: nil)
-        callback(99)
-    }
-    
     func dismissViewController(completion: (() -> Void)? = nil) {
         self.dismiss(animated: false) {
             print("dismissed vc")
@@ -196,8 +187,6 @@ extension GameViewController: GameViewDelegate {
         let vc = storyBoard.instantiateViewController(withIdentifier: "BasicStrategyViewController") as! BasicStrategyViewController
         vc.delegate = self
         vc.complete = {
-            //self.gameMaster.prepareForNewRound()
-            //self.gameMaster.discardAllHands()
             completion()
         }
         vc.isCorrect = isCorrect
@@ -216,15 +205,6 @@ extension GameViewController: GameViewDelegate {
     }
     
     func presentViewController(_ vc: UIViewController) {
-//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let vc = storyBoard.instantiateViewController(withIdentifier: "BasicStrategyViewController") as! BasicStrategyViewController
-//        vc.delegate = self
-//        vc.complete = {
-//            //self.gameMaster.prepareForNewRound()
-//            self.gameMaster.discardAllHands()
-//        }
-//        vc.playerAction = playerAction
-//        vc.correctAction = correctAction
         vc.modalPresentationStyle = .overCurrentContext
         vc.modalTransitionStyle = .crossDissolve
         self.present(vc, animated: true, completion: nil)

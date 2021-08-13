@@ -82,7 +82,6 @@ class CardCounter {
                 }
             }
         }
-        
         return apply
     }
     

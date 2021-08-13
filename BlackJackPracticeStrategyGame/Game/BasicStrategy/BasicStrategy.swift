@@ -61,25 +61,23 @@ class BasicStrategy {
     }
     
     // this method will keep converting strategyaction until it is an actionalbe result... ie hit, stand, double, split, surrender. Not all strategyAction are actionable, eg. doNotSplit, doubleHit...that isn't specific enough fro the game's user input options.
+    
     static private func getPlayerAction(ruleType: RuleType, dealerCardValue: Int, playerRuleValue: Int,  playerCardValues: [Int]) -> StrategyAction {
         var action: StrategyAction!
         let strategyAction = getStrategyAction(for: ruleType, dealerCardValue: dealerCardValue, playerRuleValue: playerRuleValue, numberOfPlayerCards: playerCardValues.count)
     
         if strategyAction == .doNotSplit {
-            // always split Aces, therefore, hand is a hard total
-            // so... take playerRuleValue and get action for .
-            var doublePlayerRuleValue = playerRuleValue * 2
-            if doublePlayerRuleValue > 17 { doublePlayerRuleValue = 17 }
-            if doublePlayerRuleValue < 8 { doublePlayerRuleValue = 8 }
-            return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doublePlayerRuleValue, playerCardValues: playerCardValues)
-            
+            let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)
+            return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doubledPlayerRuleValue, playerCardValues: playerCardValues)
         } else if strategyAction == .splitIfDAS {
-            // check game condition for DAS
-            action = .split
-            // if not DAS, return hard action
+            if Settings.shared.defaults.doubleAfterSplit {
+                action = .split
+            } else {
+                let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)
+                return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doubledPlayerRuleValue, playerCardValues: playerCardValues)
+            }
         }
         else if strategyAction == .doubleHit {
-            // count cards
             if playerCardValues.count == 2 {
                 return .double
             } else {
@@ -96,10 +94,15 @@ class BasicStrategy {
         else {
             action = strategyAction
         }
-        // if yesno, check for DAS config, then return split or hard total action
-        //
         
         return action
+    }
+    
+    static private func double(playerRuleValue value: Int) -> Int {
+        var doubledValue = value * 2
+        if doubledValue > 17 { doubledValue = 18 } // 9,9 or T,T
+        if doubledValue < 8 { doubledValue = 7 } // 2,2 or 3,3
+        return doubledValue
     }
     
     static func getRuleType(playerCardValues: [Int]) -> RuleType {

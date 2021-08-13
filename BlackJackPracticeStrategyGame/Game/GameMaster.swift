@@ -43,7 +43,7 @@ class GameMaster {
     func startGame() {
         CardCounter.shared.reset()
         //gameStrategyPattern = gameType.getStrategyPattern(gameMaster: self)
-        setupDealer(table: tableView)
+        setupDealer()
         setupPlayer()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.dealCards()
@@ -55,8 +55,8 @@ class GameMaster {
         self.gameState = .dealtCards
     }
     
-    func setupDealer(table view: UIView) {
-        let table = Table(view: view, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
+    func setupDealer() {
+        let table = Table(view: tableView, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
         self.dealer = Dealer(table: table)
         let hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)

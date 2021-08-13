@@ -24,7 +24,16 @@ class RunningCount: FreePlayGameTypeStrategy {
         }
     }
     
-    // Before discarding all... ask for running count?
+    override func tasksForEndOfRound() {
+        if countMaster.isTimeToAskForCount() {
+            countMaster.endOfRoundTasks(gameMaster: gameMaster, completion: {
+                self.gameMaster.prepareForNewRound()
+            })
+        } else {
+            gameMaster.prepareForNewRound()
+        }
+    }
+    
     
     
     

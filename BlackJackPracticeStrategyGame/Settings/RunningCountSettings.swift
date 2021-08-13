@@ -46,9 +46,7 @@ class RunningCountSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
-                        gvc.edgesForExtendedLayout = .all
-                        //self.vc.navigationController?.pushViewController(gvc, animated: true)
-                        gvc.modalPresentationStyle = .currentContext
+                        gvc.modalPresentationStyle = .overFullScreen
                         self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),

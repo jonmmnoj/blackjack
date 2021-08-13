@@ -182,6 +182,32 @@ class Settings {
             return UserDefaults.standard.object(forKey: "deviations") as? Bool ?? defaults.deviations
         }
     }
+    var freePlayAskForCount: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "freePlayAskForCount")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "freePlayAskForCount") as? Bool ?? defaults.freePlayAskForCount
+        }
+    }
+    
+    
+    struct Defaults {
+        var dealSpeed: Float = 1.0
+        var ENHC: Bool = false
+        var numberOfDecks = 6
+        var dealerHitsSoft17 = true
+        var surrender = true
+        var resplitAces = false
+        var doubleAfterSplit = true
+        var notifyMistakes = true
+        var showHandTotal = false
+        var showDiscardTray = false
+        var deviations = true
+        var numberOfRoundsBeforeAskCount = CountRounds.oneRound
+        var tableColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
+        var freePlayAskForCount = false
+    }
     
     static func getTypeOfHands() -> [RuleType] {
         var array: [RuleType] = []
@@ -200,23 +226,6 @@ class Settings {
     static var dealSpeedFactor: Float {
         let dealSpeed = self.shared.dealSpeed
         return 1.0 / dealSpeed
-    }
-    
-    
-    
-    struct Defaults {
-        var dealSpeed: Float = 1.0
-        var ENHC: Bool = false
-        var numberOfDecks = 6
-        var dealerHitsSoft17 = true
-        var surrender = true
-        var resplitAces = false
-        var doubleAfterSplit = true
-        var notifyMistakes = true
-        var showHandTotal = false
-        var showDiscardTray = false
-        var deviations = true
-        var numberOfRoundsBeforeAskCount = CountRounds.oneRound
     }
 }
 

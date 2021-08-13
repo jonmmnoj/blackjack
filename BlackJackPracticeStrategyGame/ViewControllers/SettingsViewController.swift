@@ -23,19 +23,7 @@ class SettingsViewController: QuickTableViewController {
         gts.registerCustomViews(for: tableView)
         navigationBar.topItem?.title = gts.title
         navigationBar.prefersLargeTitles = true
-        //navigationBar.isTranslucent = false
         tableContents = gts.tableSettings
-        //title = "Settings"
-        //self.tabBarController?.title = "Title"
-        
-//        let label = UILabel()
-//        label.text = "Hello"
-//        view.addSubview(label)
-//        label.snp.makeConstraints { make in
-//            make.top.equalTo(view)
-//            make.left.right.equalTo(view)
-//            make.height.equalTo(100)
-//        }
         tableView.snp.makeConstraints { make in
             make.top.equalTo(navigationBar.snp.bottom)
             make.left.right.bottom.equalTo(view)
@@ -51,7 +39,7 @@ class SettingsViewController: QuickTableViewController {
         case .runningCount:
             return RunningCountSettings(vc: vc)
         case .trueCount:
-            return BasicStrategySettings(vc: vc)
+            return TrueCountSettings(vc: vc)
         case .deviations:
             return DeviationsSettings(vc: vc)
         case .charts:
