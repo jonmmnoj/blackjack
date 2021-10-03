@@ -77,7 +77,11 @@ enum GameState {
          createSplit,
          movedAllCards,
          tappedBackButton,
-         test
+         test,
+         moveToRightMostHandToScore,
+         moveToNextHandToScore,
+         movedToHandToScore,
+         showedToast
 }
 
 enum HandState {
@@ -91,6 +95,12 @@ enum HandState {
          incomplete,
          surrender,
          splitAces
+}
+
+enum HandResult {
+    case won,
+         lost,
+         push
 }
 
 enum MoveCardsDirection {
@@ -130,7 +140,8 @@ enum GameType: String {
          runningCount,
          trueCount,
          deviations,
-         charts
+         charts,
+         deckRounding
     
     func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
         switch self {
@@ -144,6 +155,8 @@ enum GameType: String {
             return DeviationGameTypeHelper(gameMaster: gameMaster)
         case .trueCount:
             return TrueCountGameHelper(gameMaster: gameMaster)
+        case .deckRounding:
+            return DeckRoundingGameHelper(gameMaster: gameMaster)
         default:
             return FreePlayGameTypeStrategy(gameMaster: gameMaster)
 //        case .trueCount:
@@ -164,6 +177,8 @@ enum CountRounds: String {
          threeRounds = "three rounds",
          fiveRounds = "five rounds",
          onceAtEnd = "once at the end"
+         //never = "never"
+
     
     var numericValue: Int {
         switch self {
@@ -171,6 +186,7 @@ enum CountRounds: String {
             case .threeRounds: return 3
             case .fiveRounds: return 5
             case .onceAtEnd: return 0
+            //case .never: return -1
         }
     }
 }

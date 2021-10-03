@@ -30,27 +30,24 @@ class Rule {
     
     func getDeviation() -> Deviation? {
         var deviation: Deviation?
-//        if let surrender = self.surrender, let deviations = surrender.deviations, let deviation = deviations.first(where: { $0.type == Deviation.getType() }) {
-//            return deviation
-//        } else {
-            deviation = self.deviations?.first(where: { $0.type == Deviation.getType() })
-            return deviation
-        //}
-    }
-    
-    func getDeviation(numberOfCards: Int) -> Deviation? {
-        var surrenderDeviation: Deviation?
-        var ruleDeviation: Deviation?
-        if let surrender = self.surrender, let deviations = surrender.deviations, let deviation = deviations.first(where: { $0.type == Deviation.getType() }) {
-            //return deviation
-            surrenderDeviation = deviation
-       }
-        if let deviation = self.deviations?.first(where: { $0.type == Deviation.getType() }) {
-            //return deviation
-            ruleDeviation = deviation
+
+          //  deviation = self.deviations?.first(where: { $0.type == Deviation.getType() })
+        var deviations: [Deviation] = []
+        self.deviations?.forEach {
+            if $0.type == Deviation.getType() {
+                deviations.append($0)
+            }
+        }
+        let nilDeviation = deviations.first(where: { $0.count == nil })
+        if nilDeviation != nil {
+            deviation = nilDeviation
+        }
+        let countDependentDeviation = deviations.first(where: { $0.count != nil })
+        if countDependentDeviation != nil && CardCounter.shared.doesDeviationApply(countDependentDeviation!) {
+            deviation = countDependentDeviation
         }
         
-        return Settings.shared.surrender && numberOfCards == 2 ? surrenderDeviation : ruleDeviation
+        return deviation
     }
 }
 

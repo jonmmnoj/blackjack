@@ -45,11 +45,18 @@ class DiscardTrayView: UIView {
     func discard() {
         CardCounter.shared.discard()
     }
-    func updateLabels() {
-       
+    
+    func updateViews() {
+        imageView.image = UIImage(named: getImageName())
         rcLabel.text = String("RC: \(CardCounter.shared.runningCount)")
-        divLabel.text = String("Div: \(CardCounter.shared.getDivisor())")
+        divLabel.text = String("Div: \(CardCounter.shared.getNumberOfDecksInPlay())")
         tcLabel.text = String("TC: \(CardCounter.shared.getTrueCount())")
+    }
+    
+    private func getImageName() -> String {
+        let numberOfDecks = Settings.shared.numberOfDecks
+        let imageName = "D\(numberOfDecks)_\(CardCounter.shared.numberOfCardsPlayed)"
+        return imageName
     }
     
     override func layoutSubviews() {
@@ -66,16 +73,23 @@ class DiscardTrayView: UIView {
             //make.width.equalTo(self.width)
         }
         
-      
-
         imageView = UIImageView()
         self.addSubview(imageView)
-        imageView.image = UIImage(named: "D6_2")
+        imageView.contentMode = .scaleAspectFit
+        var image = UIImage(named: getImageName())!
+        imageView.image = image
+        imageView.image = image
         imageView.backgroundColor = .cyan
         imageView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
-            make.height.equalTo(Settings.shared.cardSize)
+            
+            let ratio = image.size.height / image.size.width
+            
+            let newHeight = Settings.shared.cardWidth * ratio
+            
             make.width.equalTo(Settings.shared.cardWidth)
+            make.height.equalTo(newHeight)
+            
         }
         
         countView = UIView()
@@ -133,7 +147,7 @@ class DiscardTrayView: UIView {
         self.addSubview(button)
         button.backgroundColor = .systemBlue
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .bold, scale: .large)
-        let image = UIImage(systemName: "line.horizontal.3", withConfiguration: imageConfig)
+        image = UIImage(systemName: "line.horizontal.3", withConfiguration: imageConfig)!
         button.setImage(image, for: .normal)
         button.tintColor = .white
         //button.setTitle("OK", for: .normal)

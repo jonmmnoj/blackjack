@@ -15,23 +15,23 @@ class DeviationInputView: UIView {
     var deviationSubmitHandler: ((PlayerAction, Int, String, String) -> Void)!
     var runningCountSubmitHandler: ((Int) -> Void)!
     
-    @IBOutlet var contentView: UIView!
-    @IBOutlet var titleLabel: UILabel!
-    @IBOutlet var submitButton: UIButton!
+    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var decrease: UIButton!
     @IBOutlet weak var increase: UIButton!
    
-    @IBOutlet var textField: UITextField!
-    @IBOutlet var textFieldStackView: UIStackView!
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textFieldStackView: UIStackView!
 
-    @IBOutlet var actionSegmentedControl: UISegmentedControl!
-    @IBOutlet var actionStackView: UIStackView!
+    @IBOutlet weak var actionSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var actionStackView: UIStackView!
     
-    @IBOutlet var lessGreaterThanSegmentedControl: UISegmentedControl!
-    @IBOutlet var lessGreaterThanStackView: UIStackView!
+    @IBOutlet weak var lessGreaterThanSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var lessGreaterThanStackView: UIStackView!
     
-    @IBOutlet var runningCountSegmentedControl: UISegmentedControl!
-    @IBOutlet var runningCountStackView: UIStackView!
+    @IBOutlet weak var runningCountSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var runningCountStackView: UIStackView!
 
     init(frame: CGRect, deviation: Deviation) {
         super.init(frame: frame)
@@ -44,6 +44,20 @@ class DeviationInputView: UIView {
         super.init(frame: frame)
         commonInit()
         initRunningCount()
+    }
+    
+    init(frame: CGRect, gameType: GameType) {
+        super.init(frame: frame)
+        commonInit()
+        if gameType == .freePlay {
+            initTrueCount()
+        } else {
+            initRunningCount()
+        }
+        
+        textField.keyboardType = UIKeyboardType.numberPad
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.addNumericAccessory(addPlusMinus: true)
     }
     
     required init?(coder: NSCoder) {
@@ -60,10 +74,21 @@ class DeviationInputView: UIView {
         if !Settings.shared.surrender {
             actionSegmentedControl.setEnabled(false, forSegmentAt: 4)
         }
+        
+        submitButton.layer.borderWidth = 1
+        submitButton.layer.borderColor = UIColor.systemBlue.cgColor
     }
     
     private func initRunningCount() {
         titleLabel.text = "Running Count"
+        actionStackView.isHidden = true
+        //textFieldStackView.isHidden = true
+        lessGreaterThanStackView.isHidden = true
+        runningCountStackView.isHidden = true
+    }
+    
+    private func initTrueCount() {
+        titleLabel.text = "True Count"
         actionStackView.isHidden = true
         //textFieldStackView.isHidden = true
         lessGreaterThanStackView.isHidden = true

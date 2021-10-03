@@ -19,6 +19,7 @@ class BasicStrategySettings: GameTypeSettings {
     var surrenderCell: UITableViewCell!
     var es10Cell: UITableViewCell!
     var enhcCell: UITableViewCell!
+    var dasCell: UITableViewCell!
     var twoHandCell: UITableViewCell!
     var threeHandCell: UITableViewCell!
     var fourHandCell: UITableViewCell!
@@ -92,15 +93,15 @@ class BasicStrategySettings: GameTypeSettings {
                         self.settings.surrender = !self.settings.surrender
                     }),
             
-                
-//
-//                SwitchRow(
-//                    text: "ES10",
-//                    switchValue: settings.ES10,
-//                    customization: { (cell, row) in
-//                        self.es10Cell = cell
-//                    },
-//                    action: { _ in }),
+                SwitchRow(
+                    text: "Double After Split",
+                    switchValue: settings.doubleAfterSplit,
+                      customization: { cell, row in
+                        self.dasCell = cell
+                      },
+                      action: { _ in
+                        self.settings.doubleAfterSplit = !self.settings.doubleAfterSplit
+                      }),
             ]),
 
             Section(title: "Number of Cards Dealt", rows: [
@@ -160,8 +161,11 @@ class BasicStrategySettings: GameTypeSettings {
                         (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
                         (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        (self.surrenderCell.accessoryView as! UISwitch).setOn(true, animated: true)
+                        (self.surrenderCell.accessoryView as! UISwitch).setOn(self.settings.defaults.surrender, animated: true)
                         (self.surrenderCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        
+                        (self.dasCell.accessoryView as! UISwitch).setOn(true, animated: true)
+                        (self.dasCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.threeCardHands = false
                         (self.threeHandCell.accessoryView as! UISwitch).setOn(false, animated: true)

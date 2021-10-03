@@ -63,7 +63,7 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     func tasksForEndOfRound() {
         
         
-        if Settings.shared.defaults.freePlayAskForCount && countMaster.isTimeToAskForCount() {
+        if /*Settings.shared.defaults.freePlayAskForCount && */countMaster.isTimeToAskForCount() {
             countMaster.endOfRoundTasks(gameMaster: gameMaster, completion: {
                 self.gameMaster.prepareForNewRound()
             })// let countMaster call back to GameMaster when task is complete

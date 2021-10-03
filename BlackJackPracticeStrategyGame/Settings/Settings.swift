@@ -12,14 +12,25 @@ class Settings {
     static let shared = Settings()
     private init() {}
     
+    var gameType: GameType! {
+        didSet {
+            
+        }
+    }
+    
+    var gameSettings: [GameType: Defaults]!
+    
     let defaults = Defaults()
     
     var cardSize: CGFloat {
         set {
-            UserDefaults.standard.set(newValue, forKey: "cardSize")
+            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSize"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "cardSize") as? CGFloat ?? 150.0
+            let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSize
+            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 6))
+            print (adjustmentForScreenSize)
+            return adjustmentForScreenSize
         }
     }
     
@@ -31,163 +42,195 @@ class Settings {
     
     var dealSpeed: Float {
         set {
-            UserDefaults.standard.set(newValue, forKey: "dealSpeed")
+            UserDefaults.standard.set(newValue, forKey: getKey(for: "dealSpeed"))
         }
         get {
             
-            return UserDefaults.standard.object(forKey: "dealSpeed") as? Float ?? defaults.dealSpeed
+            return UserDefaults.standard.object(forKey: getKey(for:"dealSpeed")) as? Float ?? defaults.dealSpeed
         }
     }
     var ENHC: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "ENHC")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"ENHC"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "ENHC") as? Bool ?? defaults.ENHC
+            return UserDefaults.standard.object(forKey: getKey(for:"ENHC")) as? Bool ?? defaults.ENHC
         }
     }
     var ES10: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "ES10")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"ES10"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "ES10") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: getKey(for:"ES10")) as? Bool ?? false
         }
     }
     var surrender: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "surrender")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"surrender"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "surrender") as? Bool ?? defaults.surrender
+            return UserDefaults.standard.object(forKey: getKey(for:"surrender")) as? Bool ?? defaults.surrender
         }
     }
     var twoCardHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "twoCardHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"twoCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "twoCardHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: getKey(for:"twoCardHands")) as? Bool ?? true
         }
     }
     var threeCardHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "threeCardHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"threeCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "threeCardHands") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: getKey(for:"threeCardHands")) as? Bool ?? false
         }
     }
     var fourCardHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "fourCardHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"fourCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "fourCardHands") as? Bool ?? false
+            return UserDefaults.standard.object(forKey: getKey(for:"fourCardHands")) as? Bool ?? false
         }
     }
     var splitHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "splitHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"splitHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "splitHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: getKey(for:"splitHands")) as? Bool ?? true
         }
     }
     var softHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "softHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"softHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "softHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: getKey(for:"softHands")) as? Bool ?? true
         }
     }
     var hardHands: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "hardHands")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"hardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "hardHands") as? Bool ?? true
+            return UserDefaults.standard.object(forKey: getKey(for:"hardHands")) as? Bool ?? true
         }
     }
-    var numberOfRoundsBeforeAskCount: String {
+    var numberOfRoundsBeforeAskRunningCount: String {
         set {
-            UserDefaults.standard.set(newValue, forKey: "numberOfRoundsBeforeAskCount")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"numberOfRoundsBeforeAskRunningCount"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "numberOfRoundsBeforeAskCount") as? String ?? defaults.numberOfRoundsBeforeAskCount.rawValue
+            return UserDefaults.standard.object(forKey: getKey(for:"numberOfRoundsBeforeAskRunningCount")) as? String ?? defaults.numberOfRoundsBeforeAskRunningCount
+        }
+    }
+    var numberOfRoundsBeforeAskTrueCount: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"numberOfRoundsBeforeAskTrueCount"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"numberOfRoundsBeforeAskTrueCount")) as? String ?? defaults.numberOfRoundsBeforeAskTrueCount
         }
     }
     var numberOfDecks: Int {
         set {
-            UserDefaults.standard.set(newValue, forKey: "numberOfDecks")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"numberOfDecks"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "numberOfDecks") as? Int ?? defaults.numberOfDecks
+            return UserDefaults.standard.object(forKey: getKey(for:"numberOfDecks")) as? Int ?? defaults.numberOfDecks
         }
     }
     var dealerHitsSoft17: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "dealHitsSoft17")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"dealHitsSoft17"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "dealHitsSoft17") as? Bool ?? defaults.dealerHitsSoft17
+            return UserDefaults.standard.object(forKey: getKey(for:"dealHitsSoft17")) as? Bool ?? defaults.dealerHitsSoft17
         }
     }
     var resplitAces: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "resplitAces")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"resplitAces"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "resplitAces") as? Bool ?? defaults.resplitAces
+            return UserDefaults.standard.object(forKey: getKey(for:"resplitAces")) as? Bool ?? defaults.resplitAces
         }
     }
     var doubleAfterSplit: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "doubleAfterSplit")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"doubleAfterSplit"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "doubleAfterSplit") as? Bool ?? defaults.doubleAfterSplit
+            return UserDefaults.standard.object(forKey: getKey(for:"doubleAfterSplit")) as? Bool ?? defaults.doubleAfterSplit
         }
     }
     var notifyMistakes: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "notifyMistakes")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"notifyMistakes"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "notifyMistakes") as? Bool ?? defaults.notifyMistakes
+            return UserDefaults.standard.object(forKey: getKey(for:"notifyMistakes")) as? Bool ?? defaults.notifyMistakes
         }
     }
     var showHandTotal: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "showHandTotal")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"showHandTotal"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "showHandTotal") as? Bool ?? defaults.showHandTotal
+            return UserDefaults.standard.object(forKey: getKey(for:"showHandTotal")) as? Bool ?? defaults.showHandTotal
         }
     }
     var showDiscardTray: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "showDiscardTray")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"showDiscardTray"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "showDiscardTray") as? Bool ?? defaults.showHandTotal
+            return UserDefaults.standard.object(forKey: getKey(for:"showDiscardTray")) as? Bool ?? defaults.showDiscardTray
         }
     }
     var deviations: Bool {
         set {
-            UserDefaults.standard.set(newValue, forKey: "deviations")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"deviations"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "deviations") as? Bool ?? defaults.deviations
+            return UserDefaults.standard.object(forKey: getKey(for:"deviations")) as? Bool ?? defaults.deviations
         }
     }
-    var freePlayAskForCount: Bool {
+    var deckFraction: String {
         set {
-            UserDefaults.standard.set(newValue, forKey: "freePlayAskForCount")
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"deckFraction"))
         }
         get {
-            return UserDefaults.standard.object(forKey: "freePlayAskForCount") as? Bool ?? defaults.freePlayAskForCount
+            return UserDefaults.standard.object(forKey: getKey(for:"deckFraction")) as? String ?? defaults.deckFraction
+        }
+    }
+    var deckRoundedTo: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"deckRoundedTo"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"deckRoundedTo")) as? String ?? defaults.deckRoundedTo
+        }
+    }
+    var showDiscardedRemainingDecks: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"showDiscardedRemainingDecks"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"showDiscardedRemainingDecks")) as? Bool ?? defaults.showDiscardedRemainingDecks
+        }
+    }
+    var roundLastThreeDecksToHalf: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"roundLastThreeDecksToHalf"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"roundLastThreeDecksToHalf")) as? Bool ?? defaults.roundLastThreeDecksToHalf
         }
     }
     
@@ -197,16 +240,26 @@ class Settings {
         var ENHC: Bool = false
         var numberOfDecks = 6
         var dealerHitsSoft17 = true
-        var surrender = true
+        var surrender = false
         var resplitAces = false
         var doubleAfterSplit = true
         var notifyMistakes = true
         var showHandTotal = false
         var showDiscardTray = false
-        var deviations = true
-        var numberOfRoundsBeforeAskCount = CountRounds.oneRound
+        var deviations = false
+        var numberOfRoundsBeforeAskRunningCount = CountRounds.oneRound.rawValue
+        var numberOfRoundsBeforeAskTrueCount = CountRounds.onceAtEnd.rawValue
         var tableColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
-        var freePlayAskForCount = false
+        var cardSize: CGFloat = 1//150.0
+        
+        var deckFraction: String = DeckFraction.quarter.rawValue
+        var deckRoundedTo: String = DeckRoundedTo.whole.rawValue
+        var showDiscardedRemainingDecks = false
+        var roundLastThreeDecksToHalf = false
+    }
+    
+    private func getKey(for setting: String) -> String {
+        return String("\(gameType.rawValue)_\(setting)")
     }
     
     static func getTypeOfHands() -> [RuleType] {
@@ -235,3 +288,15 @@ class Settings {
 //         twoThreeFourCardHand = "2, 3 and 4 card hand"
 //    
 //}
+
+enum DeckFraction: String {
+    case whole,
+         half,
+         third,
+         quarter
+    
+}
+
+enum DeckRoundedTo: String {
+    case whole, half
+}

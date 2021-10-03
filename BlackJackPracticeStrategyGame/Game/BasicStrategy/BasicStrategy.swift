@@ -70,7 +70,7 @@ class BasicStrategy {
             let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)
             return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doubledPlayerRuleValue, playerCardValues: playerCardValues)
         } else if strategyAction == .splitIfDAS {
-            if Settings.shared.defaults.doubleAfterSplit {
+            if Settings.shared.doubleAfterSplit {
                 action = .split
             } else {
                 let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)

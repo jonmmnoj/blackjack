@@ -19,6 +19,8 @@ class FreePlaySettings: GameTypeSettings {
     var countSection: RadioSection!
     var settings = Settings.shared
     
+    var deviationsCell: UITableViewCell!
+    var discardTrayCell: UITableViewCell!
     var dealerHitsCell: UITableViewCell!
     var enhcCell: UITableViewCell!
     var surrenderCell: UITableViewCell!
@@ -31,11 +33,11 @@ class FreePlaySettings: GameTypeSettings {
 
     var tableSettings: [Section] {
         
-        countSection = RadioSection(title: "Ask for count every", options: [
-            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.oneRound.rawValue, action: didToggleCountSelection()),
-            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.threeRounds.rawValue, action: didToggleCountSelection()),
-            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.fiveRounds.rawValue, action: didToggleCountSelection()),
-            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.onceAtEnd.rawValue, action: didToggleCountSelection())
+        countSection = RadioSection(title: "Ask for true count every", options: [
+            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.oneRound.rawValue, action: didToggleCountSelection()),
+            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.threeRounds.rawValue, action: didToggleCountSelection()),
+            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.fiveRounds.rawValue, action: didToggleCountSelection()),
+            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.onceAtEnd.rawValue, action: didToggleCountSelection())
         ] /*, footer: "See RadioSection for more details."*/)
         countSection.alwaysSelectsOneOption = true
         
@@ -142,6 +144,34 @@ class FreePlaySettings: GameTypeSettings {
                       }),
             ]),
             
+            Section(title: "Card Counting", rows: [
+                SwitchRow(
+                    text: "Use Deviations",
+                    switchValue: settings.deviations,
+                      customization: { cell, row in
+                        self.deviationsCell = cell
+                        (self.deviationsCell.accessoryView as! UISwitch).setOn(self.settings.deviations, animated: false)
+                      },
+                      action: { _ in
+                        self.settings.deviations = !self.settings.deviations
+                      }),
+                SwitchRow(
+                    text: "Show Discard Tray",
+                    switchValue: settings.showDiscardTray,
+                    customization:  { (cell, row) in
+                        self.discardTrayCell = cell
+                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.showDiscardTray, animated: false)
+                    },action: { row in
+                        self.settings.showDiscardTray = !self.settings.showDiscardTray
+                    }),
+                
+               
+            ]),
+            
+            countSection,
+            
+            radioSection,
+            
             Section(title: "Deal speed", rows: [
                 TapActionRow<SliderTableViewCell>(
                   text: " ",
@@ -153,10 +183,6 @@ class FreePlaySettings: GameTypeSettings {
                     }
                 ),
             ]),
-            
-            countSection,
-            
-            radioSection,
             
             Section(title: "", rows: [
                TapActionRow(
@@ -185,10 +211,17 @@ class FreePlaySettings: GameTypeSettings {
                             self.settings.dealerHitsSoft17 = self.settings.defaults.dealerHitsSoft17
                         }
                         
-                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
-                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
-                        if self.enhcCell.isHidden {
-                            self.settings.ENHC = self.settings.defaults.ENHC
+                        (self.deviationsCell.accessoryView as! UISwitch).setOn(self.settings.defaults.deviations, animated: true)
+                        (self.deviationsCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        // in case cell is off screen
+                        if self.deviationsCell.isHidden {
+                            self.settings.deviations = self.settings.defaults.deviations
+                        }
+                        
+                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.defaults.showDiscardTray, animated: true)
+                        (self.discardTrayCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        if self.discardTrayCell.isHidden {
+                            self.settings.showDiscardTray = self.settings.defaults.showDiscardTray
                         }
                         
                         (self.surrenderCell.accessoryView as! UISwitch).setOn(self.settings.defaults.surrender, animated: true)
@@ -212,8 +245,8 @@ class FreePlaySettings: GameTypeSettings {
                             self.settings.notifyMistakes = self.settings.defaults.notifyMistakes
                         }
                         
-                        if Settings.shared.numberOfRoundsBeforeAskCount != Settings.shared.defaults.numberOfRoundsBeforeAskCount.rawValue {
-                            let indexPath = IndexPath(row: 0, section: 3)
+                        if Settings.shared.numberOfRoundsBeforeAskTrueCount != Settings.shared.defaults.numberOfRoundsBeforeAskTrueCount {
+                            let indexPath = IndexPath(row: 3, section: 3)
                             self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                             self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
                         }
@@ -249,10 +282,14 @@ class FreePlaySettings: GameTypeSettings {
       return { row in
         if let option = row as? OptionRowCompatible {
             if option.isSelected {
-                Settings.shared.numberOfRoundsBeforeAskCount = row.text
+                Settings.shared.numberOfRoundsBeforeAskTrueCount = row.text
             }
         }
       }
+    }
+    
+    func forcedSettings() {
+        
     }
 }
 

@@ -9,24 +9,35 @@ import UIKit
 import QuickTableViewController
 
 class SettingsViewController: QuickTableViewController {
-    var gameType: GameType!
-    @IBOutlet var navigationBar: UINavigationBar!
+    var gameType: GameType! {
+        didSet {
+            
+        }
+    }
+    //@IBOutlet var navigationBar: UINavigationBar!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // If a shared setting was changed on another settings view, then the other views will not be updated. Need to reload setting controls in case there was a change to the settings. How should this be done?
+        
+        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        Settings.shared.gameType = gameType
         let gts = getSettingsHelper(for: self)
+        gts.forcedSettings()
         gts.registerCustomViews(for: tableView)
-        navigationBar.topItem?.title = gts.title
-        navigationBar.prefersLargeTitles = true
+        //navigationController?.navigationBar.topItem?.title = gts.title
+        //navigationController?.title = gts.title
+        self.navigationItem.title = gts.title
+        navigationController?.navigationBar.prefersLargeTitles = true
         tableContents = gts.tableSettings
+        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(navigationBar.snp.bottom)
-            make.left.right.bottom.equalTo(view)
+            //make.top.equalTo(navigationController!.navigationBar.snp.bottom)
+            make.left.right.bottom.top.equalTo(view)
+            //make.top.equalTo(view).offset(100)
         }
     }
     
@@ -44,6 +55,8 @@ class SettingsViewController: QuickTableViewController {
             return DeviationsSettings(vc: vc)
         case .charts:
             return ChartsSettings(vc: vc)
+        case .deckRounding:
+            return DeckRoundingSettings(vc: vc)
         case .none:
             return BasicStrategySettings(vc: vc)
         }

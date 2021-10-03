@@ -13,4 +13,5 @@ protocol GameViewDelegate {
     func presentBasicStrategyFeedbackView(isCorrect: Bool, playerAction: String, correctAction: String, completion: @escaping () -> Void)
     func alertMistake(message: String, completion: @escaping ((Bool) -> Void))
     func presentViewController(_: UIViewController)
+    func showToast(message: String)
 }

@@ -57,8 +57,8 @@ class SoftTotalsChart: ChartProtocol {
 
 class HardTotalsChart: ChartProtocol {
     var data = [["17","S","S","S","S","S","S","S","S","S","S"],
-                ["16","S","S","S","S","S","S","H","H","H","H"],
-                ["15","S","S","S","S","S","S","H","H","H","H"],
+                ["16","S","S","S","S","S","H","H","H","H","H"],
+                ["15","S","S","S","S","S","H","H","H","H","H"],
                 ["14","S","S","S","S","S","H","H","H","H","H"],
                 ["13","S","S","S","S","S","H","H","H","H","H"],
                 ["12","H","H","S","S","S","H","H","H","H","H"],

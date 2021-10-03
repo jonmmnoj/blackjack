@@ -33,34 +33,48 @@ class FeedbackView: UIView {
     }
 
     private func setupView() {
-    
+        backgroundColor = .secondarySystemBackground
+        dismissButton.layer.borderWidth = 1
+        dismissButton.layer.borderColor = UIColor.systemBlue.cgColor
     }
     
     func updateView(isCorrect: Bool, input: Int, actualCount: Int) {
         let s = isCorrect ? "right" : "wrong"
-        imageView.image = UIImage(named: s)
+        let image = UIImage(named: s)
+        imageView.image = image
         yourAnswerLabel.text = "Your answer: \(input)"
         actualLabel.text = "Actual: \(actualCount)"
-        
     }
     
     func updateViewForBasicStrategy(isCorrect: Bool, playerAction: String, correctAction: String) {
         let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
-        yourAnswerLabel.text = "Your answer: \(playerAction)"
+        //yourAnswerLabel.text = "Your answer: \(playerAction)"
         actualLabel.text = "\(correctAction)"
         actualLabel.textColor = .systemGreen
-        actualLabel.font = .boldSystemFont(ofSize: 18)
+        
+        let myMutableString = NSMutableAttributedString(string: "Your answer: \(playerAction)", attributes: [NSAttributedString.Key.font: yourAnswerLabel.font! ])
+        
+        let color: UIColor = isCorrect ? .systemGreen : .systemRed
+        myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 13, length: playerAction.count))
+        
+        yourAnswerLabel.attributedText = myMutableString
         
     }
     
     func updateViewForDeviation(isCorrect: Bool, playerAction: String, correctAction: String) {
         let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
-        yourAnswerLabel.text = "Your answer: \(playerAction)"
+        //yourAnswerLabel.text = "Your answer: \(playerAction)"
         actualLabel.text = "\(correctAction)"
         actualLabel.textColor = .systemGreen
-        actualLabel.font = .boldSystemFont(ofSize: 100)
+        
+        let myMutableString = NSMutableAttributedString(string: "Your answer: \(playerAction)", attributes: [NSAttributedString.Key.font: yourAnswerLabel.font! ])
+        
+        let color: UIColor = isCorrect ? .systemGreen : .systemRed
+        myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 13, length: playerAction.count))
+        
+        yourAnswerLabel.attributedText = myMutableString
         
     }
     

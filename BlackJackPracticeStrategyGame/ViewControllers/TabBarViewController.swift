@@ -54,7 +54,6 @@ class TabBarViewController: UITabBarController, UITabBarControllerDelegate {
         let tabTwoBarItem5 = UITabBarItem(title: "Charts", image: UIImage(named: "defaultImage3.png"), selectedImage: UIImage(named: "selectedImage3.png"))
         vc5.tabBarItem = tabTwoBarItem5
         
-        //let vc6 = TrueCountViewController()
         let vc6 = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
         vc6.gameType = .trueCount
         let tabTwoBarItem6 = UITabBarItem(title: "True Count", image: UIImage(named: "defaultImage3.png"), selectedImage: UIImage(named: "selectedImage3.png"))

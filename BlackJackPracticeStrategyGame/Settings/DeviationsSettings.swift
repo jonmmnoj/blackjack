@@ -25,6 +25,7 @@ class DeviationsSettings: GameTypeSettings {
     var splitCell: UITableViewCell!
     var softCell: UITableViewCell!
     var hardCell: UITableViewCell!
+    var dealerHitsCell: UITableViewCell!
     
     var tableSettings: [Section] {
         return [
@@ -65,6 +66,16 @@ class DeviationsSettings: GameTypeSettings {
             ]),
         
             Section(title: "Rules", rows: [
+                SwitchRow(
+                    text: "Dealer Hits Soft 17",
+                    switchValue: settings.dealerHitsSoft17,
+                      customization: { cell, row in
+                        self.dealerHitsCell = cell
+//                        (self.dealerHitsCell.accessoryView as! UISwitch).setOn(self.settings.dealerHitsSoft17, animated: false)
+                      },
+                      action: { _ in
+                        self.settings.dealerHitsSoft17 = !self.settings.dealerHitsSoft17
+                      }),
                 SwitchRow(
                     text: "ENHC",
                     switchValue: settings.ENHC,
@@ -158,6 +169,9 @@ class DeviationsSettings: GameTypeSettings {
                         cell.selectionStyle = .default
                     },
                     action: { _ in
+                        (self.dealerHitsCell.accessoryView as! UISwitch).setOn(self.settings.defaults.dealerHitsSoft17, animated: true)
+                        (self.dealerHitsCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        
                         (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
                         (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
@@ -185,7 +199,7 @@ class DeviationsSettings: GameTypeSettings {
                         (self.hardCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.hardCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        // MAKE SURE this call is after change to split hand, because this control's action handler effects split control
+                        // This is called after change to split hand, because this control's action handler affects split control
                         (self.twoHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.twoHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                     })
@@ -231,6 +245,10 @@ class DeviationsSettings: GameTypeSettings {
             (softCell.accessoryView as! UISwitch).setOn(false, animated: true)
             (self.softCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
         }
+    }
+    
+    func forcedSettings() {
+        settings.deviations = true
     }
 }
 

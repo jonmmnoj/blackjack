@@ -13,20 +13,22 @@ class Dealer: Dealable {
     
     var players: [Player] = []
     //var numberOfDecks: Int = 1
-    private var shoe: [Deck] = []
+    var shoe: Shoe
     private var shoeIndex: Int = 0
-    var hands: [Hand] = [] // dealer only has one had so this is not the best design
+    var hands: [Hand] = []
     var activatedHand: Hand?
     var table: Table
     var isDealer = true
     
-    init(table: Table, numberOfDecks: Int = 1) {
+    init(table: Table) { //, numberOfDecks: Int = 1) {
         self.table = table
-        for _ in 1...numberOfDecks { shoe.append(Deck()) }
+        //for _ in 1...numberOfDecks { shoe.append(Deck() }
+        self.shoe = Shoe(table: table)
     }
     
     func add(hand: Hand) {
         self.activatedHand = hand
+        self.hands.append(hand)
     }
     
     func access(to player: Player) {
@@ -82,24 +84,10 @@ class Dealer: Dealable {
     }
     
     func getCard() -> Card {
-        manageShoe()
-        return shoe[shoeIndex].nextCard()
-    }
-    
-    func manageShoe() {
-        if shoe[shoeIndex].isEmpty {
-            shoeIndex += 1
+        if shoe.isTimeToRefillShoe() {
+            shoe.refill()
         }
-        if shoeIndex > shoe.count - 1 {
-            refillShoe()
-        }
-    }
-    
-    func refillShoe() {
-        print("refill shoe...ie. cleared decks array and append new deck")
-        shoe = []
-        for _ in 1...1 { shoe.append(Deck()) }
-        shoeIndex = 0
+        return shoe.takeCard()
     }
     
     func discard(hand: Hand) {

@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-
-
 class GameMaster {
 
     var gameType: GameType
@@ -22,14 +20,18 @@ class GameMaster {
     var player: Player!
     var delegate: GameViewDelegate!
     var dealerBusy = false
-    var tableView: UIView // ideally, GM does not have to work with table, only dealer, and then dealer works with table?
-    //var table: Table
-    var gameState: GameState! // save game state when using dealer, dealer might use table, which uses animations, gameMaster has to wait for animations to finish, table tells master when animations are finished
-    //var countMaster: CountMaster
+    var tableView: UIView
+    var gameState: GameState!
     var navBarHeight: CGFloat = 0
     var dealerHand: Hand {
-        let x = Settings.shared.showDiscardTray ? 0 + Settings.shared.cardWidth + 3 : tableView.center.x - Settings.shared.cardWidth
-        return Hand(dealToPoint: CGPoint(x: x , y: 50), adjustmentX: Card.width + 2, adjustmentY: 0, owner: self.dealer) // old x: table.center.x - Settings.shared.cardWidth
+
+        var x = tableView.center.x - Settings.shared.cardWidth
+        if Settings.shared.showDiscardTray {
+            if UIScreen.main.bounds.width / 2 < Settings.shared.cardWidth * 2 {
+                x = Settings.shared.cardWidth + 3
+            }
+        }
+        return Hand(dealToPoint: CGPoint(x: x , y: 50), adjustmentX: Card.width + 2, adjustmentY: 0, owner: self.dealer) 
     }
     var playerHand: Hand {
         return Hand(dealToPoint: CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30), adjustmentX: Settings.shared.cardSize * 0.2, adjustmentY: Settings.shared.cardSize * 0.2, owner: player)
@@ -57,7 +59,7 @@ class GameMaster {
     
     func setupDealer() {
         let table = Table(view: tableView, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
-        self.dealer = Dealer(table: table)
+        self.dealer = Dealer(table: table)//, numberOfDecks: Settings.shared.numberOfDecks)
         let hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)
     }
@@ -200,8 +202,8 @@ extension GameMaster {
             }
         case .movedAllCards:
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
-                self.player.activatedHand!.set(state: .blackjack)
-                discard(hand: player.activatedHand!)
+                player.activatedHand!.set(state: .blackjack)
+                //discard(hand: player.activatedHand!)
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
@@ -212,19 +214,110 @@ extension GameMaster {
                 playerHasMoreHandsOrDealersTurn()
             }
         case .revealedFaceDownCard:
-            if Rules.isSoftOrHardSeventeenOrGreater(hand: self.dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
-                discardAllHands()
+            if Rules.isSoftOrHardSeventeenOrGreater(hand: dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
+                
+                gameState = .moveToRightMostHandToScore
+                resume()
+                //discardAllHands()
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.dealer.moveCardToNewPositionOnTable()
                 }
-                self.gameState = .movedRevealCard
+                gameState = .movedRevealCard
             }
         case .movedRevealCard:
-            self.dealer.dealtToAtLeast17()
-            self.gameState = .dealtToAtLeast17
+            dealer.dealtToAtLeast17()
+            gameState = .dealtToAtLeast17
         case .dealtToAtLeast17:
-            self.discardAllHands()
+        //discardAllHands()
+        
+            // at this point, before discarding all hands, the dealer needs to compare his hand to the player's hands to determine what hands won, lost, or pushed.
+            // Need to move to the had that has not been scored, then show a toast for the result
+            // Then move to the next hand, until there are no more hands
+            // After all that, the hands can be discarded
+            
+            gameState = .moveToRightMostHandToScore
+            resume()
+            
+            
+            
+        case .moveToRightMostHandToScore:
+            print("move to right most hand to score")
+            // for the first time, move to the right most hand
+            let numberOfHands = player.hands.count
+            for _ in 1..<numberOfHands {
+                dealer.table.moveAllCards(for: player, to: .right)
+            }
+            gameState = .movedToHandToScore
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.resume()
+            }
+            
+            
+            // after that, just move to the left one at a time, until at first hand position
+            // need to get the hand that needs to be scored
+            // then call table to move cards as needed
+            // if only the first hand, then no need to move cards
+            // then set gameState to movedToHandScore
+           
+        case .moveToNextHandToScore:
+            print("move to next hand to score")
+            dealer.table.moveAllCards(for: player, to: .left)
+            gameState = .movedToHandToScore
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.resume()
+            }
+            
+        case .movedToHandToScore:
+            print("moved to hand to score")
+            let hand = player.nextHandToScore!
+            let dealerHandValue = Rules.value(of: dealer.activatedHand!)
+            let playerHandValue = Rules.value(of: hand)
+            var message = ""
+            if dealerHandValue == playerHandValue {
+                message = "Push"
+                hand.result = .push
+            } else if playerHandValue > dealerHandValue {
+                message = "Won"
+                hand.result = .won
+            } else {
+                message = "Lost"
+                hand.result = .lost
+            }
+            
+            if hand.state == .bust {
+                message = "Lost"
+                hand.result = .lost
+            }
+            else if Rules.didBust(hand: dealer.activatedHand!) {
+                message = "Won"
+                hand.result = .won
+            }
+           
+            delegate.showToast(message: message)
+            gameState = .showedToast
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                self.resume()
+            }
+            // Compare the dealer and player values
+            // show toast with message: won,lost,push
+            // set gameState to showedToast
+            
+        case .showedToast:
+            print("showed toast")
+            let hand = player.nextHandToScore
+            if hand == nil {
+                discardAllHands()
+            } else {
+                gameState = .moveToNextHandToScore
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.resume()
+                }
+            }
+            // moveToHandToScore
+            // if no more hands to move to, discardAllHands()
+            
+            
         case .discardedAllHands:
             tasksForEndOfRound()
         case .tappedBackButton:
@@ -305,7 +398,17 @@ extension GameMaster {
         self.gameState = .revealedFaceDownCard
     }
     
+    
     func discardAllHands() {
+        // move cards so right most hand is centered. Compare hand with dealer.
+        // Show toast - Won, Lost, Push
+        // Move to next right-most player hand
+        // Show toast
+        // After last player hand, discard all at same time
+        
+        
+        
+        
         let wait: Double = gameType == .runningCount ? 2.0 : 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + wait) {
             self.dealer.discard(hand: self.dealer.activatedHand!)
@@ -322,15 +425,15 @@ extension GameMaster {
             hand.set(state: .bust)
             self.gameState = .busted
             
+            self.delegate.showToast(message: "Bust")
             
-            //self.resume()
             
-            // NOTE/UPDATE: Code was just calling resume().... instead of discarding.... I think skippped discarding for some reason but I don't remember the exact reason.  Was it to do with card counting? Anyway, going to comment out resume() and call discard() instead, and can put a gameType condition, or whatever is needed, to make the option to skip discarding and just resume play, ie. don't discard any hands until the round is over, and all cards are discarded at the same time.
-            // UPDATE: maybe it was to avoid discarding first hand when bust...?
+         
             
             if hand.isFirstHand {
                 self.resume()
             } else {
+                //self.resume()
                 self.discard(hand: hand)
             }
         }

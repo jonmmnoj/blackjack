@@ -38,6 +38,8 @@ class Table {
         self.view.addSubview(discardTray)
         if !Settings.shared.showDiscardTray {
             discardTray.isHidden = true
+        } else {
+            //discardTray.isHidden = false
         }
         
         gradient.frame = view.bounds
@@ -119,6 +121,7 @@ class Table {
             self.animationComplete()
             card.destroyViews()
             CardCounter.shared.discard()
+            self.discardTray.updateViews()
           })
     }
     
@@ -137,7 +140,7 @@ class Table {
     private func updateCount(card: Card) {
         card.wasDealt = true
         CardCounter.shared.count(card: card)
-        discardTray.updateLabels()
+        discardTray.updateViews()
         card.hand?.updateValueOfHand(for: self)
     }
     
@@ -187,7 +190,11 @@ class Table {
                     }
                     card.set(dealPoint: newPoint)
                     card.updateFrame()
-                }, completion: { finished in })
+                }, completion: { finished in
+                    
+                    // why no animation complete??
+                    
+                })
             }
         }
     }

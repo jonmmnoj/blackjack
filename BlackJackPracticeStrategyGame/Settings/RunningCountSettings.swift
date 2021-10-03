@@ -21,10 +21,10 @@ class RunningCountSettings: GameTypeSettings {
     var tableSettings: [Section] {
         
         radioSection = RadioSection(title: "Ask for count every", options: [
-            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.oneRound.rawValue, action: didToggleSelection()),
-            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.threeRounds.rawValue, action: didToggleSelection()),
-            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.fiveRounds.rawValue, action: didToggleSelection()),
-            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.onceAtEnd.rawValue, action: didToggleSelection())
+            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.oneRound.rawValue, action: didToggleSelection()),
+            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.threeRounds.rawValue, action: didToggleSelection()),
+            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.fiveRounds.rawValue, action: didToggleSelection()),
+            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.onceAtEnd.rawValue, action: didToggleSelection())
         ] /*, footer: "See RadioSection for more details."*/)
         radioSection.alwaysSelectsOneOption = true
         
@@ -82,7 +82,7 @@ class RunningCountSettings: GameTypeSettings {
                         self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
                         self.sliderView.slider.sendActions(for: .valueChanged)
                         
-                        if Settings.shared.numberOfRoundsBeforeAskCount != Settings.shared.defaults.numberOfRoundsBeforeAskCount.rawValue {
+                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
                             let indexPath = IndexPath(row: 0, section: 2)
                             self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                             self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
@@ -104,9 +104,13 @@ class RunningCountSettings: GameTypeSettings {
       return { row in
         if let option = row as? OptionRowCompatible {
             if option.isSelected {
-                Settings.shared.numberOfRoundsBeforeAskCount = row.text
+                Settings.shared.numberOfRoundsBeforeAskRunningCount = row.text
             }
         }
       }
+    }
+    
+    func forcedSettings() {
+        //Settings.shared.number
     }
 }

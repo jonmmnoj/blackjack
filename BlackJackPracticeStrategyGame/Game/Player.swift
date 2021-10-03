@@ -16,6 +16,15 @@ class Player: Dealable {
     var hands: [Hand] = []
     var isFinished: Bool = false
     var isDealer = false
+    var nextHandToScore: Hand? {
+        let hands = self.hands.reversed()
+        for hand in hands {
+            if hand.result == nil {
+                return hand
+            }
+        }
+        return nil
+    }
     
     init() {
 

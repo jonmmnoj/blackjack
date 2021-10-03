@@ -52,7 +52,7 @@ class TabBarController: UITabBarController {
         let navController = UINavigationController(rootViewController: rootViewController)
         rootViewController.navigationController?.navigationBar.isHidden = true
         navController.tabBarItem.title = title
-        navController.tabBarItem.image = image
+        //navController.tabBarItem.image = image
         
         return navController
     }

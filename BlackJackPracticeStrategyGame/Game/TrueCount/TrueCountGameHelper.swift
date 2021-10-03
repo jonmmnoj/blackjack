@@ -11,7 +11,7 @@ import UIKit
 class TrueCountGameHelper: GameTypeStrategyPatternProtocol {
     var gameMaster: GameMaster
     var stackView: UIStackView!
-    var vc: TrueCountViewController!
+    var vc: TrueCountView!
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
@@ -20,7 +20,7 @@ class TrueCountGameHelper: GameTypeStrategyPatternProtocol {
     func dealCards() {
         
         
-        vc = TrueCountViewController()
+        vc = TrueCountView()
         stackView = vc.stackView
         gameMaster.tableView.addSubview(stackView)
         stackView.snp.makeConstraints { (make) in

@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		9E1843084AF29E86476F95F3 /* Pods_BlackJackPracticeStrategyGame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE22D6AD31DF36DF2FE3DBB /* Pods_BlackJackPracticeStrategyGame.framework */; };
 		FC03265C269BECDE002B13D0 /* BasicStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC03265B269BECDE002B13D0 /* BasicStrategy.swift */; };
+		FC0D49EA26C9DDB200F6556E /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */; };
+		FC24C98A27094452008A0993 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC24C98927094452008A0993 /* Toast.swift */; };
 		FC4E6220269E808500D1AF93 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E621F269E808500D1AF93 /* Settings.swift */; };
 		FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E6221269E86D200D1AF93 /* CardCounter.swift */; };
 		FC4E622426A110AD00D1AF93 /* CountMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622326A110AD00D1AF93 /* CountMaster.swift */; };
 		FC4E622626A1C34B00D1AF93 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622526A1C34A00D1AF93 /* CountViewController.swift */; };
 		FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622726A1D71900D1AF93 /* GameViewDelegate.swift */; };
 		FC4E622F26A21B6300D1AF93 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */; };
+		FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */; };
+		FC4E9DB426E1B7A300CAC0A0 /* Shoe.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */; };
 		FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */; };
 		FC610E8D26A8F92C0089C7C9 /* BasicStrategyMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E8C26A8F92C0089C7C9 /* BasicStrategyMaster.swift */; };
 		FC610E8F26A8FBEA0089C7C9 /* BasicStrategyGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */; };
@@ -53,7 +57,7 @@
 		FC610F1026BC55430089C7C9 /* Chart.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FC610F0F26BC55430089C7C9 /* Chart.storyboard */; };
 		FC610F1326BC57090089C7C9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = FC610F1226BC57090089C7C9 /* OrderedCollections */; };
 		FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */; };
-		FC610F1C26C2E3A50089C7C9 /* TrueCountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */; };
+		FC610F1C26C2E3A50089C7C9 /* TrueCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1B26C2E3A40089C7C9 /* TrueCountView.swift */; };
 		FC610F1E26C3727B0089C7C9 /* TrueCountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F1D26C3727B0089C7C9 /* TrueCountSettings.swift */; };
 		FC610F2126C5F6CC0089C7C9 /* TrueCountGameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F2026C5F6CA0089C7C9 /* TrueCountGameHelper.swift */; };
 		FC610F2326C608530089C7C9 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610F2226C608530089C7C9 /* MainMenuViewController.swift */; };
@@ -79,6 +83,9 @@
 		FC92B52126A61B120082DA32 /* StrategyGameDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */; };
 		FC92B52326A733F40082DA32 /* BasicStrategy+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52226A733F40082DA32 /* BasicStrategy+Extension.swift */; };
 		FC92B52526A85AE00082DA32 /* GameTypeStrategyPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52426A85AE00082DA32 /* GameTypeStrategyPattern.swift */; };
+		FCA4102726CF284F005E2177 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102626CF284F005E2177 /* UITextField+Extension.swift */; };
+		FCA4102A26D2B678005E2177 /* DeckRoundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102926D2B678005E2177 /* DeckRoundingView.swift */; };
+		FCA4102E26D2C508005E2177 /* DeckRoundingGameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,12 +93,16 @@
 		83C5FEB864BCF9ECA8FA30F9 /* Pods-BlackJackPracticeStrategyGame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackJackPracticeStrategyGame.debug.xcconfig"; path = "Target Support Files/Pods-BlackJackPracticeStrategyGame/Pods-BlackJackPracticeStrategyGame.debug.xcconfig"; sourceTree = "<group>"; };
 		CE4608C3DEFAC854F2FC0FFA /* Pods-BlackJackPracticeStrategyGame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackJackPracticeStrategyGame.release.xcconfig"; path = "Target Support Files/Pods-BlackJackPracticeStrategyGame/Pods-BlackJackPracticeStrategyGame.release.xcconfig"; sourceTree = "<group>"; };
 		FC03265B269BECDE002B13D0 /* BasicStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategy.swift; sourceTree = "<group>"; };
+		FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		FC24C98927094452008A0993 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FC4E621F269E808500D1AF93 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		FC4E6221269E86D200D1AF93 /* CardCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCounter.swift; sourceTree = "<group>"; };
 		FC4E622326A110AD00D1AF93 /* CountMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountMaster.swift; sourceTree = "<group>"; };
 		FC4E622526A1C34A00D1AF93 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		FC4E622726A1D71900D1AF93 /* GameViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewDelegate.swift; sourceTree = "<group>"; };
 		FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingSettings.swift; sourceTree = "<group>"; };
+		FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shoe.swift; sourceTree = "<group>"; };
 		FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyViewController.swift; sourceTree = "<group>"; };
 		FC610E8C26A8F92C0089C7C9 /* BasicStrategyMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyMaster.swift; sourceTree = "<group>"; };
 		FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyGameType.swift; sourceTree = "<group>"; };
@@ -132,7 +143,7 @@
 		FC610EFE26BC55230089C7C9 /* PrettyHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyHeaderView.swift; sourceTree = "<group>"; };
 		FC610F0F26BC55430089C7C9 /* Chart.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Chart.storyboard; sourceTree = "<group>"; };
 		FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsSettings.swift; sourceTree = "<group>"; };
-		FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCountViewController.swift; sourceTree = "<group>"; };
+		FC610F1B26C2E3A40089C7C9 /* TrueCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCountView.swift; sourceTree = "<group>"; };
 		FC610F1D26C3727B0089C7C9 /* TrueCountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCountSettings.swift; sourceTree = "<group>"; };
 		FC610F2026C5F6CA0089C7C9 /* TrueCountGameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrueCountGameHelper.swift; sourceTree = "<group>"; };
 		FC610F2226C608530089C7C9 /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +171,9 @@
 		FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyGameDecks.swift; sourceTree = "<group>"; };
 		FC92B52226A733F40082DA32 /* BasicStrategy+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicStrategy+Extension.swift"; sourceTree = "<group>"; };
 		FC92B52426A85AE00082DA32 /* GameTypeStrategyPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTypeStrategyPattern.swift; sourceTree = "<group>"; };
+		FCA4102626CF284F005E2177 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
+		FCA4102926D2B678005E2177 /* DeckRoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingView.swift; sourceTree = "<group>"; };
+		FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingGameHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +233,7 @@
 				FC610EBB26B84B600089C7C9 /* DeviationsSettings.swift */,
 				FC610F1626BE086F0089C7C9 /* ChartsSettings.swift */,
 				FC610F1D26C3727B0089C7C9 /* TrueCountSettings.swift */,
+				FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -258,6 +273,8 @@
 				FC610EA126AF8BDA0089C7C9 /* SliderTableViewCell.xib */,
 				FC610EAC26B4A8880089C7C9 /* DiscardTrayView.swift */,
 				FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */,
+				FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */,
+				FC24C98927094452008A0993 /* Toast.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -364,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				FC610F2026C5F6CA0089C7C9 /* TrueCountGameHelper.swift */,
+				FC610F1B26C2E3A40089C7C9 /* TrueCountView.swift */,
 			);
 			path = TrueCount;
 			sourceTree = "<group>";
@@ -389,6 +407,7 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
+				FCA4102526CF2835005E2177 /* Extension */,
 				FC610EBF26B8BA050089C7C9 /* Rules */,
 				FC610EAB26B4A8190089C7C9 /* CustomViews */,
 				FC79377E2694D31B0000ACB7 /* Game */,
@@ -412,14 +431,16 @@
 				FC79377F2694D31B0000ACB7 /* Dealer.swift */,
 				FC7937802694D31B0000ACB7 /* Hand.swift */,
 				FC7937812694D31B0000ACB7 /* Player.swift */,
+				FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */,
 				FC79378A2694D4070000ACB7 /* Deck.swift */,
 				FC79378C2694D4240000ACB7 /* Card.swift */,
 				FC7937932694DFF50000ACB7 /* Table.swift */,
-				FC610F1F26C5F68D0089C7C9 /* TrueCount */,
-				FC610EB826B83FE50089C7C9 /* Deviations */,
 				FC610EA626B0A8E10089C7C9 /* FreePlay */,
-				FC03265A269BECC4002B13D0 /* BasicStrategy */,
 				FC610F1A26C217240089C7C9 /* RunningCount */,
+				FC610F1F26C5F68D0089C7C9 /* TrueCount */,
+				FCA4102826D2B65F005E2177 /* DeckRounding */,
+				FC610EB826B83FE50089C7C9 /* Deviations */,
+				FC03265A269BECC4002B13D0 /* BasicStrategy */,
 				FC4E621E269E807000D1AF93 /* CardCounting */,
 			);
 			path = Game;
@@ -451,7 +472,6 @@
 				FC4E622526A1C34A00D1AF93 /* CountViewController.swift */,
 				FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */,
 				FC610EA926B2E7C80089C7C9 /* TabBarViewController.swift */,
-				FC610F1B26C2E3A40089C7C9 /* TrueCountViewController.swift */,
 				FC610F2226C608530089C7C9 /* MainMenuViewController.swift */,
 			);
 			path = ViewControllers;
@@ -465,6 +485,23 @@
 				FC610E9C26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift */,
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		FCA4102526CF2835005E2177 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FCA4102626CF284F005E2177 /* UITextField+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		FCA4102826D2B65F005E2177 /* DeckRounding */ = {
+			isa = PBXGroup;
+			children = (
+				FCA4102926D2B678005E2177 /* DeckRoundingView.swift */,
+				FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */,
+			);
+			path = DeckRounding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -594,9 +631,10 @@
 			files = (
 				FC79378B2694D4070000ACB7 /* Deck.swift in Sources */,
 				FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */,
-				FC610F1C26C2E3A50089C7C9 /* TrueCountViewController.swift in Sources */,
+				FC610F1C26C2E3A50089C7C9 /* TrueCountView.swift in Sources */,
 				FC610E9B26AF3D0C0089C7C9 /* StrategyDeck.swift in Sources */,
 				FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */,
+				FCA4102726CF284F005E2177 /* UITextField+Extension.swift in Sources */,
 				FC610F2126C5F6CC0089C7C9 /* TrueCountGameHelper.swift in Sources */,
 				FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */,
 				FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */,
@@ -611,10 +649,13 @@
 				FC610F0C26BC55230089C7C9 /* PrettyRowCell.swift in Sources */,
 				FC610E9D26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift in Sources */,
 				FC7937922694D6780000ACB7 /* Dealable.swift in Sources */,
+				FCA4102E26D2C508005E2177 /* DeckRoundingGameHelper.swift in Sources */,
 				FC610EFF26BC55230089C7C9 /* RowCellObserver.swift in Sources */,
 				FC7937862694D31B0000ACB7 /* GameMaster.swift in Sources */,
 				FC610F1E26C3727B0089C7C9 /* TrueCountSettings.swift in Sources */,
+				FC4E9DB426E1B7A300CAC0A0 /* Shoe.swift in Sources */,
 				FC610F2326C608530089C7C9 /* MainMenuViewController.swift in Sources */,
+				FC0D49EA26C9DDB200F6556E /* MenuTableViewCell.swift in Sources */,
 				FC7937842694D31B0000ACB7 /* Hand.swift in Sources */,
 				FC4E622626A1C34B00D1AF93 /* CountViewController.swift in Sources */,
 				FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */,
@@ -638,6 +679,7 @@
 				FC7937852694D31B0000ACB7 /* Player.swift in Sources */,
 				FC79378D2694D4240000ACB7 /* Card.swift in Sources */,
 				FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */,
+				FCA4102A26D2B678005E2177 /* DeckRoundingView.swift in Sources */,
 				FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */,
 				FC610EA226AF8BDA0089C7C9 /* SliderTableViewCell.swift in Sources */,
 				FC03265C269BECDE002B13D0 /* BasicStrategy.swift in Sources */,
@@ -651,8 +693,10 @@
 				FC610E9F26AF71840089C7C9 /* BasicStrategySettings.swift in Sources */,
 				FC610EBA26B840000089C7C9 /* DeviationGameTypeHelper.swift in Sources */,
 				FC7937892694D3DF0000ACB7 /* Enums.swift in Sources */,
+				FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */,
 				FC610E8D26A8F92C0089C7C9 /* BasicStrategyMaster.swift in Sources */,
 				FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */,
+				FC24C98A27094452008A0993 /* Toast.swift in Sources */,
 				FC4E622F26A21B6300D1AF93 /* FeedbackView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

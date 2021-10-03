@@ -16,17 +16,36 @@ class TrueCountSettings: GameTypeSettings {
     }
     var vc: SettingsViewController
     var sliderView: SliderTableViewCell!
-    //var radioSection: RadioSection!
+    var numberOfDecksSection: RadioSection!
+    var deckFractionsSection: RadioSection!
+    var deckRoundedToSection: RadioSection!
+    var roundCell: UITableViewCell!
+    var showCell: UITableViewCell!
+    
+    var settings = Settings.shared
     
     var tableSettings: [Section] {
+        deckRoundedToSection = RadioSection(title: "Rounding", options: [
+            OptionRow(text: "whole", isSelected: settings.deckRoundedTo == "whole", action: didToggleDeckRoundedToSelection()),
+            OptionRow(text: "half", isSelected: settings.deckRoundedTo == "half", action: didToggleDeckRoundedToSelection())
+        ], footer: "Always rounds down")
+        deckRoundedToSection.alwaysSelectsOneOption = true
         
-//        radioSection = RadioSection(title: "Ask for count every", options: [
-//            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.oneRound.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.threeRounds.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.fiveRounds.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskCount == CountRounds.onceAtEnd.rawValue, action: didToggleSelection())
-//        ] /*, footer: "See RadioSection for more details."*/)
-//        radioSection.alwaysSelectsOneOption = true
+        numberOfDecksSection = RadioSection(title: "Number of Decks", options: [
+            OptionRow(text: "2", isSelected: settings.numberOfDecks == 2, action: didToggleSelection()),
+            OptionRow(text: "4", isSelected: settings.numberOfDecks == 4, action: didToggleSelection()),
+            OptionRow(text: "6", isSelected: settings.numberOfDecks == 6, action: didToggleSelection()),
+            OptionRow(text: "8", isSelected: settings.numberOfDecks == 8, action: didToggleSelection())
+        ] /*, footer: "See RadioSection for more details."*/)
+        numberOfDecksSection.alwaysSelectsOneOption = true
+        
+        deckFractionsSection = RadioSection(title: "Amount Discarded", options: [
+            OptionRow(text: "whole", isSelected: settings.deckFraction == "whole", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "half", isSelected: settings.deckFraction == "half", action: didToggleDeckFractionSelection()),
+//            OptionRow(text: "third", isSelected: settings.deckFraction == "third", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "quarter", isSelected: settings.deckFraction == "quarter", action: didToggleDeckFractionSelection())
+        ] )//, footer: "")
+        deckFractionsSection.alwaysSelectsOneOption = true
         
         return [
             Section(title: "", rows: [
@@ -51,20 +70,24 @@ class TrueCountSettings: GameTypeSettings {
                     })
             ]),
             
-//            Section(title: "Deal speed", rows: [
-//                TapActionRow<SliderTableViewCell>(
-//                  text: " ",
-//                customization: { cell, row in
-//                    self.sliderView = cell as? SliderTableViewCell
-//                },
-//                    action: { _ in
-//
-//                    }
-//                ),
-//            ]),
-//
-//            radioSection,
-//
+            deckRoundedToSection,
+            numberOfDecksSection,
+            deckFractionsSection,
+            
+            Section(title: "Miscellaneous", rows: [
+                SwitchRow(text: "Show Amount Discarded/Remaining", detailText: .subtitle(""), switchValue: settings.showDiscardedRemainingDecks, customization: {cell,row in
+                    self.showCell = cell
+                }, action: { _ in
+                    self.settings.showDiscardedRemainingDecks = !self.settings.showDiscardedRemainingDecks
+                }),
+                SwitchRow(text: "Round Last 3 Decks to Half", detailText: .subtitle(""), switchValue: settings.roundLastThreeDecksToHalf, customization: {cell,row in
+                    self.roundCell = cell
+                }, action: { _ in
+                    self.settings.roundLastThreeDecksToHalf = !self.settings.roundLastThreeDecksToHalf
+                }),
+                
+            ])
+
 //            Section(title: "", rows: [
 //               TapActionRow(
 //                    text: "Reset to defaults",
@@ -93,20 +116,35 @@ class TrueCountSettings: GameTypeSettings {
         ]
     }
     
+
+
     
+    private func didToggleSelection() -> (Row) -> Void {
+      return { row in
+        if let option = row as? OptionRowCompatible {
+            if option.isSelected {
+                Settings.shared.numberOfDecks = Int(row.text)!
+            }
+        }
+      }
+    }
     
-//    func registerCustomViews(for tableView: UITableView) {
-//        let cell = UINib(nibName: "SliderTableViewCell", bundle: nil)
-//        tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
-//    }
-    
-//    private func didToggleSelection() -> (Row) -> Void {
-//      return { row in
-//        if let option = row as? OptionRowCompatible {
-//            if option.isSelected {
-//                Settings.shared.numberOfRoundsBeforeAskCount = row.text
-//            }
-//        }
-//      }
-//    }
+    private func didToggleDeckFractionSelection() -> (Row) -> Void {
+      return { row in
+        if let option = row as? OptionRowCompatible {
+            if option.isSelected {
+                Settings.shared.deckFraction = row.text
+            }
+        }
+      }
+    }
+    private func didToggleDeckRoundedToSelection() -> (Row) -> Void {
+      return { row in
+        if let option = row as? OptionRowCompatible {
+            if option.isSelected {
+                Settings.shared.deckRoundedTo = row.text
+            }
+        }
+      }
+    }
 }

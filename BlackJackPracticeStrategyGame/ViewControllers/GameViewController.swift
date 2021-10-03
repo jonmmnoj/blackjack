@@ -5,7 +5,7 @@ class GameViewController: UIViewController {
     var gameMaster: GameMaster!
     var gameType: GameType!
     var showInputButtons: Bool {
-        let gameTypes: [GameType] = [.runningCount, .deviations, .trueCount]
+        let gameTypes: [GameType] = [.runningCount, .deviations, .trueCount, .deckRounding]
         return !gameTypes.contains(gameType)
     }
     
@@ -29,7 +29,6 @@ class GameViewController: UIViewController {
         stack.alignment = .fill
         stack.distribution = .fillEqually
         [hitButton, standButton, doubleButton, splitButton].forEach { stack.addArrangedSubview($0)
-            
         }
         if Settings.shared.surrender {
             stack.addArrangedSubview(surrenderButton)
@@ -69,6 +68,9 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
         if showInputButtons {
             //addButtons()
             self.view.addSubview(stackView)
@@ -76,9 +78,10 @@ class GameViewController: UIViewController {
                    //make.centerX.left.right.equalTo(hitButton)
                    //make.top.equalTo(hitButton.snp.bottom).offset(30)
                 
-                let height = stackView.subviews.count * 40
+                let height = Settings.shared.cardSize //stackView.subviews.count * 40
                 make.height.equalTo(height)
-                make.width.equalTo(100)
+                let width = Settings.shared.cardWidth //100
+                make.width.equalTo(width)
                     make.centerY.equalTo(self.view)
                 make.right.equalTo(self.view)
                 
@@ -99,10 +102,6 @@ class GameViewController: UIViewController {
         gameMaster.delegate = self
         //gameMaster.navBarHeight = navigationController?.navigationBar.frame.height
         gameMaster.startGame()
-        
-        
-        //let discardTrayView = DiscardTrayView(frame: .zero)
-        //super.view.addSubview(discardTrayView)
     }
     
 //    func addButtons() {
@@ -162,11 +161,41 @@ class GameViewController: UIViewController {
         button.isEnabled = false
         return button
     }
+    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//
+//    }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if gameType == .runningCount { return }
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height
+                
+//                self.view.snp.makeConstraints { make in
+//                    make.top
+//                }
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if gameType == .runningCount { return }
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
 }
 
 // MARK: - GameViewDelegate
 
 extension GameViewController: GameViewDelegate {
+    func showToast(message: String) {
+        Toast.show(message: message, controller: self)
+    }
+    
     func playerInput(enabled value: Bool) {
         hitButton.isEnabled = value
         standButton.isEnabled = value
@@ -177,7 +206,7 @@ extension GameViewController: GameViewDelegate {
     
     func dismissViewController(completion: (() -> Void)? = nil) {
         self.dismiss(animated: false) {
-            print("dismissed vc")
+            
         }
         completion?()
     }

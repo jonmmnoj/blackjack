@@ -19,12 +19,14 @@ class Hand {
     var isFirstHand: Bool {
         return owner.hands.first === self
     }
+    
     var originPoint: CGPoint
     var wasSplit: Bool = false // to prevent splitting same hand again ifo split then dealt a pair again.
     var isSplitHand: Bool = false
     var adjustmentX: CGFloat
     var adjustmentY: CGFloat
     var state: HandState
+    var result: HandResult? = nil
     var canSplit: Bool {
         let isTwoCards = cards.count == 2
         let isPair = cards[0].value.rawValue == cards[1].value.rawValue
