@@ -193,6 +193,7 @@ class GameViewController: UIViewController {
 
 extension GameViewController: GameViewDelegate {
     func showToast(message: String) {
+        if gameType == .runningCount  { return }
         Toast.show(message: message, controller: self)
     }
     

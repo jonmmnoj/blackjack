@@ -203,7 +203,16 @@ extension GameMaster {
         case .movedAllCards:
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
                 player.activatedHand!.set(state: .blackjack)
-                //discard(hand: player.activatedHand!)
+                
+                //DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.delegate.showToast(message: "Won")
+                    self.player.activatedHand!.result = .won
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.discard(hand: self.player.activatedHand!)
+                }
+                //}
+                
+             
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
@@ -216,9 +225,12 @@ extension GameMaster {
         case .revealedFaceDownCard:
             if Rules.isSoftOrHardSeventeenOrGreater(hand: dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
                 
-                gameState = .moveToRightMostHandToScore
-                resume()
-                //discardAllHands()
+                if player.nextHandToScore != nil {
+                    gameState = .moveToRightMostHandToScore
+                    resume()
+                } else {
+                    discardAllHands()
+                }
             } else {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     self.dealer.moveCardToNewPositionOnTable()
@@ -229,7 +241,11 @@ extension GameMaster {
             dealer.dealtToAtLeast17()
             gameState = .dealtToAtLeast17
         case .dealtToAtLeast17:
-        //discardAllHands()
+        
+            if gameType == .runningCount {
+                discardAllHands()
+                return
+            }
         
             // at this point, before discarding all hands, the dealer needs to compare his hand to the player's hands to determine what hands won, lost, or pushed.
             // Need to move to the had that has not been scored, then show a toast for the result
@@ -244,8 +260,7 @@ extension GameMaster {
         case .moveToRightMostHandToScore:
             print("move to right most hand to score")
             // for the first time, move to the right most hand
-            let numberOfHands = player.hands.count
-            for _ in 1..<numberOfHands {
+            for _ in 1..<player.numberOfHandsToMoveForScore {
                 dealer.table.moveAllCards(for: player, to: .right)
             }
             gameState = .movedToHandToScore
@@ -262,7 +277,9 @@ extension GameMaster {
            
         case .moveToNextHandToScore:
             print("move to next hand to score")
-            dealer.table.moveAllCards(for: player, to: .left)
+            for _ in 1...player.numberOfHandsToMoveForScore {
+                dealer.table.moveAllCards(for: player, to: .left)
+            }
             gameState = .movedToHandToScore
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.resume()
@@ -349,7 +366,13 @@ extension GameMaster {
                 self.delegate.playerInput(enabled: false)
                 revealFaceDownCard()
             } else {
-                discard(hand: player.activatedHand!)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.delegate.showToast(message: "Won")
+                    self.player.activatedHand!.result = .won
+                    self.discard(hand: self.player.activatedHand!)
+                }
+                
             }
         
         } else {
@@ -428,14 +451,26 @@ extension GameMaster {
             self.delegate.showToast(message: "Bust")
             
             
-         
-            
-            if hand.isFirstHand {
-                self.resume()
-            } else {
-                //self.resume()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.delegate.showToast(message: "Lost")
+                hand.result = .lost
                 self.discard(hand: hand)
             }
+            
+         
+            
+//            if hand.isFirstHand {
+//                self.resume()
+//            } else {
+//                //self.resume()
+//
+//                // show Lost toast before discard
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                    self.delegate.showToast(message: "Lost")
+//                    hand.result = .lost
+//                    self.discard(hand: hand)
+//                }
+//            }
         }
     }
     

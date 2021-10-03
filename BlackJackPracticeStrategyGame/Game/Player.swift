@@ -14,8 +14,28 @@ class Player: Dealable {
     
     var activatedHand: Hand? // nil implies all hands are complete ie no action to take
     var hands: [Hand] = []
-    var isFinished: Bool = false
+    //var isFinished: Bool = false
     var isDealer = false
+    var numberOfHandsToMoveForScore: Int {
+        var indexOfLastHandWithNilResult = 0
+        var count = 0
+        for hand in hands {
+            count += 1
+            if hand.result == nil {
+                indexOfLastHandWithNilResult = count
+            }
+        }
+        var amountToMove = 0
+        if indexOfLastHandScored == nil {
+            amountToMove = indexOfLastHandWithNilResult
+        } else {
+            amountToMove = indexOfLastHandScored! - indexOfLastHandWithNilResult
+        }
+        indexOfLastHandScored = indexOfLastHandWithNilResult
+        
+        return amountToMove
+    }
+    var indexOfLastHandScored: Int? = nil
     var nextHandToScore: Hand? {
         let hands = self.hands.reversed()
         for hand in hands {
@@ -48,11 +68,12 @@ class Player: Dealable {
             }
         }
         self.activatedHand = nil // no action left to take
-        self.isFinished = true
+        //self.isFinished = true
     }
     
     func clearHands() {
         self.hands = []
+        self.indexOfLastHandScored = nil
     }
     
     func allHandsBust() -> Bool {
