@@ -80,6 +80,14 @@ class DiscardTrayView: UIView {
         imageView.image = image
         imageView.image = image
         imageView.backgroundColor = .cyan
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+            imageView.isUserInteractionEnabled = true
+            imageView.addGestureRecognizer(tapGestureRecognizer)
+        
+
+       
+        
         imageView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
             
@@ -172,6 +180,14 @@ class DiscardTrayView: UIView {
         UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut, .allowUserInteraction], animations: {
             self.layoutIfNeeded()
           })
+    }
+
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        let tappedImage = tapGestureRecognizer.view as! UIImageView
+
+        // Your action
+        print("tap")
     }
     
 }

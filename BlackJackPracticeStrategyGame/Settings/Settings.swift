@@ -22,13 +22,23 @@ class Settings {
     
     let defaults = Defaults()
     
-    var cardSize: CGFloat {
+    var cardSizeFactor: CGFloat {
         set {
-            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSize"))
+            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSizeFactor"))
         }
         get {
-            let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSize
-            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 6))
+            
+            return UserDefaults.standard.object(forKey: getKey(for:"cardSizeFactor")) as? CGFloat ?? defaults.cardSizeFactor
+        }
+    }
+    
+    var cardSize: CGFloat {
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSize"))
+//        }
+        get {
+            let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSizeFactor
+            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 5.5))
             print (adjustmentForScreenSize)
             return adjustmentForScreenSize
         }
@@ -245,12 +255,12 @@ class Settings {
         var doubleAfterSplit = true
         var notifyMistakes = true
         var showHandTotal = false
-        var showDiscardTray = false
+        var showDiscardTray = true
         var deviations = false
         var numberOfRoundsBeforeAskRunningCount = CountRounds.oneRound.rawValue
         var numberOfRoundsBeforeAskTrueCount = CountRounds.onceAtEnd.rawValue
         var tableColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
-        var cardSize: CGFloat = 1//150.0
+        var cardSizeFactor: CGFloat = 1//150.0
         
         var deckFraction: String = DeckFraction.quarter.rawValue
         var deckRoundedTo: String = DeckRoundedTo.whole.rawValue

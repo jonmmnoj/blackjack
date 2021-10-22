@@ -12,10 +12,15 @@ protocol Dealable {
     var hands: [Hand] { get set }
     func searchForIncompleteHand()
     var isDealer: Bool { get set }
+    func index(of hand: Hand) -> Int?
 }
 
 extension Dealable {
     func searchForIncompleteHand() {
         
+    }
+    
+    func index(of hand: Hand) -> Int? {
+        return nil
     }
 }

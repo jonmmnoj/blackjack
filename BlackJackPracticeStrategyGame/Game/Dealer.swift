@@ -119,6 +119,12 @@ class Dealer: Dealable {
     func splitHand(for hand: Hand) {
         let newHand = hand.createSplitHand()
         let cardToMove = newHand.cards.first!
+        // check for move all hands to the right of this hand, first
+        if let newHandIndex = players[0].index(of: newHand) {
+            if newHandIndex < players[0].hands.count - 1 {
+                table.moveAllCards(for: players[0], to: .left, startIndex: newHandIndex + 1)
+            }
+        }
         table.animateMove(card: cardToMove)
         let rotate = cardToMove.value == .ace
         dealCardsAfterSplit(newHand: newHand, otherHand: hand, rotate: rotate)

@@ -25,40 +25,33 @@ class Table {
     }
     
     var offScreenDiscardPoint: CGPoint {
-        return CGPoint(x: 0 - Card.width, y: 0)
+        return CGPoint(x: 0 - Card.width, y: discardTray.frame.minY)
     }
     
     init(view table: UIView, gameMaster: GameMaster) {
         table.backgroundColor = Settings.shared.defaults.tableColor
-        
-        
         self.view = table
         self.gameMaster = gameMaster
         self.arrowView = UIImageView(image: UIImage(named: "down_arrow"))
         self.view.addSubview(discardTray)
-        if !Settings.shared.showDiscardTray {
+        if !Settings.shared.showDiscardTray || Settings.shared.gameType != .freePlay {
             discardTray.isHidden = true
-        } else {
-            //discardTray.isHidden = false
         }
-        
         gradient.frame = view.bounds
-        //view.layer.addSublayer(gradient, at: 0)
         view.layer.insertSublayer(gradient, at: 0)
-        
     }
     
     func showIndicator(on hand: Hand) {
         let point = hand.nextCardPoint
-        let frame = CGRect(x: point.x, y: point.y - 50, width: 25, height: 25)
+        let dim = Settings.shared.cardWidth / 5
+        let frame = CGRect(x: point.x, y: point.y - dim * 2, width: dim, height: dim)
         arrowView.frame = frame
         self.view.addSubview(arrowView)
         arrowView.alpha = 1
         
-        UIView.animate(withDuration: 3, delay: 0, usingSpringWithDamping:0.1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            //self.arrowView.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0,   options: [.curveEaseInOut, .repeat, .autoreverse], animations: {
             self.arrowView.frame = frame.offsetBy(dx: 0, dy: 5)
-        }) { _ in }
+        })
     }
     
     func stopIndicator() {
@@ -165,10 +158,13 @@ class Table {
         card.faceView!.frame = card.view!.bounds
     }
     
-    func moveAllCards(for player: Player, to direction: MoveCardsDirection) {
+    func moveAllCards(for player: Player, to direction: MoveCardsDirection, startIndex: Int? = nil) {
         var adjustmentX: CGFloat = Settings.shared.cardSize // 200
         adjustmentX *= direction == .right ? -1 : 1
-        for hand in player.hands {
+        for (i, hand) in player.hands.enumerated() {
+            if startIndex != nil {
+                if i < startIndex! { continue }
+            }
             var newPoint = hand.nextCardPoint
             newPoint.x += adjustmentX
             hand.set(nextCardPoint: newPoint)

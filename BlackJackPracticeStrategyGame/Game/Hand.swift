@@ -102,7 +102,8 @@ class Hand {
 //        }
         set(nextCardPoint: CGPoint(x: nextCardPoint.x - adjustmentX, y: nextCardPoint.y + adjustmentY))
         owner.activatedHand = newHand
-        owner.hands.append(newHand)
+        let index = owner.index(of: self)!
+        owner.hands.insert(newHand, at: index + 1)
         return newHand
     }
     

@@ -28,7 +28,9 @@ class GameViewController: UIViewController {
         stack.spacing = 5.0
         stack.alignment = .fill
         stack.distribution = .fillEqually
-        [hitButton, standButton, doubleButton, splitButton].forEach { stack.addArrangedSubview($0)
+        [hitButton, standButton, doubleButton, splitButton].forEach {
+            $0.backgroundColor = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
+            stack.addArrangedSubview($0)
         }
         if Settings.shared.surrender {
             stack.addArrangedSubview(surrenderButton)
@@ -104,21 +106,6 @@ class GameViewController: UIViewController {
         gameMaster.startGame()
     }
     
-//    func addButtons() {
-//        if Settings.shared.surrender {
-//            super.view.addSubview(surrenderButton)
-//        }
-//        super.view.addSubview(splitButton)
-//        super.view.addSubview(doubleButton)
-//        super.view.addSubview(standButton)
-//        super.view.addSubview(hitButton)
-//
-//
-//
-//
-//        }
-//    }
-    
     @objc func hitButtonAction(_ sender:UIButton!) {
         gameMaster.inputReceived(type: .hit)
     }
@@ -145,27 +132,15 @@ class GameViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-//    let buttonHeight: CGFloat = 35
-//    let buttonWidth: CGFloat = 100
-//    var yAdjustment: CGFloat  = 35 + 5
-//    var buttonY: CGFloat {
-//        let y = view.frame.height / 1.5 - yAdjustment
-//        yAdjustment += buttonHeight + 5
-//        return y
-//    }
     func makeButton(title: String) -> UIButton {
         let button = UIButton()//frame: CGRect(x: view.frame.width - buttonWidth, y: buttonY, width: buttonWidth, height: buttonHeight))
         button.backgroundColor = .systemBlue
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.isEnabled = false
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
         return button
     }
-    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//    }
 
     @objc func keyboardWillShow(notification: NSNotification) {
         if gameType == .runningCount { return }

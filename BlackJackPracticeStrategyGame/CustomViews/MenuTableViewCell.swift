@@ -16,7 +16,7 @@ class MenuTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         //view.backgroundColor = .systemRed
         view.layer.cornerRadius = 10
-        customImageView.setImageColor(color: .white)
+        customImageView.setImageColor(color: .black)
     }
     
 }

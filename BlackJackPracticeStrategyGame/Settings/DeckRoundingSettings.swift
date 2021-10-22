@@ -40,10 +40,10 @@ class DeckRoundingSettings: GameTypeSettings {
         numberOfDecksSection.alwaysSelectsOneOption = true
         
         deckFractionsSection = RadioSection(title: "Amount Discarded", options: [
-            OptionRow(text: "whole", isSelected: settings.deckFraction == "whole", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "half", isSelected: settings.deckFraction == "half", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "wholes", isSelected: settings.deckFraction == "whole", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "halves", isSelected: settings.deckFraction == "half", action: didToggleDeckFractionSelection()),
 //            OptionRow(text: "third", isSelected: settings.deckFraction == "third", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "quarter", isSelected: settings.deckFraction == "quarter", action: didToggleDeckFractionSelection())
+            OptionRow(text: "quarters", isSelected: settings.deckFraction == "quarter", action: didToggleDeckFractionSelection())
         ] )//, footer: "")
         deckFractionsSection.alwaysSelectsOneOption = true
         

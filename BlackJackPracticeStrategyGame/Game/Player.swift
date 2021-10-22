@@ -16,6 +16,7 @@ class Player: Dealable {
     var hands: [Hand] = []
     //var isFinished: Bool = false
     var isDealer = false
+    
     var numberOfHandsToMoveForScore: Int {
         var indexOfLastHandWithNilResult = 0
         var count = 0
@@ -84,6 +85,15 @@ class Player: Dealable {
             }
         }
         return isBust
+    }
+    
+    func index(of hand: Hand) -> Int? {
+        for (i, h) in hands.enumerated() {
+            if h === hand {
+                return i
+            }
+        }
+        return nil
     }
     
     

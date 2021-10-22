@@ -12,6 +12,7 @@ class MainMenuViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Blackjack Trainer"
+        view.backgroundColor = Settings.shared.defaults.tableColor
     }
 
     // MARK: - Table view data source
@@ -38,6 +39,7 @@ class MainMenuViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
         let gameType = cellContent[indexPath.row].gameType
         let vc = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
         vc.gameType = gameType
