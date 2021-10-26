@@ -12,6 +12,7 @@ import UIKit
 
 
 class Hand {
+    var betAmount: Int = 0
     var cards: [Card] = []
     var nextCardPoint: CGPoint
     private(set) var hasAce: Bool = false
@@ -88,6 +89,8 @@ class Hand {
     
     func createSplitHand() -> Hand {
         let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 10 + Card.width, y: self.originPoint.y), adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
+        newHand.betAmount = self.betAmount
+        Settings.shared.bankRollAmount -= Double(self.betAmount)
         newHand.isSplitHand = true
         self.isSplitHand = true
         self.wasSplit = true

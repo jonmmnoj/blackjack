@@ -15,6 +15,9 @@ class GameMaster {
     lazy var gameStrategyPattern: GameTypeStrategyPatternProtocol = {
         return gameType.getStrategyPattern(gameMaster: self)
     }()
+    var playerBets: Bool {
+        return gameType == .freePlay && Settings.shared.placeBets
+    }
     var dealer: Dealer!
     var players: [Player] = []
     var player: Player!
@@ -44,12 +47,28 @@ class GameMaster {
     
     func startGame() {
         CardCounter.shared.reset()
-        //gameStrategyPattern = gameType.getStrategyPattern(gameMaster: self)
         setupDealer()
         setupPlayer()
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            self.dealCards()
+            if self.playerBets {
+                self.getBet()
+            } else {
+                self.dealCards()
+            }
         }
+    }
+    
+    func getBet() {
+        self.delegate.showPlaceBetView()
+    }
+    
+    func playerBet(amount: Int) {
+        print(amount)
+        for hand in player.hands {
+            hand.betAmount = amount
+        }
+        dealCards()
     }
     
     func dealCards() {
@@ -87,7 +106,11 @@ class GameMaster {
         hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)
         
-        dealCards()
+        if playerBets {
+            getBet()
+        } else {
+            dealCards()
+        }
     }
 }
 
@@ -110,7 +133,9 @@ extension GameMaster {
     func playerDoubles() {
         let player = self.players.first!
         let hand = player.activatedHand!
-        
+        Settings.shared.bankRollAmount -= Double(hand.betAmount)
+        hand.betAmount += hand.betAmount
+    
         // NOTE:  Should this condition logic go in the GameTypeProtocol class, eg. FreePlayGameType class??
         if hand.cards.count > 2 {
             print("alert: > 2 cards")
@@ -125,6 +150,17 @@ extension GameMaster {
         
         self.dealer.deal(to: hand, isDouble: true)
         self.gameState = .dealtDouble
+    }
+    
+    var canDouble: Bool {
+        return !(player.activatedHand!.cards.count > 2)
+    }
+    var canSurrender: Bool {
+        return !(player.activatedHand!.cards.count > 2)
+    }
+    var canSplit: Bool {
+        let hand = player.activatedHand!
+        return !(hand.cards.count > 2) && hand.cards[0].value.rawValue == hand.cards[1].value.rawValue
     }
     
     func playerSplits() {
@@ -152,12 +188,12 @@ extension GameMaster {
     
     func playerSurrenders() {
         let hand = player.activatedHand!
-        hand.set(state: .surrender)
-        if !hand.isFirstHand {
-            moveCards(to: .left)
-        } else {
-            playerHasMoreHandsOrDealersTurn()
-        }
+        handleSurrender(for: hand)
+//        if !hand.isFirstHand {
+//            moveCards(to: .left)
+//        } else {
+//            playerHasMoreHandsOrDealersTurn()
+//        }
     }
 }
 
@@ -166,7 +202,7 @@ extension GameMaster {
         switch gameState {
         case .dealtCards:
             // assume one hand game -- need to change for 2-hand games
-           //if dealer has ace ask insurance
+            //if dealer has ace ask insurance
             if playerHasBlackjack {
                 player.activatedHand!.set(state: .blackjack)
                 revealFaceDownCard()
@@ -204,9 +240,7 @@ extension GameMaster {
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
                 player.activatedHand!.set(state: .blackjack)
                 
-                //DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.delegate.showToast(message: "Won")
-                    self.player.activatedHand!.result = .won
+                handleWon(for: player.activatedHand!)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.discard(hand: self.player.activatedHand!)
                 }
@@ -216,14 +250,14 @@ extension GameMaster {
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
-        case .discardedHand, .busted:
+        case .discardedHand, .busted, .surrendered:
             if player.activatedHand!.isSplitHand && !player.activatedHand!.isFirstHand {
                 moveCards(to: .left)
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
         case .revealedFaceDownCard:
-            if Rules.isSoftOrHardSeventeenOrGreater(hand: dealer.activatedHand!) || (dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) || player.allHandsBust() {
+            if Rules.isSoftOrHardSeventeenOrGreater(hand: dealer.activatedHand!) || /*(dealerHasBlackjack || player.hands.count == 1 && player.hands.first?.state == .blackjack) ||*/ dealerHasBlackjack || player.allHandsBustSurrenderOrBlackjack() {
                 
                 if player.nextHandToScore != nil {
                     gameState = .moveToRightMostHandToScore
@@ -258,7 +292,7 @@ extension GameMaster {
             
             
         case .moveToRightMostHandToScore:
-            print("move to right most hand to score")
+            //print("move to right most hand to score")
             // for the first time, move to the right most hand
             for _ in 1..<player.numberOfHandsToMoveForScore {
                 dealer.table.moveAllCards(for: player, to: .right)
@@ -276,7 +310,7 @@ extension GameMaster {
             // then set gameState to movedToHandScore
            
         case .moveToNextHandToScore:
-            print("move to next hand to score")
+            //print("move to next hand to score")
             for _ in 1...player.numberOfHandsToMoveForScore {
                 dealer.table.moveAllCards(for: player, to: .left)
             }
@@ -286,32 +320,35 @@ extension GameMaster {
             }
             
         case .movedToHandToScore:
-            print("moved to hand to score")
+            //print("moved to hand to score")
             let hand = player.nextHandToScore!
             let dealerHandValue = Rules.value(of: dealer.activatedHand!)
             let playerHandValue = Rules.value(of: hand)
-            var message = ""
+            var isWin: Bool?
             if dealerHandValue == playerHandValue {
-                message = "Push"
                 hand.result = .push
+                updateBankRoll(for: hand)
             } else if playerHandValue > dealerHandValue {
-                message = "Won"
-                hand.result = .won
+                isWin = true
             } else {
-                message = "Lost"
-                hand.result = .lost
+                isWin = false
             }
             
             if hand.state == .bust {
-                message = "Lost"
-                hand.result = .lost
+                isWin = false
             }
             else if Rules.didBust(hand: dealer.activatedHand!) {
-                message = "Won"
-                hand.result = .won
+                isWin = true
+            }
+            
+            if let isWin = isWin {
+                if isWin {
+                    handleWon(for: hand)
+                } else {
+                    handleLost(for: hand)
+                }
             }
            
-            delegate.showToast(message: message)
             gameState = .showedToast
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
                 self.resume()
@@ -321,7 +358,7 @@ extension GameMaster {
             // set gameState to showedToast
             
         case .showedToast:
-            print("showed toast")
+            //print("showed toast")
             let hand = player.nextHandToScore
             if hand == nil {
                 discardAllHands()
@@ -339,8 +376,17 @@ extension GameMaster {
             tasksForEndOfRound()
         case .tappedBackButton:
             print("back button")
+            
         default:
             print("GameMaster.resume() default case")
+        }
+    }
+    
+    func returnBetsToPlayer() {
+        for hand in player.hands {
+            if hand.result == nil {
+                Settings.shared.bankRollAmount += Double(hand.betAmount)
+            }
         }
     }
     
@@ -368,13 +414,10 @@ extension GameMaster {
             } else {
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    self.delegate.showToast(message: "Won")
-                    self.player.activatedHand!.result = .won
+                    self.handleWon(for: self.player.activatedHand!)
                     self.discard(hand: self.player.activatedHand!)
                 }
-                
             }
-        
         } else {
             waitForPlayerInput()
         }
@@ -386,7 +429,7 @@ extension GameMaster {
             playerCardValues.append(card.value.rawValue)
         }
         let action = BasicStrategy.getPlayerAction(dealerCardValue: dealer.activatedHand!.cards.last!.value.rawValue, playerCardValues: playerCardValues )
-        print("\(action.rawValue): \(playerCardValues)")
+        //print("\(action.rawValue): \(playerCardValues)")
 
         let pAction: PlayerAction = PlayerAction(rawValue: action.rawValue)!
         
@@ -395,16 +438,6 @@ extension GameMaster {
     
     func waitForPlayerInput() {
         gameStrategyPattern.waitForPlayerInput()
-        
-//        if gameStrategyPattern.automaticPlay {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                let pAction = self.getPlayerAction()
-//                self.inputReceived(type: pAction)
-//            }
-//        } else {
-//            dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
-//            delegate.playerInput(enabled: true)
-//        }
     }
     
     func discard(hand: Hand) {
@@ -421,17 +454,7 @@ extension GameMaster {
         self.gameState = .revealedFaceDownCard
     }
     
-    
     func discardAllHands() {
-        // move cards so right most hand is centered. Compare hand with dealer.
-        // Show toast - Won, Lost, Push
-        // Move to next right-most player hand
-        // Show toast
-        // After last player hand, discard all at same time
-        
-        
-        
-        
         let wait: Double = gameType == .runningCount ? 2.0 : 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + wait) {
             self.dealer.discard(hand: self.dealer.activatedHand!)
@@ -443,34 +466,92 @@ extension GameMaster {
         }
     }
     
+    func handleWon(for hand: Hand) {
+        hand.result = .won
+        updateBankRoll(for: hand)
+    }
+    
+    func handleLost(for hand: Hand) {
+        hand.result = .lost
+        updateBankRoll(for: hand)
+    }
+    
+    func updateBankRoll(for hand: Hand) {
+        let result = hand.result
+        var finalAmount: Double = 0
+        let betAmount = Double(hand.betAmount)
+        if result == .won {
+            finalAmount = betAmount * 2
+        } else if result == .lost {
+            finalAmount = 0
+        } else if result == .push {
+            finalAmount = betAmount
+        } else if result == .surrender {
+            finalAmount = betAmount * 0.5
+        }
+        
+        if hand.state == .blackjack {
+            finalAmount += betAmount * 0.5
+        }
+        Settings.shared.bankRollAmount += finalAmount
+        
+        var message = ""
+        if result == .won {
+            message = "Won"
+            if playerBets {
+                let amount = finalAmount - betAmount
+                if hasRemainder(amount) {
+                    message += String(format: " +$%.2f", amount)
+                } else {
+                    message += " +$\(Int(amount))"
+                }
+            }
+        } else if result == .lost {
+            message = "Lost"
+            if playerBets {
+                message += " -$\(Int(betAmount))"
+            }
+        } else if result == .surrender {
+            message = "Lost"
+            if playerBets {
+                if hasRemainder(finalAmount) {
+                    message += String(format: " -$%.2f", finalAmount)
+                } else {
+                    message += " -$\(Int(finalAmount))"
+                }
+            }
+        } else if result == .push {
+            message = "Push"
+        }
+        delegate.showToast(message: message)
+    }
+    
+    private func hasRemainder(_ value: Double) -> Bool {
+        let i = Int(value)
+        return Double(i) - value != 0
+    }
+    
+    private func handleSurrender(for hand: Hand) {
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            hand.set(state: .surrender)
+            hand.result = .surrender
+            self.gameState = .surrendered
+            //DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.updateBankRoll(for: hand)
+                self.discard(hand: hand)
+            //}
+        //}
+    }
+    
     func handleBust(hand: Hand) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             hand.set(state: .bust)
             self.gameState = .busted
-            
             self.delegate.showToast(message: "Bust")
-            
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.delegate.showToast(message: "Lost")
-                hand.result = .lost
+                self.handleLost(for: hand)
                 self.discard(hand: hand)
             }
-            
-         
-            
-//            if hand.isFirstHand {
-//                self.resume()
-//            } else {
-//                //self.resume()
-//
-//                // show Lost toast before discard
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                    self.delegate.showToast(message: "Lost")
-//                    hand.result = .lost
-//                    self.discard(hand: hand)
-//                }
-//            }
         }
     }
     

@@ -17,7 +17,9 @@ class Table {
     var cardViewIndex: Int = 0
     var arrowView: UIImageView
     lazy var discardTray: DiscardTrayView = {
-        return DiscardTrayView(frame: .zero)
+        let view = DiscardTrayView(frame: .zero)
+        view.delegate = gameMaster.delegate
+        return view
     }()
     
     var offScreenCardStartPoint: CGPoint {

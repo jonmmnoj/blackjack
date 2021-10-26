@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 class DiscardTrayView: UIView {
+    
+    var delegate: GameViewDelegate!
 
     /*
     // Only override draw() if you perform custom drawing.
@@ -32,7 +34,7 @@ class DiscardTrayView: UIView {
     var imageView: UIImageView!
     var countView: UIView!
     var hConstraint: Constraint!
-    var isOpen = true
+    var isOpen = false
     var buttonHeight = 40
     var counterViewHeight = 100
     var discardImageHeight = 200
@@ -62,15 +64,12 @@ class DiscardTrayView: UIView {
     override func layoutSubviews() {
         
         if button != nil { return }
-        //self.frame = CGRect(x: 50, y: 50, width: 100, height: 600)        //self.isUserInteractionEnabled = true
-        //self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = .clear
         
         self.snp.makeConstraints { (make) in
             make.top.equalTo(self.superview!).offset(50)
             make.left.equalTo(self.superview!)
             make.height.equalTo(discardImageHeight + counterViewHeight + buttonHeight)
-            //make.width.equalTo(self.width)
         }
         
         imageView = UIImageView()
@@ -82,19 +81,13 @@ class DiscardTrayView: UIView {
         imageView.backgroundColor = .cyan
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-            imageView.isUserInteractionEnabled = true
-            imageView.addGestureRecognizer(tapGestureRecognizer)
-        
-
-       
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureRecognizer)
         
         imageView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
-            
             let ratio = image.size.height / image.size.width
-            
             let newHeight = Settings.shared.cardWidth * ratio
-            
             make.width.equalTo(Settings.shared.cardWidth)
             make.height.equalTo(newHeight)
             
@@ -106,8 +99,8 @@ class DiscardTrayView: UIView {
         countView.snp.makeConstraints { (make) in
             make.top.equalTo(imageView.snp.bottom)
             make.left.right.equalTo(self)
-            make.height.equalTo(counterViewHeight)
-            //make.width.equalTo(self.width)
+            //make.height.equalTo(counterViewHeight)
+            make.height.equalTo(0)
         }
         
         sView = UIStackView()
@@ -125,27 +118,21 @@ class DiscardTrayView: UIView {
         rcLabel.text = "RC:"
         rcLabel.backgroundColor = .systemGray5
         rcLabel.snp.makeConstraints { (make) in
-            //make.top.equalTo(countView).offset(10)
-            //make.height.equalTo(20)
-            //make.width.equalTo(countView)
+           
         }
         divLabel = UILabel()
         countView.addSubview(divLabel)
         divLabel.text = "Div:"
         divLabel.backgroundColor = .systemGray5
         divLabel.snp.makeConstraints { (make) in
-            //make.top.equalTo(rcLabel.snp.bottom).offset(10)
-            //make.height.equalTo(20)
-            //make.width.equalTo(countView)
+           
         }
         tcLabel = UILabel()
         countView.addSubview(tcLabel)
         tcLabel.text = "TC:"
         tcLabel.backgroundColor = .systemGray5
         tcLabel.snp.makeConstraints { (make) in
-            //make.top.equalTo(divLabel.snp.bottom).offset(10)
-            //make.height.equalTo(20)
-            //make.width.equalTo(countView)
+            
         }
         sView.addArrangedSubview(rcLabel)
         sView.addArrangedSubview(divLabel)
@@ -153,12 +140,11 @@ class DiscardTrayView: UIView {
         
         button = UIButton()
         self.addSubview(button)
-        button.backgroundColor = .systemBlue
+        button.backgroundColor = Settings.shared.defaults.buttonColor//.systemBlue
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .bold, scale: .large)
         image = UIImage(systemName: "line.horizontal.3", withConfiguration: imageConfig)!
         button.setImage(image, for: .normal)
         button.tintColor = .white
-        //button.setTitle("OK", for: .normal)
         button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
         button.isEnabled = true
         button.snp.makeConstraints { (make) in
@@ -168,12 +154,12 @@ class DiscardTrayView: UIView {
             //make.width.equalTo(self.width)
         }
         self.bringSubviewToFront(button)
+        self.updateViews()
     }
     
     @objc func buttonAction(_ sender: UIButton!) {
-        print("tap")
-        let cViewHeight = isOpen ? 0 : 100
         isOpen = !isOpen
+        let cViewHeight = isOpen ? 100 : 0
         countView.snp.updateConstraints { make in
             make.height.equalTo(cViewHeight)
         }
@@ -182,12 +168,54 @@ class DiscardTrayView: UIView {
           })
     }
 
-    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
-    {
-        let tappedImage = tapGestureRecognizer.view as! UIImageView
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        //let tappedImageView = tapGestureRecognizer.view as! UIImageView
 
         // Your action
         print("tap")
+        
+        let vc = UIViewController()
+        vc.view.backgroundColor = .black.withAlphaComponent(0.8)
+        
+        let imageView = UIImageView()
+        vc.view.addSubview(imageView)
+        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: getImageName())!
+        imageView.image = image
+        imageView.backgroundColor = .cyan
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissImageTapped(tapGestureRecognizer:)))
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(tapGestureRecognizer)
+        imageView.snp.makeConstraints { (make) in
+            make.center.equalTo(vc.view.center)
+            make.width.equalTo(Settings.shared.cardWidth * 2.5)
+            let ratio = image.size.height / image.size.width
+            let newHeight = Settings.shared.cardWidth * 2.5 * ratio
+            make.height.equalTo(newHeight)
+        }
+        
+        let v = self.findViewController()!
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        v.present(vc, animated: true)
     }
     
+    @objc func dismissImageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
+        let v = self.findViewController()!
+        v.dismiss(animated: true)
+    }
+}
+
+
+extension UIView {
+    func findViewController() -> UIViewController? {
+        if let nextResponder = self.next as? UIViewController {
+            return nextResponder
+        } else if let nextResponder = self.next as? UIView {
+            return nextResponder.findViewController()
+        } else {
+            return nil
+        }
+    }
 }

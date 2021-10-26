@@ -131,15 +131,15 @@
                             <rect key="frame" x="0.0" y="271" width="414" height="54"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pq9-RJ-zc5">
-                                    <rect key="frame" x="8" y="8" width="398" height="38"/>
-                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                    <state key="normal" title="SUBMIT"/>
+                                    <rect key="frame" x="0.0" y="8" width="414" height="46"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <state key="normal" title="Submit"/>
                                     <connections>
                                         <action selector="submitAction:" destination="-1" eventType="touchUpInside" id="uEz-9h-KbD"/>
                                     </connections>
                                 </button>
                             </subviews>
-                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                            <edgeInsets key="layoutMargins" top="8" left="0.0" bottom="0.0" right="0.0"/>
                         </stackView>
                     </subviews>
                 </stackView>

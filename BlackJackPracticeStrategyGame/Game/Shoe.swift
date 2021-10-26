@@ -53,8 +53,10 @@ class Shoe {
     
     func isTimeToRefillShoe() -> Bool {
         // if deck penetration... would adjust this number here
-        let value = CardCounter.shared.getNumberOfCardsLeft() < 20
-        print("End of shoe")
+        let value = CardCounter.shared.getNumberOfCardsLeft() < 17
+        if value {
+            print("Shoe should be refilled, i.e. less that 17 cards remaining")
+        }
         // good place to shoe popup message syaing end of shoe, only show if freeplay
         
         return value

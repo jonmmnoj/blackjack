@@ -12,6 +12,8 @@ protocol GameViewDelegate {
     func dismissViewController(completion: (() -> Void)?)
     func presentBasicStrategyFeedbackView(isCorrect: Bool, playerAction: String, correctAction: String, completion: @escaping () -> Void)
     func alertMistake(message: String, completion: @escaping ((Bool) -> Void))
-    func presentViewController(_: UIViewController)
+    func present(_: UIViewController)
     func showToast(message: String)
+    //func showDiscardTrayExpanded(image: UIImage)
+    func showPlaceBetView()
 }

@@ -9,6 +9,8 @@ import UIKit
 
 
 class TrueCountView: NSObject {
+    var tableView: UIView!
+    
     lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.backgroundColor = .secondarySystemBackground
@@ -50,7 +52,7 @@ class TrueCountView: NSObject {
          tcStackView,
          submitButton].forEach { stack.addArrangedSubview($0) }
         stack.isLayoutMarginsRelativeArrangement = true
-        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 8, bottom: 8, trailing: 8)
+        stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
         return stack
     }()
@@ -93,7 +95,7 @@ class TrueCountView: NSObject {
     }()
     lazy var rcValueLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.preferredFont(forTextStyle: .title2)
+        label.font = UIFont.preferredFont(forTextStyle: .title1)
         label.textColor = .systemGreen
         label.text = "5"
         label.textAlignment = .center
@@ -156,15 +158,14 @@ class TrueCountView: NSObject {
     }()
     lazy var submitButton: UIButton = {
         let button = UIButton()
+        button.backgroundColor = Settings.shared.defaults.buttonColor
         button.setTitle("Submit", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         button.addTarget(self, action: #selector(submit), for: .touchUpInside)
         button.snp.makeConstraints { (make) in
             make.height.equalTo(50)
         }
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.systemBlue.cgColor
         
         return button
     }()
@@ -213,13 +214,13 @@ class TrueCountView: NSObject {
         let half: [Float] = [0.5, 1.0]
         let third: [Float] = [0.333, 0.666, 1.0]
         let quarter: [Float] = [0.25, 0.5, 0.75, 1.0]
-        if  Settings.shared.deckFraction == "whole" {
+        if  Settings.shared.deckFraction == "wholes" {
             array = whole
-        } else if Settings.shared.deckFraction == "half" {
+        } else if Settings.shared.deckFraction == "halves" {
             array = half
-        } else if Settings.shared.deckFraction == "third" {
+        } else if Settings.shared.deckFraction == "thirds" {
             array  = third
-        }else if Settings.shared.deckFraction == "quarter" {
+        }else if Settings.shared.deckFraction == "quarters" {
             array = quarter
         }
         
@@ -238,6 +239,7 @@ class TrueCountView: NSObject {
         let imageName = String("D\(numberOfDecks)_\(numberOfCardsDiscarded)")//decks/D\(numberOfDecks)/
         let image = UIImage(named: imageName)
         self.imageView.image = image
+        resizeImageView()
         
         let randomRunningCount = runningCounts.randomElement()!
         self.rcValueLabel.text = String(randomRunningCount)
@@ -274,6 +276,24 @@ class TrueCountView: NSObject {
         print("Decks in play: \(numberOfDecksLeftInPlay)")
         print("RC ÷ Decks in play: \(divisionResult)")
         print("TC: \(trueCount!)")
+    }
+    
+    private func resizeImageView() {
+        let image = self.imageView.image!
+        let ratio = image.size.height / image.size.width
+        var width = UIScreen.main.bounds.size.width
+        if tableView.traitCollection.horizontalSizeClass == .compact {
+            width *= 0.75
+        } else { // assumes .regular
+            width *= 0.5
+        }
+        let height = width * ratio
+        
+        self.imageView.snp.makeConstraints { (make) in
+            
+            make.height.equalTo(height)
+            make.width.equalTo(width)
+        }
     }
 }
 

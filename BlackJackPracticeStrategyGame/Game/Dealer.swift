@@ -106,12 +106,12 @@ class Dealer: Dealable {
     }
     
     func handleBust(for player: Player) {
-        print("Player Bust")
+        //print("Player Bust")
         discard(hand: player.hands.first!)
     }
     
     func handleBust(for hand: Hand) {
-        print("Hand Bust")
+        //print("Hand Bust")
         hand.set(state: .bust)
         discard(hand: hand)
     }

@@ -12,7 +12,7 @@ import UIKit
 
 class CountMaster {
     var numberOfRoundsPlayed: Int // notify when setting changes? to reset?
-    var delegate: GameViewDelegate!
+    //var delegate: GameViewDelegate!
     var cardCounter = CardCounter.shared
     var gameMaster: GameMaster?
     var taskComplete: (() -> Void)!
@@ -67,15 +67,13 @@ class CountMaster {
     }
     
     func userInput(value: Int, completion: (Bool, Int, Int) -> ()) {
-        print("User input: \(value), Actual Count: \(cardCounter.runningCount)")
         let isCorrect = value == cardCounter.runningCount
         completion(isCorrect, value, cardCounter.runningCount)
     }
     
     func dismissCountView() {
-        delegate.dismissViewController() {
-            //self.gameMaster!.prepareForNewRound()
-            self.taskComplete()
-        }
+//        delegate.dismissViewController() {
+//            self.taskComplete()
+//        }
     }
 }

@@ -19,15 +19,11 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
     
     func dealCards() {
         
-        
         dv = DeckRoundingView()
+        dv.tableView = gameMaster.tableView
         stackView = dv.stackView
         gameMaster.tableView.addSubview(stackView)
         stackView.snp.makeConstraints { (make) in
-            make.left.equalTo(gameMaster.tableView.safeAreaLayoutGuide.snp.leftMargin).offset(50)
-            make.right.equalTo(gameMaster.tableView.safeAreaLayoutGuide.snp.rightMargin).offset(-50)
-            //make.top.equalTo(view.safeAreaLayoutGuide.snp.topMargin).offset(100)//.snp.topMargin)//.offset(50)
-            //make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottomMargin).offset(-100)//.offset(50)
             make.centerWithinMargins.equalTo(gameMaster.tableView.snp.centerWithinMargins)
             make.height.lessThanOrEqualTo(gameMaster.tableView.snp.height)
         }
@@ -40,7 +36,7 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
 
         }
 
-        gameMaster.delegate.playerInput(enabled: true)
+        //gameMaster.delegate.playerInput(enabled: true)
         gameMaster.tableView.isUserInteractionEnabled = true
         //stackView.isUserInteractionEnabled = true
     }

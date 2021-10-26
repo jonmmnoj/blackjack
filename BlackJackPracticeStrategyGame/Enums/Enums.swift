@@ -66,6 +66,7 @@ enum GameState {
          dealtDouble,
          dealtSplit,
          busted,
+         surrendered,
          revealedFaceDownCard,
          movedRevealCard,
          dealtToAtLeast17,
@@ -100,7 +101,8 @@ enum HandState {
 enum HandResult {
     case won,
          lost,
-         push
+         push,
+         surrender
 }
 
 enum MoveCardsDirection {

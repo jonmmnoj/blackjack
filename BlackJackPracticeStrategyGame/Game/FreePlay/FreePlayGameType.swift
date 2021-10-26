@@ -18,7 +18,7 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
-        countMaster.delegate = gameMaster.delegate
+        //countMaster.delegate = gameMaster.delegate
         countMaster.gameMaster = gameMaster
     }
     

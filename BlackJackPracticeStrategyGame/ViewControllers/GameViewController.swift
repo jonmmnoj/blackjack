@@ -29,10 +29,13 @@ class GameViewController: UIViewController {
         stack.alignment = .fill
         stack.distribution = .fillEqually
         [hitButton, standButton, doubleButton, splitButton].forEach {
-            $0.backgroundColor = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
+            $0.backgroundColor = Settings.shared.defaults.buttonColor
+            $0.setTitleColor(.white.withAlphaComponent(0.5), for: .disabled)
             stack.addArrangedSubview($0)
         }
         if Settings.shared.surrender {
+            surrenderButton.backgroundColor = Settings.shared.defaults.buttonColor
+            surrenderButton.setTitleColor(.white.withAlphaComponent(0.5), for: .disabled)
             stack.addArrangedSubview(surrenderButton)
         }
         return stack
@@ -74,21 +77,18 @@ class GameViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         if showInputButtons {
-            //addButtons()
             self.view.addSubview(stackView)
             stackView.snp.makeConstraints { (make) in
-                   //make.centerX.left.right.equalTo(hitButton)
-                   //make.top.equalTo(hitButton.snp.bottom).offset(30)
-                
-                let height = Settings.shared.cardSize //stackView.subviews.count * 40
+                var height = Settings.shared.cardSize
+                if Settings.shared.surrender {
+                    height = Settings.shared.cardSize * 5/4
+                }
                 make.height.equalTo(height)
-                let width = Settings.shared.cardWidth //100
+                let width = Settings.shared.cardWidth
                 make.width.equalTo(width)
-                    make.centerY.equalTo(self.view)
+                make.centerY.equalTo(self.view)
                 make.right.equalTo(self.view)
-                
-               }
-            
+            }
         }
         
         super.view.addSubview(homeButton)
@@ -99,10 +99,8 @@ class GameViewController: UIViewController {
             make.left.equalTo(self.view).offset(20)
         }
             
-            
         gameMaster = GameMaster(gameType: gameType, table: self.view)
         gameMaster.delegate = self
-        //gameMaster.navBarHeight = navigationController?.navigationBar.frame.height
         gameMaster.startGame()
     }
     
@@ -123,12 +121,12 @@ class GameViewController: UIViewController {
     }
     
     @objc func surrenderButtonAction(_ sender:UIButton!) {
-        //gameMaster.inputReceived(type: .surrender)
+        gameMaster.inputReceived(type: .surrender)
     }
     
     @objc func homeButtonAction(_ sender:UIButton!) {
         // block the CardCounter from counting any cards that are on animation delay?
-        gameMaster.gameState = .tappedBackButton
+        gameMaster.returnBetsToPlayer()
         dismiss(animated: true, completion: nil)
     }
     
@@ -167,6 +165,36 @@ class GameViewController: UIViewController {
 // MARK: - GameViewDelegate
 
 extension GameViewController: GameViewDelegate {
+    func showPlaceBetView() {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .black.withAlphaComponent(0.8)
+        let placeBetView = PlaceBetView()
+        placeBetView.discardTray.delegate = self
+        vc.view.addSubview(placeBetView)
+        vc.view.addSubview(placeBetView.discardTray)
+        //placeBetView.discardTray.updateViews()
+        placeBetView.snp.makeConstraints { (make) in
+            make.center.equalTo(vc.view.center)
+            make.width.equalTo(350)
+            make.height.equalTo(336)
+        }
+        
+        placeBetView.dealHandler = { betAmount in
+            self.dismiss(animated: true) {
+                self.gameMaster.playerBet(amount: betAmount)
+            }
+        }
+        placeBetView.exitGameHandler = {
+            self.dismiss(animated: false) {
+                self.dismiss(animated: true)
+            }
+        }
+       
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        self.present(vc, animated: true, completion: nil)
+    }
+    
     func showToast(message: String) {
         if gameType == .runningCount  { return }
         Toast.show(message: message, controller: self)
@@ -178,12 +206,16 @@ extension GameViewController: GameViewDelegate {
         splitButton.isEnabled = value
         doubleButton.isEnabled = value
         surrenderButton.isEnabled = value
+        
+        if value == true {
+            splitButton.isEnabled = gameMaster.canSplit
+            doubleButton.isEnabled = gameMaster.canDouble
+            surrenderButton.isEnabled = gameMaster.canSurrender
+        }
     }
     
     func dismissViewController(completion: (() -> Void)? = nil) {
-        self.dismiss(animated: false) {
-            
-        }
+        self.dismiss(animated: false)
         completion?()
     }
     
@@ -209,7 +241,7 @@ extension GameViewController: GameViewDelegate {
         self.present(alert, animated: true)
     }
     
-    func presentViewController(_ vc: UIViewController) {
+    func present(_ vc: UIViewController) {
         vc.modalPresentationStyle = .overCurrentContext
         vc.modalTransitionStyle = .crossDissolve
         self.present(vc, animated: true, completion: nil)

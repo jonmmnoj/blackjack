@@ -17,9 +17,31 @@ class Settings {
             
         }
     }
-    
+    var placeBets: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "placeBets")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "placeBets") as? Bool ?? defaults.placeBets
+        }
+    }
+    var bankRollAmount: Double {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "bankRollAmount")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "bankRollAmount") as? Double ?? defaults.bankRollAmount
+        }
+    }
+    var previousBetAmount: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "previousBetAmount")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "previousBetAmount") as? Int ?? defaults.previousBetAmount
+        }
+    }
     var gameSettings: [GameType: Defaults]!
-    
     let defaults = Defaults()
     
     var cardSizeFactor: CGFloat {
@@ -39,7 +61,7 @@ class Settings {
         get {
             let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSizeFactor
             let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 5.5))
-            print (adjustmentForScreenSize)
+            //print (adjustmentForScreenSize)
             return adjustmentForScreenSize
         }
     }
@@ -88,7 +110,7 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: getKey(for:"twoCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: getKey(for:"twoCardHands")) as? Bool ?? true
+            return UserDefaults.standard.object(forKey: getKey(for:"twoCardHands")) as? Bool ?? defaults.twoCardHands
         }
     }
     var threeCardHands: Bool {
@@ -96,7 +118,7 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: getKey(for:"threeCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: getKey(for:"threeCardHands")) as? Bool ?? false
+            return UserDefaults.standard.object(forKey: getKey(for:"threeCardHands")) as? Bool ?? defaults.threeCardHands
         }
     }
     var fourCardHands: Bool {
@@ -104,7 +126,7 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: getKey(for:"fourCardHands"))
         }
         get {
-            return UserDefaults.standard.object(forKey: getKey(for:"fourCardHands")) as? Bool ?? false
+            return UserDefaults.standard.object(forKey: getKey(for:"fourCardHands")) as? Bool ?? defaults.fourCardHands
         }
     }
     var splitHands: Bool {
@@ -260,12 +282,20 @@ class Settings {
         var numberOfRoundsBeforeAskRunningCount = CountRounds.oneRound.rawValue
         var numberOfRoundsBeforeAskTrueCount = CountRounds.onceAtEnd.rawValue
         var tableColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
+        var buttonColor = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
         var cardSizeFactor: CGFloat = 1//150.0
         
-        var deckFraction: String = DeckFraction.quarter.rawValue
+        var deckFraction: String = DeckFraction.quarters.rawValue
         var deckRoundedTo: String = DeckRoundedTo.whole.rawValue
         var showDiscardedRemainingDecks = false
         var roundLastThreeDecksToHalf = false
+        var bankRollAmount = 10000.00
+        var previousBetAmount = 0
+        var placeBets = false
+        
+        var twoCardHands = true
+        var threeCardHands = true
+        var fourCardHands = false
     }
     
     private func getKey(for setting: String) -> String {
@@ -300,10 +330,10 @@ class Settings {
 //}
 
 enum DeckFraction: String {
-    case whole,
-         half,
-         third,
-         quarter
+    case wholes,
+         halves,
+         thirds,
+         quarters
     
 }
 

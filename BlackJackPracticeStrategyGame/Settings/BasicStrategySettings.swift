@@ -168,7 +168,7 @@ class BasicStrategySettings: GameTypeSettings {
                         (self.dasCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.threeCardHands = false
-                        (self.threeHandCell.accessoryView as! UISwitch).setOn(false, animated: true)
+                        (self.threeHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.threeHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.fourCardHands = false

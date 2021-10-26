@@ -27,6 +27,7 @@ class FreePlaySettings: GameTypeSettings {
     var dasCell: UITableViewCell!
     var resplitCell: UITableViewCell!
     var notifyCell: UITableViewCell!
+    var placeBetsCell: UITableViewCell!
     var sliderView: SliderTableViewCell!
     //var speedCell: UITableViewCell!
     
@@ -142,6 +143,16 @@ class FreePlaySettings: GameTypeSettings {
                       action: { _ in
                         self.settings.notifyMistakes = !self.settings.notifyMistakes
                       }),
+                SwitchRow(
+                    text: "Place Bets",
+                    switchValue: settings.placeBets,
+                      customization: { cell, row in
+                        self.placeBetsCell = cell
+                        (self.placeBetsCell.accessoryView as! UISwitch).setOn(self.settings.placeBets, animated: false)
+                      },
+                      action: { _ in
+                        self.settings.placeBets = !self.settings.placeBets
+                      }),
             ]),
             
             Section(title: "Card Counting", rows: [
@@ -243,6 +254,12 @@ class FreePlaySettings: GameTypeSettings {
                         (self.notifyCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         if self.notifyCell.isHidden {
                             self.settings.notifyMistakes = self.settings.defaults.notifyMistakes
+                        }
+                        
+                        (self.placeBetsCell.accessoryView as! UISwitch).setOn(self.settings.defaults.placeBets, animated: true)
+                        (self.placeBetsCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        if self.placeBetsCell.isHidden {
+                            self.settings.placeBets = self.settings.defaults.placeBets
                         }
                         
                         if Settings.shared.numberOfRoundsBeforeAskTrueCount != Settings.shared.defaults.numberOfRoundsBeforeAskTrueCount {

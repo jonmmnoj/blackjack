@@ -87,6 +87,28 @@ class Player: Dealable {
         return isBust
     }
     
+    func allHandsLost() -> Bool {
+        var isLost = true
+        self.hands.forEach {
+            let state = $0.state
+            if state != .bust && state != .surrender {
+                isLost = false
+            }
+        }
+        return isLost
+    }
+    
+    func allHandsBustSurrenderOrBlackjack() -> Bool {
+        var result = true
+        self.hands.forEach {
+            let state = $0.state
+            if state != .bust && state != .surrender && state != .blackjack {
+                result = false
+            }
+        }
+        return result
+    }
+    
     func index(of hand: Hand) -> Int? {
         for (i, h) in hands.enumerated() {
             if h === hand {

@@ -75,8 +75,10 @@ class DeviationInputView: UIView {
             actionSegmentedControl.setEnabled(false, forSegmentAt: 4)
         }
         
-        submitButton.layer.borderWidth = 1
-        submitButton.layer.borderColor = UIColor.systemBlue.cgColor
+        //submitButton.layer.borderWidth = 1
+        //submitButton.layer.borderColor = UIColor.systemBlue.cgColor
+        submitButton.backgroundColor = Settings.shared.defaults.buttonColor
+        submitButton.setTitleColor(.white, for: .normal)
     }
     
     private func initRunningCount() {
@@ -149,13 +151,6 @@ class DeviationInputView: UIView {
             runningCount = "+"
         }
     }
-    
-    
-    
-    
-    
-    
-    
     
     @objc func handleTap() {
         textField.resignFirstResponder() // dismiss keyoard

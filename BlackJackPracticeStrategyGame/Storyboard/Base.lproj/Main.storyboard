@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ub9-Wl-6rM">
-    <device id="retina6_7" orientation="portrait" appearance="light"/>
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -13,11 +13,11 @@
             <objects>
                 <viewController storyboardIdentifier="GameViewController" id="BYZ-38-t0r" customClass="GameViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jNI-DG-5zJ">
-                                <rect key="frame" x="213" y="44" width="2" height="848"/>
+                                <rect key="frame" x="186.66666666666666" y="44" width="2" height="734"/>
                                 <color key="backgroundColor" systemColor="systemPinkColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="2" id="n1L-7I-8Pd"/>
@@ -42,11 +42,11 @@
             <objects>
                 <viewController storyboardIdentifier="CountViewController" id="L7i-Wz-RYB" customClass="CountViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yzV-2a-Hdb">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RWC-h0-lFW">
-                                <rect key="frame" x="39" y="288" width="350" height="350"/>
+                                <rect key="frame" x="12.666666666666657" y="231" width="350" height="350"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's the count?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ub-us-9J3">
                                         <rect key="frame" x="0.0" y="20" width="350" height="30"/>
@@ -63,7 +63,7 @@
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" placeholder="?" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jVK-ea-a0O">
-                                        <rect key="frame" x="150" y="152.33333333333331" width="50" height="45.333333333333343"/>
+                                        <rect key="frame" x="150" y="152.66666666666669" width="50" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="50" id="Mca-pu-mhy"/>
                                         </constraints>
@@ -88,8 +88,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbr-Fe-66D">
-                                        <rect key="frame" x="20" y="288" width="310" height="42"/>
+                                        <rect key="frame" x="0.0" y="300" width="350" height="50"/>
                                         <color key="backgroundColor" systemColor="linkColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="MSn-7X-BNg"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                         <state key="normal" title="Submit">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -117,15 +120,15 @@
                                 <constraints>
                                     <constraint firstItem="b0g-bc-SG7" firstAttribute="top" secondItem="jVK-ea-a0O" secondAttribute="bottom" constant="12" id="0T0-49-tnu"/>
                                     <constraint firstItem="KvF-SZ-q2Z" firstAttribute="leading" secondItem="jVK-ea-a0O" secondAttribute="trailing" constant="25" id="6Zn-tg-61b"/>
-                                    <constraint firstItem="pbr-Fe-66D" firstAttribute="leading" secondItem="RWC-h0-lFW" secondAttribute="leading" constant="20" id="6kF-P6-XxY"/>
+                                    <constraint firstItem="pbr-Fe-66D" firstAttribute="leading" secondItem="RWC-h0-lFW" secondAttribute="leading" id="6kF-P6-XxY"/>
                                     <constraint firstItem="KvF-SZ-q2Z" firstAttribute="centerY" secondItem="jVK-ea-a0O" secondAttribute="centerY" id="73q-NY-qI3"/>
                                     <constraint firstAttribute="width" secondItem="RWC-h0-lFW" secondAttribute="height" multiplier="1:1" id="ABD-cX-KmK"/>
                                     <constraint firstItem="pbr-Fe-66D" firstAttribute="centerX" secondItem="RWC-h0-lFW" secondAttribute="centerX" id="BR3-3R-n4R"/>
                                     <constraint firstItem="SMg-JD-IJR" firstAttribute="centerY" secondItem="jVK-ea-a0O" secondAttribute="centerY" id="NoF-E5-DJa"/>
-                                    <constraint firstAttribute="trailing" secondItem="pbr-Fe-66D" secondAttribute="trailing" constant="20" id="ddN-k8-Ciw"/>
+                                    <constraint firstAttribute="trailing" secondItem="pbr-Fe-66D" secondAttribute="trailing" id="ddN-k8-Ciw"/>
                                     <constraint firstItem="jVK-ea-a0O" firstAttribute="leading" secondItem="SMg-JD-IJR" secondAttribute="trailing" constant="25" id="fVe-ZL-wOy"/>
                                     <constraint firstItem="jVK-ea-a0O" firstAttribute="centerY" secondItem="RWC-h0-lFW" secondAttribute="centerY" id="h7k-WV-PFH"/>
-                                    <constraint firstAttribute="bottom" secondItem="pbr-Fe-66D" secondAttribute="bottom" constant="20" id="lay-oq-uCZ"/>
+                                    <constraint firstAttribute="bottom" secondItem="pbr-Fe-66D" secondAttribute="bottom" id="lay-oq-uCZ"/>
                                     <constraint firstItem="2Ub-us-9J3" firstAttribute="top" secondItem="RWC-h0-lFW" secondAttribute="top" constant="20" id="m86-9c-Qbg"/>
                                     <constraint firstAttribute="trailing" secondItem="2Ub-us-9J3" secondAttribute="trailing" id="nYd-Fp-FhS"/>
                                     <constraint firstAttribute="height" constant="350" id="nmb-mx-gPi"/>
@@ -135,7 +138,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mSu-Qr-5Os" customClass="FeedbackView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
-                                <rect key="frame" x="39" y="288" width="350" height="350"/>
+                                <rect key="frame" x="12.666666666666657" y="231" width="350" height="350"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BTP-95-6G5">
                                         <rect key="frame" x="100" y="25" width="150" height="150"/>
@@ -236,11 +239,11 @@
             <objects>
                 <viewController id="h3P-DZ-e6x" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ejg-jX-Edb">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="md6-1e-ZTY" customClass="DeviationInputView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
-                                <rect key="frame" x="94" y="220" width="240" height="486"/>
+                                <rect key="frame" x="67.666666666666686" y="163" width="240" height="486"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="OO0-Mw-sY8"/>
@@ -265,7 +268,7 @@
             <objects>
                 <viewController storyboardIdentifier="SettingsViewController" id="Qmw-Ok-ntr" customClass="SettingsViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7dU-CX-R7B">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="JwE-yI-gdJ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -280,7 +283,7 @@
             <objects>
                 <navigationController id="ub9-Wl-6rM" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="fG8-1K-AsR">
-                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
+                        <rect key="frame" x="0.0" y="44" width="375" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -296,27 +299,27 @@
             <objects>
                 <tableViewController id="8NI-5Q-WaP" customClass="MainMenuViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Yci-IV-uvK">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MenuTableViewCell" rowHeight="278" id="1JS-m1-ZD1" customClass="MenuTableViewCell" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="278"/>
+                                <rect key="frame" x="0.0" y="24.333333969116211" width="375" height="278"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1JS-m1-ZD1" id="dua-Mg-0c3">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="278"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="278"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m6F-uS-LFU">
-                                            <rect key="frame" x="216" y="168" width="42" height="21"/>
+                                            <rect key="frame" x="167" y="168" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Ag-nA-rrY">
-                                            <rect key="frame" x="20" y="66" width="147" height="123"/>
+                                            <rect key="frame" x="16" y="66" width="102" height="123"/>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zv0-i7-LYO">
-                                            <rect key="frame" x="216" y="83" width="42" height="21"/>
+                                            <rect key="frame" x="167" y="83" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -361,19 +364,19 @@
             <objects>
                 <tableViewController id="pyP-ML-IGS" customClass="MainMenuViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="120" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Fuh-V9-fNw">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="120" id="3I6-Yz-NYu" customClass="MenuTableViewCell" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="24.333333969116211" width="428" height="120"/>
+                                <rect key="frame" x="0.0" y="24.333333969116211" width="375" height="120"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3I6-Yz-NYu" id="QcO-dZ-5s1">
-                                    <rect key="frame" x="0.0" y="0.0" width="428" height="120"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ncC-rQ-DS7">
-                                            <rect key="frame" x="20" y="11" width="388" height="98"/>
+                                            <rect key="frame" x="16" y="11" width="343" height="98"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8B-lR-Lkr">
                                                     <rect key="frame" x="10" y="10" width="197" height="41"/>
@@ -382,7 +385,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EQw-NS-HSH">
-                                                    <rect key="frame" x="304" y="10" width="74" height="78"/>
+                                                    <rect key="frame" x="259" y="10" width="74" height="78"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="EQw-NS-HSH" secondAttribute="height" multiplier="19:20" id="v0u-bg-f6v"/>
                                                     </constraints>
@@ -431,11 +434,11 @@
             <objects>
                 <viewController storyboardIdentifier="BasicStrategyViewController" id="yU0-yG-yOl" customClass="BasicStrategyViewController" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ehk-vV-y7r">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MD7-VX-vXS" customClass="FeedbackView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
-                                <rect key="frame" x="39" y="288" width="350" height="350"/>
+                                <rect key="frame" x="12.666666666666657" y="231" width="350" height="350"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bzb-57-Wj3">
                                         <rect key="frame" x="100" y="25" width="150" height="150"/>
@@ -445,8 +448,11 @@
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4D-f4-prE">
-                                        <rect key="frame" x="8" y="300" width="334" height="42"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <rect key="frame" x="0.0" y="300" width="350" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="fLl-7K-agB"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                         <state key="normal" title="Dismiss"/>
                                         <connections>
                                             <action selector="dismiss:" destination="MD7-VX-vXS" eventType="touchUpInside" id="3yP-C8-ia2"/>
@@ -470,12 +476,12 @@
                                     <constraint firstAttribute="width" secondItem="MD7-VX-vXS" secondAttribute="height" multiplier="1:1" id="2n2-Js-A6r"/>
                                     <constraint firstItem="Sqn-rp-233" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="5wF-Xb-7pa"/>
                                     <constraint firstItem="bzb-57-Wj3" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="AeV-0x-4l4"/>
-                                    <constraint firstItem="U4D-f4-prE" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" constant="8" id="ByB-bv-ZKm"/>
-                                    <constraint firstAttribute="bottom" secondItem="U4D-f4-prE" secondAttribute="bottom" constant="8" id="Fzg-n9-lcf"/>
+                                    <constraint firstItem="U4D-f4-prE" firstAttribute="leading" secondItem="MD7-VX-vXS" secondAttribute="leading" id="ByB-bv-ZKm"/>
+                                    <constraint firstAttribute="bottom" secondItem="U4D-f4-prE" secondAttribute="bottom" id="Fzg-n9-lcf"/>
                                     <constraint firstItem="fz4-Xd-XZl" firstAttribute="top" secondItem="Sqn-rp-233" secondAttribute="bottom" constant="10" id="HU7-1c-bsT"/>
                                     <constraint firstAttribute="height" constant="350" id="Pij-tx-q08"/>
                                     <constraint firstItem="bzb-57-Wj3" firstAttribute="top" secondItem="MD7-VX-vXS" secondAttribute="top" constant="25" id="Pu8-vm-2Gp"/>
-                                    <constraint firstAttribute="trailing" secondItem="U4D-f4-prE" secondAttribute="trailing" constant="8" id="SCX-95-apz"/>
+                                    <constraint firstAttribute="trailing" secondItem="U4D-f4-prE" secondAttribute="trailing" id="SCX-95-apz"/>
                                     <constraint firstItem="fz4-Xd-XZl" firstAttribute="centerX" secondItem="MD7-VX-vXS" secondAttribute="centerX" id="lm5-pR-fU2"/>
                                     <constraint firstItem="Sqn-rp-233" firstAttribute="top" secondItem="bzb-57-Wj3" secondAttribute="bottom" constant="20" id="xkq-Hs-RVY"/>
                                 </constraints>

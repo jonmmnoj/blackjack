@@ -23,7 +23,6 @@ class FeedbackView: UIView {
         super.init(frame: frame)
     }
 
-    //initWithCode to init view from xib or storyboard
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -34,8 +33,10 @@ class FeedbackView: UIView {
 
     private func setupView() {
         backgroundColor = .secondarySystemBackground
-        dismissButton.layer.borderWidth = 1
-        dismissButton.layer.borderColor = UIColor.systemBlue.cgColor
+        //dismissButton.layer.borderWidth = 1
+        //dismissButton.layer.borderColor = UIColor.systemBlue.cgColor
+        dismissButton.backgroundColor = Settings.shared.defaults.buttonColor
+        dismissButton.setTitleColor(.white, for: .normal)
     }
     
     func updateView(isCorrect: Bool, input: Int, actualCount: Int) {
@@ -49,7 +50,6 @@ class FeedbackView: UIView {
     func updateViewForBasicStrategy(isCorrect: Bool, playerAction: String, correctAction: String) {
         let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
-        //yourAnswerLabel.text = "Your answer: \(playerAction)"
         actualLabel.text = "\(correctAction)"
         actualLabel.textColor = .systemGreen
         
@@ -59,13 +59,11 @@ class FeedbackView: UIView {
         myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 13, length: playerAction.count))
         
         yourAnswerLabel.attributedText = myMutableString
-        
     }
     
     func updateViewForDeviation(isCorrect: Bool, playerAction: String, correctAction: String) {
         let s = isCorrect ? "right" : "wrong"
         imageView.image = UIImage(named: s)
-        //yourAnswerLabel.text = "Your answer: \(playerAction)"
         actualLabel.text = "\(correctAction)"
         actualLabel.textColor = .systemGreen
         
@@ -75,11 +73,9 @@ class FeedbackView: UIView {
         myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 13, length: playerAction.count))
         
         yourAnswerLabel.attributedText = myMutableString
-        
     }
     
     @IBAction func dismiss(_ sender: UIButton) {
         delegate?.dimiss()
     }
-
 }

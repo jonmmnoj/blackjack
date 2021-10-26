@@ -40,10 +40,10 @@ class TrueCountSettings: GameTypeSettings {
         numberOfDecksSection.alwaysSelectsOneOption = true
         
         deckFractionsSection = RadioSection(title: "Amount Discarded", options: [
-            OptionRow(text: "wholes", isSelected: settings.deckFraction == "whole", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "halves", isSelected: settings.deckFraction == "half", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "wholes", isSelected: settings.deckFraction == "wholes", action: didToggleDeckFractionSelection()),
+            OptionRow(text: "halves", isSelected: settings.deckFraction == "halves", action: didToggleDeckFractionSelection()),
 //            OptionRow(text: "third", isSelected: settings.deckFraction == "third", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "quarters", isSelected: settings.deckFraction == "quarter", action: didToggleDeckFractionSelection())
+            OptionRow(text: "quarters", isSelected: settings.deckFraction == "quarters", action: didToggleDeckFractionSelection())
         ] )//, footer: "")
         deckFractionsSection.alwaysSelectsOneOption = true
         

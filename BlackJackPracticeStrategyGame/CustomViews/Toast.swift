@@ -10,16 +10,16 @@ import UIKit
 class Toast {
     static func show(message: String, controller: UIViewController) {
         let toastContainer = UIView(frame: CGRect())
-        toastContainer.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        toastContainer.backgroundColor = UIColor.white//.withAlphaComponent(0.6)
         toastContainer.alpha = 0.0
         toastContainer.layer.cornerRadius = 10;
         toastContainer.clipsToBounds  =  true
 
         let toastLabel = UILabel(frame: CGRect())
-        toastLabel.textColor = UIColor.white
+        toastLabel.textColor = UIColor.black
         toastLabel.textAlignment = .center;
         //toastLabel.font.withSize(12.0)
-        toastLabel.font = UIFont.preferredFont(forTextStyle: .title3)
+        toastLabel.font = UIFont.preferredFont(forTextStyle: .headline)
         toastLabel.text = message
         toastLabel.clipsToBounds  =  true
         toastLabel.numberOfLines = 0
