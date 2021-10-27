@@ -18,7 +18,7 @@ class BasicStrategySettings: GameTypeSettings {
     var settings = Settings.shared
     var surrenderCell: UITableViewCell!
     var es10Cell: UITableViewCell!
-    var enhcCell: UITableViewCell!
+    //var enhcCell: UITableViewCell!
     var dasCell: UITableViewCell!
     var twoHandCell: UITableViewCell!
     var threeHandCell: UITableViewCell!
@@ -66,21 +66,21 @@ class BasicStrategySettings: GameTypeSettings {
             ]),
         
             Section(title: "Rules", rows: [
-                SwitchRow(
-                    text: "ENHC",
-                    switchValue: settings.ENHC,
-                    customization:  { (cell, row) in
-                        self.enhcCell = cell
-                    },action: { row in
-                        self.settings.ENHC = !self.settings.ENHC
-                        UIView.transition(with: self.surrenderCell.textLabel!,
-                                          duration: 0.5,
-                                      options: .transitionFlipFromTop,
-                                    animations: { [weak self] in
-                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
-                                 }, completion: nil)
-
-                    }),
+//                SwitchRow(
+//                    text: "ENHC",
+//                    switchValue: settings.ENHC,
+//                    customization:  { (cell, row) in
+//                        self.enhcCell = cell
+//                    },action: { row in
+//                        self.settings.ENHC = !self.settings.ENHC
+//                        UIView.transition(with: self.surrenderCell.textLabel!,
+//                                          duration: 0.5,
+//                                      options: .transitionFlipFromTop,
+//                                    animations: { [weak self] in
+//                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
+//                                 }, completion: nil)
+//
+//                    }),
                 
                 SwitchRow(
                     text: "Surrender",
@@ -158,8 +158,8 @@ class BasicStrategySettings: GameTypeSettings {
                         cell.selectionStyle = .default
                     },
                     action: { _ in
-                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
-                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+//                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
+//                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         (self.surrenderCell.accessoryView as! UISwitch).setOn(self.settings.defaults.surrender, animated: true)
                         (self.surrenderCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)

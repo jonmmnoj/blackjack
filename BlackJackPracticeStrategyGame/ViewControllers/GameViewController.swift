@@ -176,7 +176,7 @@ extension GameViewController: GameViewDelegate {
         placeBetView.snp.makeConstraints { (make) in
             make.center.equalTo(vc.view.center)
             make.width.equalTo(350)
-            make.height.equalTo(336)
+            make.height.equalTo(350)
         }
         
         placeBetView.dealHandler = { betAmount in

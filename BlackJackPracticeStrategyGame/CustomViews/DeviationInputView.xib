@@ -127,7 +127,7 @@
                             </subviews>
                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4dt-GC-SaC">
+                        <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="760" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4dt-GC-SaC">
                             <rect key="frame" x="0.0" y="271" width="414" height="54"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="752" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pq9-RJ-zc5">

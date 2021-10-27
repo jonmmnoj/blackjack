@@ -8,11 +8,8 @@
 import Foundation
 import UIKit
 
-
-
 class CountMaster {
     var numberOfRoundsPlayed: Int // notify when setting changes? to reset?
-    //var delegate: GameViewDelegate!
     var cardCounter = CardCounter.shared
     var gameMaster: GameMaster?
     var taskComplete: (() -> Void)!
@@ -26,19 +23,15 @@ class CountMaster {
         let value = Settings.shared.gameType == .freePlay ? Settings.shared.numberOfRoundsBeforeAskTrueCount : Settings.shared.numberOfRoundsBeforeAskRunningCount
         let setting = CountRounds(rawValue: value)?.numericValue ?? 0
         if setting == 0 { // TODO: at end of shoe or end game
-            
             if gameMaster!.dealer.shoe.isTimeToRefillShoe() {
                 return true
             }
-            
             return false
-            
         }
         return numberOfRoundsPlayed % setting == 0
     }
     
     func endOfRoundTasks(gameMaster: GameMaster, completion: @escaping () -> Void) {
-        //self.gameMaster = gameMaster // needed to call back to GM when count task is done
         self.taskComplete = completion
         presentViewToGetUserCount()
     }
@@ -57,11 +50,15 @@ class CountMaster {
         
         let tableView = gameMaster!.tableView
         tableView.addSubview(inputView)
+        var width = UIScreen.main.bounds.size.width
+        if tableView.traitCollection.horizontalSizeClass == .compact {
+            width *= 0.8
+        } else { // assumes .regular
+            width *= 0.5
+        }
         inputView.snp.makeConstraints { make in
             make.center.equalTo(tableView)
-            make.width.greaterThanOrEqualTo(tableView.snp.width).offset(-50)
-            //make.left.equalTo(table)(50)
-            // make.right.equalTo(table).offset(-50)
+            make.width.equalTo(width)
             make.height.lessThanOrEqualTo(250)
         }
     }
@@ -69,11 +66,5 @@ class CountMaster {
     func userInput(value: Int, completion: (Bool, Int, Int) -> ()) {
         let isCorrect = value == cardCounter.runningCount
         completion(isCorrect, value, cardCounter.runningCount)
-    }
-    
-    func dismissCountView() {
-//        delegate.dismissViewController() {
-//            self.taskComplete()
-//        }
     }
 }

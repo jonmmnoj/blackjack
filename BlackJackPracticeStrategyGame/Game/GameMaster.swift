@@ -18,6 +18,9 @@ class GameMaster {
     var playerBets: Bool {
         return gameType == .freePlay && Settings.shared.placeBets
     }
+    var showDiscardTray: Bool {
+        return Settings.shared.showDiscardTray && gameType == .freePlay
+    }
     var dealer: Dealer!
     var players: [Player] = []
     var player: Player!
@@ -29,7 +32,7 @@ class GameMaster {
     var dealerHand: Hand {
 
         var x = tableView.center.x - Settings.shared.cardWidth
-        if Settings.shared.showDiscardTray {
+        if showDiscardTray {
             if UIScreen.main.bounds.width / 2 < Settings.shared.cardWidth * 2 {
                 x = Settings.shared.cardWidth + 3
             }

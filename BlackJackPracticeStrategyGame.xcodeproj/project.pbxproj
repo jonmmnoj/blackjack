@@ -16,7 +16,6 @@
 		FC4E6220269E808500D1AF93 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E621F269E808500D1AF93 /* Settings.swift */; };
 		FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E6221269E86D200D1AF93 /* CardCounter.swift */; };
 		FC4E622426A110AD00D1AF93 /* CountMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622326A110AD00D1AF93 /* CountMaster.swift */; };
-		FC4E622626A1C34B00D1AF93 /* CountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622526A1C34A00D1AF93 /* CountViewController.swift */; };
 		FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622726A1D71900D1AF93 /* GameViewDelegate.swift */; };
 		FC4E622F26A21B6300D1AF93 /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */; };
 		FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */; };
@@ -101,7 +100,6 @@
 		FC4E621F269E808500D1AF93 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		FC4E6221269E86D200D1AF93 /* CardCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCounter.swift; sourceTree = "<group>"; };
 		FC4E622326A110AD00D1AF93 /* CountMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountMaster.swift; sourceTree = "<group>"; };
-		FC4E622526A1C34A00D1AF93 /* CountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountViewController.swift; sourceTree = "<group>"; };
 		FC4E622726A1D71900D1AF93 /* GameViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewDelegate.swift; sourceTree = "<group>"; };
 		FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingSettings.swift; sourceTree = "<group>"; };
@@ -473,7 +471,6 @@
 			children = (
 				FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */,
 				FC79376E2694D2E90000ACB7 /* GameViewController.swift */,
-				FC4E622526A1C34A00D1AF93 /* CountViewController.swift */,
 				FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */,
 				FC610F2226C608530089C7C9 /* MainMenuViewController.swift */,
 			);
@@ -660,7 +657,6 @@
 				FC610F2326C608530089C7C9 /* MainMenuViewController.swift in Sources */,
 				FC0D49EA26C9DDB200F6556E /* MenuTableViewCell.swift in Sources */,
 				FC7937842694D31B0000ACB7 /* Hand.swift in Sources */,
-				FC4E622626A1C34B00D1AF93 /* CountViewController.swift in Sources */,
 				FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */,
 				FC610EAD26B4A8880089C7C9 /* DiscardTrayView.swift in Sources */,
 				FC610F0126BC55230089C7C9 /* PrettyDelegate.swift in Sources */,

@@ -22,7 +22,7 @@ class FreePlaySettings: GameTypeSettings {
     var deviationsCell: UITableViewCell!
     var discardTrayCell: UITableViewCell!
     var dealerHitsCell: UITableViewCell!
-    var enhcCell: UITableViewCell!
+    //var enhcCell: UITableViewCell!
     var surrenderCell: UITableViewCell!
     var dasCell: UITableViewCell!
     var resplitCell: UITableViewCell!
@@ -85,22 +85,22 @@ class FreePlaySettings: GameTypeSettings {
                       action: { _ in
                         self.settings.dealerHitsSoft17 = !self.settings.dealerHitsSoft17
                       }),
-                SwitchRow(
-                    text: "ENHC",
-                    switchValue: settings.ENHC,
-                    customization:  { (cell, row) in
-                        self.enhcCell = cell
-                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.ENHC, animated: false)
-                    },action: { row in
-                        self.settings.ENHC = !self.settings.ENHC
-                        UIView.transition(with: self.surrenderCell.textLabel!,
-                                          duration: 0.5,
-                                      options: .transitionFlipFromTop,
-                                    animations: { [weak self] in
-                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
-                                 }, completion: nil)
-
-                    }),
+//                SwitchRow(
+//                    text: "ENHC",
+//                    switchValue: settings.ENHC,
+//                    customization:  { (cell, row) in
+//                        self.enhcCell = cell
+//                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.ENHC, animated: false)
+//                    },action: { row in
+//                        self.settings.ENHC = !self.settings.ENHC
+//                        UIView.transition(with: self.surrenderCell.textLabel!,
+//                                          duration: 0.5,
+//                                      options: .transitionFlipFromTop,
+//                                    animations: { [weak self] in
+//                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
+//                                 }, completion: nil)
+//
+//                    }),
                 
                 SwitchRow(
                     text: "Surrender",

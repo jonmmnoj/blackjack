@@ -21,7 +21,6 @@ class CardCounter {
     }
     
     func getNumberOfDiscardedDecks() -> Float {
-        // adjust for whole or half
         let result: Float
         let roundDeckToNearest = Settings.shared.deckRoundedTo
         let roundLast3DecksToHalf = false //Settings.shared.roundDecksToHalf
@@ -30,26 +29,21 @@ class CardCounter {
             if roundLast3DecksToHalf && discardedDecks >= 3 {
                 result = discardedDecks.floor(nearest: 0.5)
             } else {
-                // if 0.9 -> 0, if 1.25 -> 1, if 1.5 -> 1, if 1.75 -> 1, if 1.99 -> 1
-                result = discardedDecks.rounded(.towardZero)
+                result = discardedDecks.rounded(.towardZero) // if 0.9 -> 0, if 1.25 -> 1, if 1.5 -> 1, if 1.75 -> 1, if 1.99 -> 1
             }
-        } else { // roundDeckToNearest = 0.5 {
-            // if 0.4 -> 0, if 0.5 -> 0.5, if 0.9 -> 0.5, if 0.99 -> 0.5, if 1 -> 1
-            result = discardedDecks.floor(nearest: 0.5)
+        } else {
+            result = discardedDecks.floor(nearest: 0.5) // if 0.4 -> 0, if 0.5 -> 0.5, if 0.9 -> 0.5, if 0.99 -> 0.5, if 1 -> 1
         }
-        return result//discardedDecks.rounded(.towardZero)
+        return result
     }
     
     func getNumberOfDecksInPlay() -> Float {
         let result = Float(Settings.shared.numberOfDecks) - getNumberOfDiscardedDecks()
-        //if result == 0 { result = 1 }
         return result
     }
     
     func getTrueCount() -> Int {
         let divisionResult = (Float(runningCount) / getNumberOfDecksInPlay())
-        // end of shoe error: float cannot be coverted to Int because it is infinite or NaN
-        // b/c decks in play is 0
         let trueCount = Int(divisionResult)
         return trueCount
     }
@@ -108,5 +102,4 @@ class CardCounter {
         let numOfCardsNotPlayed = totalCards - numberOfCardsPlayed
         return numOfCardsNotPlayed
     }
-    
 }
