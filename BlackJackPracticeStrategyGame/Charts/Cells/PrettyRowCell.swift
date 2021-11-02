@@ -39,8 +39,18 @@ class PrettyRowCell : SwiftGridCell {
     }
     
     func updateDisplay() {
-        button.setTitle(text, for: .normal)
-        button.backgroundColor = cellConfig[text] ?? .white
+        var string = text ?? ""
+        var forBackgroundColor = text ?? ""
+        if text.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil && !text.contains("A,") {
+            string = text.components(separatedBy: CharacterSet.letters).joined()
+            forBackgroundColor = text.components(separatedBy: CharacterSet.letters.inverted)
+                .joined()
+        }
+        button.setTitle(string, for: .normal)
+        button.backgroundColor = cellConfig[forBackgroundColor] ?? .white
+        if text.contains("+") || text.contains("-") {
+            button.setTitleColor(.red, for: .normal)
+        }
     }
 }
 

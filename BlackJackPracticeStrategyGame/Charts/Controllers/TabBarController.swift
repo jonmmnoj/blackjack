@@ -10,6 +10,8 @@ import UIKit
 @available(iOS 13.0, *)
 class TabBarController: UITabBarController {
     
+    var deviationType: DeviationType!
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
@@ -26,18 +28,68 @@ class TabBarController: UITabBarController {
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
-        setupVCs()
+        setupVCs(deviation: self.deviationType)
     }
     
-    private func setupVCs() {
+    enum ChartType {
+        case pairs, soft, hard, surrender
+    }
+    
+    enum DeviationType {
+        case standard, hard17, soft17
+    }
+    
+    private struct Chart {
+        let type: ChartType
+        let deviation: DeviationType
+        
+    }
+    
+    private func getChart(type: ChartType, deviation: DeviationType) -> ChartProtocol {
+        let chart = Chart(type: type, deviation: deviation)
+        switch (chart.type, chart.deviation) {
+        case (.pairs, .standard):
+            return PairSplittingChart()
+        case (.soft, .standard):
+            return SoftTotalsChart()
+        case (.hard, .standard):
+            return HardTotalsChart()
+        case (.surrender, .standard):
+            return SurrenderChart()
+            
+        case (.pairs, .hard17):
+            return H17PairSplittingChart()
+        case (.soft, .hard17):
+            return H17SoftTotalsChart()
+        case (.hard, .hard17):
+            return H17HardTotalsChart()
+        case (.surrender, .hard17):
+            return H17SurrenderChart()
+            
+        case (.pairs, .soft17):
+            return S17PairSplittingChart()
+        case (.soft, .soft17):
+            return S17SoftTotalsChart()
+        case (.hard, .soft17):
+            return S17HardTotalsChart()
+        case (.surrender, .soft17):
+            return S17SurrenderChart()
+//
+        default:
+            return SurrenderChart()
+
+        }
+    }
+    
+    private func setupVCs(deviation: DeviationType) {
         let vc1 =  storyboard?.instantiateViewController(identifier: "ChartViewController") as! ChartViewController
-        vc1.chart = PairSplittingChart()
+        vc1.chart = getChart(type: .pairs, deviation: deviation)
         let vc2 =  storyboard?.instantiateViewController(identifier: "ChartViewController") as! ChartViewController
-        vc2.chart = SoftTotalsChart()
+        vc2.chart = getChart(type: .soft, deviation: deviation)
         let vc3 =  storyboard?.instantiateViewController(identifier: "ChartViewController") as! ChartViewController
-        vc3.chart = HardTotalsChart()
+        vc3.chart = getChart(type: .hard, deviation: deviation)
         let vc4 =  storyboard?.instantiateViewController(identifier: "ChartViewController") as! ChartViewController
-        vc4.chart = SurrenderChart()
+        vc4.chart = getChart(type: .surrender, deviation: deviation)
         
         viewControllers = [
             createNavController(for: vc1, title: NSLocalizedString("Pair Splits", comment: ""), image: UIImage(systemName: "table")!),
@@ -51,25 +103,8 @@ class TabBarController: UITabBarController {
         let navController = UINavigationController(rootViewController: rootViewController)
         rootViewController.navigationController?.navigationBar.isHidden = true
         navController.tabBarItem.title = title
-        //navController.tabBarItem.image = image
         
         return navController
     }
-    
-//    private func addNavButtons(to vc: UIViewController) {
-////        let add = UIBarButtonItem(barButtonSystemItem: .add, target: vc, action: #selector(testButtonTouchUpInside))
-//        navigationItem.rightBarButtonItems = [UIBarButtonItem(title: "Quiz", style: .plain, target: vc, action: #selector("quizButtonTouchUpInside"))]
-//    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 

@@ -13,6 +13,7 @@
 		FC24C98A27094452008A0993 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC24C98927094452008A0993 /* Toast.swift */; };
 		FC3E400627247AFF005BD61E /* PlaceBetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3E400527247AFF005BD61E /* PlaceBetView.swift */; };
 		FC3E400827247B16005BD61E /* PlaceBetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC3E400727247B16005BD61E /* PlaceBetView.xib */; };
+		FC3E400A2729B78E005BD61E /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3E40092729B78E005BD61E /* Insurance.swift */; };
 		FC4E6220269E808500D1AF93 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E621F269E808500D1AF93 /* Settings.swift */; };
 		FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E6221269E86D200D1AF93 /* CardCounter.swift */; };
 		FC4E622426A110AD00D1AF93 /* CountMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E622326A110AD00D1AF93 /* CountMaster.swift */; };
@@ -21,7 +22,6 @@
 		FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */; };
 		FC4E9DB426E1B7A300CAC0A0 /* Shoe.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */; };
 		FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */; };
-		FC610E8D26A8F92C0089C7C9 /* BasicStrategyMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E8C26A8F92C0089C7C9 /* BasicStrategyMaster.swift */; };
 		FC610E8F26A8FBEA0089C7C9 /* BasicStrategyGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */; };
 		FC610E9126A8FC0D0089C7C9 /* FreePlayGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9026A8FC0D0089C7C9 /* FreePlayGameType.swift */; };
 		FC610E9326A8FC4D0089C7C9 /* RunningCountGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */; };
@@ -47,7 +47,6 @@
 		FC610F0526BC55230089C7C9 /* Charts.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF326BC55230089C7C9 /* Charts.swift */; };
 		FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF426BC55230089C7C9 /* PECountry.swift */; };
 		FC610F0726BC55230089C7C9 /* PrettyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF526BC55230089C7C9 /* PrettyDataSource.swift */; };
-		FC610F0826BC55230089C7C9 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF726BC55230089C7C9 /* MainViewController.swift */; };
 		FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF826BC55230089C7C9 /* ChartViewController.swift */; };
 		FC610F0A26BC55230089C7C9 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EF926BC55230089C7C9 /* TabBarController.swift */; };
 		FC610F0B26BC55230089C7C9 /* PrettyHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC610EFB26BC55230089C7C9 /* PrettyHeaderView.xib */; };
@@ -97,6 +96,7 @@
 		FC24C98927094452008A0993 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FC3E400527247AFF005BD61E /* PlaceBetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceBetView.swift; sourceTree = "<group>"; };
 		FC3E400727247B16005BD61E /* PlaceBetView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceBetView.xib; sourceTree = "<group>"; };
+		FC3E40092729B78E005BD61E /* Insurance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Insurance.swift; sourceTree = "<group>"; };
 		FC4E621F269E808500D1AF93 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		FC4E6221269E86D200D1AF93 /* CardCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardCounter.swift; sourceTree = "<group>"; };
 		FC4E622326A110AD00D1AF93 /* CountMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountMaster.swift; sourceTree = "<group>"; };
@@ -105,7 +105,6 @@
 		FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingSettings.swift; sourceTree = "<group>"; };
 		FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shoe.swift; sourceTree = "<group>"; };
 		FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyViewController.swift; sourceTree = "<group>"; };
-		FC610E8C26A8F92C0089C7C9 /* BasicStrategyMaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyMaster.swift; sourceTree = "<group>"; };
 		FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyGameType.swift; sourceTree = "<group>"; };
 		FC610E9026A8FC0D0089C7C9 /* FreePlayGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreePlayGameType.swift; sourceTree = "<group>"; };
 		FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCountGameType.swift; sourceTree = "<group>"; };
@@ -134,7 +133,6 @@
 		FC610EF326BC55230089C7C9 /* Charts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Charts.swift; sourceTree = "<group>"; };
 		FC610EF426BC55230089C7C9 /* PECountry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PECountry.swift; sourceTree = "<group>"; };
 		FC610EF526BC55230089C7C9 /* PrettyDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDataSource.swift; sourceTree = "<group>"; };
-		FC610EF726BC55230089C7C9 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		FC610EF826BC55230089C7C9 /* ChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewController.swift; sourceTree = "<group>"; };
 		FC610EF926BC55230089C7C9 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		FC610EFB26BC55230089C7C9 /* PrettyHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PrettyHeaderView.xib; sourceTree = "<group>"; };
@@ -217,7 +215,6 @@
 				FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */,
 				FC610EB026B61D340089C7C9 /* StrategyGameDecks+Extension.swift */,
 				FC610E9A26AF3D0C0089C7C9 /* StrategyDeck.swift */,
-				FC610E8C26A8F92C0089C7C9 /* BasicStrategyMaster.swift */,
 				FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */,
 			);
 			path = BasicStrategy;
@@ -296,6 +293,7 @@
 				FC92B52226A733F40082DA32 /* BasicStrategy+Extension.swift */,
 				FC92B51C26A61ABF0082DA32 /* Rule.swift */,
 				FC92B51E26A61AD40082DA32 /* Deviation.swift */,
+				FC3E40092729B78E005BD61E /* Insurance.swift */,
 			);
 			path = Rules;
 			sourceTree = "<group>";
@@ -353,7 +351,6 @@
 		FC610EF626BC55230089C7C9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FC610EF726BC55230089C7C9 /* MainViewController.swift */,
 				FC610EF826BC55230089C7C9 /* ChartViewController.swift */,
 				FC610EF926BC55230089C7C9 /* TabBarController.swift */,
 			);
@@ -641,7 +638,6 @@
 				FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */,
 				FC610F0426BC55230089C7C9 /* CellContentEnumeration.swift in Sources */,
 				FC92B52326A733F40082DA32 /* BasicStrategy+Extension.swift in Sources */,
-				FC610F0826BC55230089C7C9 /* MainViewController.swift in Sources */,
 				FC92B51D26A61ABF0082DA32 /* Rule.swift in Sources */,
 				FC7937962694FF4D0000ACB7 /* Rules.swift in Sources */,
 				FC610EBC26B84B600089C7C9 /* DeviationsSettings.swift in Sources */,
@@ -694,10 +690,10 @@
 				FC610EBA26B840000089C7C9 /* DeviationGameTypeHelper.swift in Sources */,
 				FC7937892694D3DF0000ACB7 /* Enums.swift in Sources */,
 				FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */,
-				FC610E8D26A8F92C0089C7C9 /* BasicStrategyMaster.swift in Sources */,
 				FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */,
 				FC24C98A27094452008A0993 /* Toast.swift in Sources */,
 				FC4E622F26A21B6300D1AF93 /* FeedbackView.swift in Sources */,
+				FC3E400A2729B78E005BD61E /* Insurance.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

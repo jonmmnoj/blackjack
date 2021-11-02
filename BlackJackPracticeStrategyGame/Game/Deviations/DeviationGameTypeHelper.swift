@@ -38,6 +38,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         dealer.deal(card:card ,to: dealer.activatedHand!, delay: false)
         card = Card(value: CardValue(rawValue: dCards[0])!, suit: CardSuit.allCases.randomElement()!)
         dealer.deal(card: card ,to: dealer.activatedHand!, delay: false)
+        gameMaster.gameState = .dealtCards
     }
     
     func inputReceived(action: PlayerAction) {
@@ -68,7 +69,8 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         let tableView = gameMaster.tableView
         tableView.addSubview(inputView)
         inputView.snp.makeConstraints { make in
-            make.center.equalTo(tableView)
+            make.centerX.equalTo(tableView.snp.centerX)
+            make.centerY.equalTo(tableView.snp.centerY).offset(-10)
             var widthFactor = 1.0
             if tableView.traitCollection.horizontalSizeClass == .compact {
                 widthFactor *= 0.75
@@ -76,9 +78,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
                 widthFactor *= 0.5
             }
             make.width.greaterThanOrEqualTo(tableView.snp.width).multipliedBy(widthFactor)
-            //make.left.equalTo(table)(50)
-           // make.right.equalTo(table).offset(-50)
-            make.height.lessThanOrEqualTo(250)
+            make.height.lessThanOrEqualTo(350)
         }
     }
     

@@ -61,6 +61,14 @@ class Dealer: Dealable {
             //i += 1
             deal(card: card, to: $0)
         }
+        
+        // if 2 hand round...
+            // player would have 2 hands, player.hands.count == 2
+        // move to hand... deal card
+            // to move to hand: keep track of which hand the dealer has moved to, or just always move to hand before a deal (less efficient but don't have to keep track of last hand moved to and don't have to compare)
+        // move to next hand... deal card
+        // move back to first hand... deal card
+        // move to next hand... deal card
     }
     
     func dealtToAtLeast17() -> Void {
@@ -84,9 +92,6 @@ class Dealer: Dealable {
     }
     
     func getCard() -> Card {
-        if shoe.isTimeToRefillShoe() {
-            shoe.refill()
-        }
         return shoe.takeCard()
     }
     
@@ -106,12 +111,10 @@ class Dealer: Dealable {
     }
     
     func handleBust(for player: Player) {
-        //print("Player Bust")
         discard(hand: player.hands.first!)
     }
     
     func handleBust(for hand: Hand) {
-        //print("Hand Bust")
         hand.set(state: .bust)
         discard(hand: hand)
     }

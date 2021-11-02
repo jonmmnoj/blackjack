@@ -11,11 +11,46 @@ import Foundation
 class PlaceBetView: UIView {
     var dealHandler: ((Int) -> Void)!
     var exitGameHandler: (() -> Void)!
+    var discardTrayIsOpen: Bool = false
     lazy var discardTray: DiscardTrayView = {
         let view = DiscardTrayView(frame: .zero)
-        //view.delegate = gameMaster.delegate
+        if discardTrayIsOpen {
+            view.beginOpen = true
+        }
         return view
     }()
+    private var bankRollAmount: Double {
+        get {
+            return Settings.shared.bankRollAmount
+        }
+        set {
+            Settings.shared.bankRollAmount = newValue
+            let currencyFormatter = NumberFormatter()
+            currencyFormatter.usesGroupingSeparator = true
+            currencyFormatter.numberStyle = .currency
+            let priceString = currencyFormatter.string(from: NSNumber(value: newValue))!
+            bankRollAmountLabel.text = priceString
+        }
+    }
+    private var betAmount: Int = 0 {
+        willSet {
+            if newValue == 0 {
+                bankRollAmount += Double(betAmount)
+            } else {
+                let dif = newValue - betAmount
+                bankRollAmount -= Double(dif)
+            }
+        }
+        didSet {
+            let currencyFormatter = NumberFormatter()
+            currencyFormatter.usesGroupingSeparator = true
+            currencyFormatter.numberStyle = .currency
+            currencyFormatter.maximumFractionDigits = 0
+            let priceString = currencyFormatter.string(from: NSNumber(value: betAmount))!
+            currentBetAmountLabel.text = priceString
+            Settings.shared.previousBetAmount = betAmount
+        }
+    }
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var titleView: UIView!
@@ -93,39 +128,5 @@ class PlaceBetView: UIView {
         endGameButton.setTitleColor(.white, for: .normal)
         bankRollLabel.textColor = .darkGray
         bankRollAmountLabel.textColor = .darkGray
-    }
-    
-    var betAmount: Int = 0 {
-        willSet {
-            if newValue == 0 {
-                bankRollAmount += Double(betAmount)
-            } else {
-                let dif = newValue - betAmount
-                bankRollAmount -= Double(dif)
-            }
-        }
-        didSet {
-            let currencyFormatter = NumberFormatter()
-            currencyFormatter.usesGroupingSeparator = true
-            currencyFormatter.numberStyle = .currency
-            currencyFormatter.maximumFractionDigits = 0
-            let priceString = currencyFormatter.string(from: NSNumber(value: betAmount))!
-            currentBetAmountLabel.text = priceString
-            Settings.shared.previousBetAmount = betAmount
-        }
-    }
-    
-    var bankRollAmount: Double {
-        get {
-            return Settings.shared.bankRollAmount
-        }
-        set {
-            Settings.shared.bankRollAmount = newValue
-            let currencyFormatter = NumberFormatter()
-            currencyFormatter.usesGroupingSeparator = true
-            currencyFormatter.numberStyle = .currency
-            let priceString = currencyFormatter.string(from: NSNumber(value: newValue))!
-            bankRollAmountLabel.text = priceString
-        }
     }
 }

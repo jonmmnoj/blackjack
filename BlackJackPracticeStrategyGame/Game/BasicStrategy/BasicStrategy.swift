@@ -20,10 +20,10 @@ class BasicStrategy {
         let rules = type == .pair ? pairRules : type == .soft ? softRules : hardRules
         for rule in rules {
             if rule.isMatch(dealerCardValue: dealerCardValue, playerRuleValue: playerRuleValue) {
-                // first, check if the rule has surrender logic (and the player can surrender), if not, then check if it has deviation logic, if not, then return rule's action
                 if Settings.shared.surrender && numberOfPlayerCards == 2 {
                     if let surrender = rule.surrender {
-                        if let deviation = surrender.getDeviation() {
+                        if Settings.shared.deviations && surrender.getDeviation() != nil {
+                            let deviation = surrender.getDeviation()!
                             if CardCounter.shared.doesDeviationApply(deviation) {
                                 action = deviation.action
                                 break
@@ -45,8 +45,8 @@ class BasicStrategy {
                         }
                     }
                 }
-                // if the rule gets to this point, then it does not have surrender or deviation logic.
-                action = rule.action
+                action = rule.action 
+                
                 break
             }
         }
@@ -143,11 +143,10 @@ class BasicStrategy {
             playerRuleValue = playerCardValues.first
         } else if rule == .soft {
             playerRuleValue = playerCardValues.reduce(0, +) - 1
-        } else {
-           // hard
+        } else { // hard
             playerRuleValue = playerCardValues.reduce(0, +)
-            if playerRuleValue > 17 { playerRuleValue = 17 }
-            if playerRuleValue < 8 { playerRuleValue = 8 }
+            if playerRuleValue > 17 { playerRuleValue = 18 }
+            if playerRuleValue < 8 { playerRuleValue = 7 }
         }
         return playerRuleValue
     }

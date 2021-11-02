@@ -14,12 +14,6 @@ class ChartViewController: UIViewController, PrettyDataSourceProtocol {
     
     @IBOutlet weak var prettyGridView: SwiftGridView!
     
-    // MARK: - PrettyDataSourceDelegate
-    //var chart: ChartProtocol = FillInChart(chart: SoftTotalsChart())
-    //var chart: ChartProtocol = SoftTotalsChart()
-    //var chart: ChartProtocol = PairSplittingChart()
-    //var chart: ChartProtocol = SurrenderChart()
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("chart vc will disappear")

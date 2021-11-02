@@ -24,7 +24,6 @@ class Shoe {
             cards += deck.cards
         }
         cards.shuffle()
-        print("shoe filled")
         CardCounter.shared.reset()
         if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
             table.discardTray.updateViews()
@@ -39,7 +38,6 @@ class Shoe {
     func empty() {
         cards.removeAll()
         cardIndex = 0
-        print("shoe emptied")
     }
     
     func takeCard() -> Card {
@@ -54,13 +52,6 @@ class Shoe {
     func isTimeToRefillShoe() -> Bool {
         // if deck penetration... would adjust this number here
         let value = CardCounter.shared.getNumberOfCardsLeft() < 17
-        if value {
-            print("Shoe should be refilled, i.e. less that 17 cards remaining")
-        }
-        // good place to shoe popup message syaing end of shoe, only show if freeplay
-        
         return value
     }
-    
-    
 }

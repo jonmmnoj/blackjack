@@ -39,6 +39,7 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
         //gameMaster.delegate.playerInput(enabled: true)
         gameMaster.tableView.isUserInteractionEnabled = true
         //stackView.isUserInteractionEnabled = true
+        gameMaster.gameState = .dealtCards
     }
     
     func inputReceived(action: PlayerAction) {

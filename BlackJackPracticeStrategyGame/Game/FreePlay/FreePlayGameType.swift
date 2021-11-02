@@ -27,7 +27,7 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
         dealer.dealCardToSelf()
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
-        //dealer.dealCardToPlayers()
+        gameMaster.gameState = .askInsurance
     }
     
     func inputReceived(action: PlayerAction) {
@@ -61,9 +61,7 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     }
     
     func tasksForEndOfRound() {
-        
-        
-        if /*Settings.shared.defaults.freePlayAskForCount && */countMaster.isTimeToAskForCount() {
+        if countMaster.isTimeToAskForCount() {
             countMaster.endOfRoundTasks(gameMaster: gameMaster, completion: {
                 self.gameMaster.prepareForNewRound()
             })// let countMaster call back to GameMaster when task is complete

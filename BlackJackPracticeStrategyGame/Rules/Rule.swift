@@ -64,7 +64,6 @@ class Surrender {
         var deviation: Deviation?
         deviation = self.deviations?.first(where: { $0.type == Deviation.getType() })
         return deviation
-        
     }
 }
 
@@ -106,8 +105,7 @@ class Deviation {
     
     static func getType() -> DeviationType {
         let dealerHitsSoft17 = Settings.shared.dealerHitsSoft17
-        let enhc = Settings.shared.ENHC
-        let surrender = Settings.shared.surrender
+        //let enhc = Settings.shared.ENHC
         let type: DeviationType = dealerHitsSoft17 ? .hard17 : .soft17
         return type
     }

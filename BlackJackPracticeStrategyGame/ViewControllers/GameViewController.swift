@@ -79,9 +79,9 @@ class GameViewController: UIViewController {
         if showInputButtons {
             self.view.addSubview(stackView)
             stackView.snp.makeConstraints { (make) in
-                var height = Settings.shared.cardSize
+                var height = Settings.shared.cardSize * 1.2
                 if Settings.shared.surrender {
-                    height = Settings.shared.cardSize * 5/4
+                    height = Settings.shared.cardSize * 1.5
                 }
                 make.height.equalTo(height)
                 let width = Settings.shared.cardWidth
@@ -169,10 +169,13 @@ extension GameViewController: GameViewDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
         let placeBetView = PlaceBetView()
+        if gameMaster.dealer.table.discardTray.isOpen {
+            placeBetView.discardTrayIsOpen = true
+        }
         placeBetView.discardTray.delegate = self
         vc.view.addSubview(placeBetView)
         vc.view.addSubview(placeBetView.discardTray)
-        //placeBetView.discardTray.updateViews()
+        
         placeBetView.snp.makeConstraints { (make) in
             make.center.equalTo(vc.view.center)
             make.width.equalTo(350)
@@ -192,6 +195,11 @@ extension GameViewController: GameViewDelegate {
        
         vc.modalPresentationStyle = .overCurrentContext
         vc.modalTransitionStyle = .crossDissolve
+        if presentedViewController != nil {
+            if !(presentedViewController is BasicStrategyViewController) {
+                dismiss(animated: true)
+            }
+        }
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -242,8 +250,8 @@ extension GameViewController: GameViewDelegate {
     }
     
     func present(_ vc: UIViewController) {
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.modalTransitionStyle = .crossDissolve
+        //vc.modalPresentationStyle = .overCurrentContext
+        //vc.modalTransitionStyle = .crossDissolve
         self.present(vc, animated: true, completion: nil)
     }
 }

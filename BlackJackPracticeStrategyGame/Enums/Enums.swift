@@ -82,7 +82,9 @@ enum GameState {
          moveToRightMostHandToScore,
          moveToNextHandToScore,
          movedToHandToScore,
-         showedToast
+         showedToast,
+         askInsurance
+         
 }
 
 enum HandState {

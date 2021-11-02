@@ -29,13 +29,15 @@ class TrueCountGameHelper: GameTypeStrategyPatternProtocol {
         vc.setup()
         vc.submitHandler = { isCorrect, text, correctText in
             self.gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: isCorrect, playerAction: text, correctAction: correctText) {
-                     self.dealCards()
+                self.dealCards()
             }
             self.stackView.removeFromSuperview()
 
         }
 
         gameMaster.tableView.isUserInteractionEnabled = true
+        
+        gameMaster.gameState = .dealtCards
     }
     
     func inputReceived(action: PlayerAction) {

@@ -34,6 +34,14 @@ class RunningCount: FreePlayGameTypeStrategy {
         }
     }
     
+    override func dealCards() {
+        dealer.dealCardToPlayers()
+        dealer.dealCardToSelf()
+        dealer.dealCardToPlayers()
+        dealer.dealCardToSelf()
+        gameMaster.gameState = .dealtCards
+    }
+    
     
     
     

@@ -34,6 +34,7 @@ class BasicStrategyGameType: GameTypeStrategyPatternProtocol {
         dealer.deal(card:card ,to: dealer.activatedHand!, delay: false)
         card = Card(value: CardValue(rawValue: dCards[0])!, suit: CardSuit.allCases.randomElement()!)
         dealer.deal(card: card ,to: dealer.activatedHand!, delay: false)
+        gameMaster.gameState = .dealtCards
     }
     
     func inputReceived(action: PlayerAction) {

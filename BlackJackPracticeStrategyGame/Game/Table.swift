@@ -161,7 +161,7 @@ class Table {
     }
     
     func moveAllCards(for player: Player, to direction: MoveCardsDirection, startIndex: Int? = nil) {
-        var adjustmentX: CGFloat = Settings.shared.cardSize // 200
+        var adjustmentX: CGFloat = Settings.shared.cardSize + 31
         adjustmentX *= direction == .right ? -1 : 1
         for (i, hand) in player.hands.enumerated() {
             if startIndex != nil {

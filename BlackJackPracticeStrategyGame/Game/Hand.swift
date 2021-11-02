@@ -13,6 +13,7 @@ import UIKit
 
 class Hand {
     var betAmount: Int = 0
+    var insurance: Insurance?
     var cards: [Card] = []
     var nextCardPoint: CGPoint
     private(set) var hasAce: Bool = false
@@ -22,23 +23,23 @@ class Hand {
     }
     
     var originPoint: CGPoint
-    var wasSplit: Bool = false // to prevent splitting same hand again ifo split then dealt a pair again.
+    var wasSplit: Bool = false
     var isSplitHand: Bool = false
     var adjustmentX: CGFloat
     var adjustmentY: CGFloat
     var state: HandState
     var result: HandResult? = nil
-    var canSplit: Bool {
-        let isTwoCards = cards.count == 2
-        let isPair = cards[0].value.rawValue == cards[1].value.rawValue
-        if !isTwoCards || !isPair ||  wasSplit {
-            return false
-        } else if cards[0].value == .ace && isSplitHand && !Settings.shared.resplitAces {
-            return false
-        } else {
-            return true
-        }
-    }
+//    var canSplit: Bool {
+//        let isTwoCards = cards.count == 2
+//        let isPair = cards[0].value.rawValue == cards[1].value.rawValue
+//        if !isTwoCards || !isPair ||  wasSplit {
+//            return false
+//        } else if cards[0].value == .ace && isSplitHand && !Settings.shared.resplitAces {
+//            return false
+//        } else {
+//            return true
+//        }
+//    }
     
     init(dealToPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, owner: Dealable) {
         self.nextCardPoint = dealToPoint
@@ -88,7 +89,7 @@ class Hand {
     }
     
     func createSplitHand() -> Hand {
-        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 10 + Card.width, y: self.originPoint.y), adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
+        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y), adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
         newHand.betAmount = self.betAmount
         Settings.shared.bankRollAmount -= Double(self.betAmount)
         newHand.isSplitHand = true

@@ -11,30 +11,14 @@ import SnapKit
 class DiscardTrayView: UIView {
     
     var delegate: GameViewDelegate!
-
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-    
     let width = 200
-
-    override init (frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-    
     var button: UIButton!
     var imageView: UIImageView!
     var countView: UIView!
     var hConstraint: Constraint!
     var isOpen = false
+    var beginOpen = false
+    var openHeight = 75
     var buttonHeight = 40
     var counterViewHeight = 100
     var discardImageHeight = 200
@@ -44,23 +28,14 @@ class DiscardTrayView: UIView {
     var divLabel: UILabel!
     var tcLabel: UILabel!
     
-    func discard() {
-        CardCounter.shared.discard()
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
     }
     
-    func updateViews() {
-        imageView.image = UIImage(named: getImageName())
-        rcLabel.text = String("RC: \(CardCounter.shared.runningCount)")
-        divLabel.text = String("Div: \(CardCounter.shared.getNumberOfDecksInPlay())")
-        tcLabel.text = String("TC: \(CardCounter.shared.getTrueCount())")
+    override init (frame: CGRect) {
+        super.init(frame: frame)
     }
-    
-    private func getImageName() -> String {
-        let numberOfDecks = Settings.shared.numberOfDecks
-        let imageName = "D\(numberOfDecks)_\(CardCounter.shared.numberOfCardsPlayed)"
-        return imageName
-    }
-    
+
     override func layoutSubviews() {
         
         if button != nil { return }
@@ -99,7 +74,6 @@ class DiscardTrayView: UIView {
         countView.snp.makeConstraints { (make) in
             make.top.equalTo(imageView.snp.bottom)
             make.left.right.equalTo(self)
-            //make.height.equalTo(counterViewHeight)
             make.height.equalTo(0)
         }
         
@@ -153,13 +127,37 @@ class DiscardTrayView: UIView {
             make.height.equalTo(buttonHeight)
             //make.width.equalTo(self.width)
         }
+        if beginOpen {
+            isOpen = true
+            countView.snp.updateConstraints { make in
+                make.height.equalTo(openHeight)
+            }
+        }
+        
         self.bringSubviewToFront(button)
         self.updateViews()
     }
     
+    func discard() {
+        CardCounter.shared.discard()
+    }
+    
+    func updateViews() {
+        imageView.image = UIImage(named: getImageName())
+        rcLabel.text = String("RC: \(CardCounter.shared.runningCount)")
+        divLabel.text = String("Div: \(CardCounter.shared.getNumberOfDecksInPlay())")
+        tcLabel.text = String("TC: \(CardCounter.shared.getTrueCount())")
+    }
+    
+    private func getImageName() -> String {
+        let numberOfDecks = Settings.shared.numberOfDecks
+        let imageName = "D\(numberOfDecks)_\(CardCounter.shared.numberOfCardsPlayed)"
+        return imageName
+    }
+    
     @objc func buttonAction(_ sender: UIButton!) {
         isOpen = !isOpen
-        let cViewHeight = isOpen ? 100 : 0
+        let cViewHeight = isOpen ? openHeight : 0
         countView.snp.updateConstraints { make in
             make.height.equalTo(cViewHeight)
         }
