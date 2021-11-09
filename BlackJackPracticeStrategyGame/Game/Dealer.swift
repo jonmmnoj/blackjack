@@ -37,7 +37,7 @@ class Dealer: Dealable {
     
     func dealCardToSelf() {
         let card = getCard()
-        //let card = Card(value: .six, suit: .clubs) // SOFT 17 TEST
+        //let card = Card(value: .ten, suit: .clubs) // SOFT 17 TEST
         if self.activatedHand!.cards.count == 0 {
             card.isFaceDown = true
             //card.value = .ace
@@ -51,14 +51,13 @@ class Dealer: Dealable {
         }
     }
     
-    //let values: [CardValue] = [.ace, .ten, .five]
+    //let values: [CardValue] = [.ten, .five]//, .five]
     //var i = 0
     func deal(to player: Player) {
         player.hands.forEach {
             let card = getCard()
-            //let card = Card(value: .two, suit: .diamonds)
-            //let card = Card(value: values[i], suit: .diamonds)
-            //i += 1
+            //let card = Card(value: .ace, suit: .diamonds)
+           //let card = Card(value: values[i], suit: .diamonds); i += 1; if i > 1 { i = 0 };
             deal(card: card, to: $0)
         }
         
@@ -140,12 +139,16 @@ class Dealer: Dealable {
             otherHand.set(state: .splitAces)
         }
         var card = getCard()
-        //var card = Card(value: .ten, suit: .diamonds)//
-        card.isSplitAce = isSplitAce
+        //var card = Card(value: .nine, suit: .diamonds)//
+        if isSplitAce {
+            card.rotateForSplitAce = true
+        }
         deal(card: card, to: newHand)
         card = getCard()
-        //card = Card(value: .ten, suit: .diamonds)
-        card.isSplitAce = isSplitAce
+        //card = Card(value: .ace, suit: .diamonds)
+        if isSplitAce {
+            card.rotateForSplitAce = true
+        }
         deal(card: card, to: otherHand)
     }
     

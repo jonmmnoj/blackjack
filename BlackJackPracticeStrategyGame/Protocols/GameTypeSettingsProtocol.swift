@@ -13,6 +13,7 @@ protocol GameTypeSettings {
     var title: String { get set }
     func registerCustomViews(for tableView: UITableView)
     func forcedSettings()
+        //func selectedSettingOption()
     
 }
 

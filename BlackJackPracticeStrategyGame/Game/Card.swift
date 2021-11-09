@@ -14,15 +14,12 @@ class Card {
         return (self.height * 0.708).rounded() //0.708
     }
     var rotateAnimation: Bool {
-        return isDouble || isSplitAce
+        return isDouble || rotateForSplitAce
     }
-    var isSplitAce: Bool = false {
-        didSet {
-            if isSplitAce {
-                
-            }
-        }
-    }
+    var hasAdjustedForRotatedMoveLeft = false
+    var hasAdjustedForRotatedMoveRight = false
+    var rotateForSplitAce: Bool = false
+    var wasTransformed: Bool = false
     var hand: Hand?
     var value: CardValue
     var suit: CardSuit
@@ -72,6 +69,8 @@ class Card {
     
     func createViews() {
         let view = UIView()
+        //view.layer.borderColor = UIColor.red.cgColor
+        //view.layer.borderWidth = 2
         //view.backgroundColor = .black
         
         let back = UIImageView()
@@ -91,7 +90,7 @@ class Card {
     }
     
     func imageName() -> String {
-        return String("\(self.value.rawValue)\(self.suit.letter)")
+        return String("\(self.value.stringValue)\(self.suit.letter)")
     }
 }
 

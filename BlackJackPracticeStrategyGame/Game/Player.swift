@@ -63,7 +63,7 @@ class Player: Dealable {
     func searchForIncompleteHand() {
         for i in (0..<self.hands.count).reversed() {
             let hand = hands[i]
-            if hand.state == .incomplete {
+            if hand.state == .incomplete || hand.state == .splitAces { //|| (hand.state == .splitAces && hand.cards[0].value == .ace && hand.cards[1].value == .ace)  { 
                 self.activatedHand = hand
                 return
             }

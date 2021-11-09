@@ -9,17 +9,10 @@ import UIKit
 import QuickTableViewController
 
 class SettingsViewController: QuickTableViewController {
-    var gameType: GameType! {
-        didSet {
-            
-        }
-    }
-    //@IBOutlet var navigationBar: UINavigationBar!
+    var gameType: GameType!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        
     }
 
     override func viewDidLoad() {
@@ -28,10 +21,8 @@ class SettingsViewController: QuickTableViewController {
         let gts = getSettingsHelper(for: self)
         gts.forcedSettings()
         gts.registerCustomViews(for: tableView)
-        //navigationController?.navigationBar.topItem?.title = gts.title
-        //navigationController?.title = gts.title
         self.navigationItem.title = gts.title
-        navigationController?.navigationBar.prefersLargeTitles = true
+        //navigationController?.navigationBar.prefersLargeTitles = true
         tableContents = gts.tableSettings
         
         tableView.snp.makeConstraints { make in

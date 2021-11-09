@@ -55,6 +55,24 @@ enum CardValue: Int, CaseIterable {
         case .king: return 10
         }
     }
+    
+    var stringValue: String {
+        switch self {
+        case .ace: return "1"
+        case .two: return "2"
+        case .three: return "3"
+        case .four: return "4"
+        case .five: return "5"
+        case .six: return "6"
+        case .seven: return "7"
+        case .eight: return "8"
+        case .nine: return "9"
+        case .ten: return "10"
+        case .jack: return "J"
+        case .queen: return "Q"
+        case .king: return "K"
+        }
+    }
 }
 
 enum GameState {
@@ -203,3 +221,16 @@ enum DeviationType {
 enum Colors {
     case green
 }
+
+enum DeckFraction: String {
+    case wholes, halves, thirds, quarters
+}
+
+enum DeckRoundedTo: String {
+    case whole, half
+}
+
+enum NumberOfDecks: Int {
+    case two = 2, four = 4, six = 6, eight = 8
+}
+

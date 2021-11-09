@@ -17,7 +17,7 @@ class CardCounter {
     func reset() {
         runningCount = 0
         numberOfCardsPlayed = 0
-        print("Card Counter reset")
+        //print("Card Counter reset")
     }
     
     func getNumberOfDiscardedDecks() -> Float {
@@ -73,24 +73,25 @@ class CardCounter {
         if deviationTrueCount == nil {
             apply = true
         } else {
-            if deviationTrueCount! == 0 { // Use the RUNNING count when 0
+            if deviationTrueCount! != 0 {
                 if direction == "+" {
-                    if self.runningCount > 0 {
+                    if getTrueCount() >= deviationTrueCount! {
                         apply = true
                     }
-                } else {
-                    if self.runningCount < 0 {
+                } else if direction == "-" {
+                    if getTrueCount() <= deviationTrueCount! {
                         apply = true
                     }
-                }
-            }
-            if direction == "+" {
-                if self.getTrueCount() >= deviationTrueCount! {
-                    apply = true
                 }
             } else {
-                if self.getTrueCount() <= deviationTrueCount! {
-                    apply = true
+                if direction == "+" {
+                    if runningCount > 0 {
+                        apply = true
+                    }
+                } else if direction == "-" {
+                    if runningCount < 0 {
+                        apply = true
+                    }
                 }
             }
         }

@@ -26,6 +26,7 @@ class DeviationsSettings: GameTypeSettings {
     var softCell: UITableViewCell!
     var hardCell: UITableViewCell!
     var dealerHitsCell: UITableViewCell!
+    var quickFeedbackCell: UITableViewCell!
     
     var tableSettings: [Section] {
         return [
@@ -113,6 +114,27 @@ class DeviationsSettings: GameTypeSettings {
 //                    },
 //                    action: { _ in }),
             ]),
+            
+            Section(title: "Hand Types", rows: [
+                SwitchRow(text: "Pairs", switchValue: settings.splitHands,
+                          customization: { cell, row in
+                            self.splitCell = cell
+                          },
+                          action: { _ in
+                            self.settings.splitHands = !self.settings.splitHands
+                            print("split: \(self.settings.splitHands)")
+                          }),
+                SwitchRow(text: "Soft Totals", switchValue: settings.softHands, customization: {cell,row in
+                    self.softCell = cell
+                }, action: { _ in
+                    self.settings.softHands = !self.settings.softHands
+                }),
+                SwitchRow(text: "Hard Totals", switchValue: settings.hardHands, customization: {cell,row in
+                    self.hardCell = cell
+                }, action: { _ in
+                    self.settings.hardHands = !self.settings.hardHands
+                })
+            ]),
 
             Section(title: "Number of Cards", rows: [
                 SwitchRow(text: "2 card hands",  switchValue: settings.twoCardHands, customization: {cell,row in
@@ -135,25 +157,12 @@ class DeviationsSettings: GameTypeSettings {
                     self.settings.fourCardHands = !self.settings.fourCardHands
                 })
             ]),
-        
-            Section(title: "Hand Types", rows: [
-                SwitchRow(text: "Pairs", switchValue: settings.splitHands,
-                          customization: { cell, row in
-                            self.splitCell = cell
-                          },
-                          action: { _ in
-                            self.settings.splitHands = !self.settings.splitHands
-                            print("split: \(self.settings.splitHands)")
-                          }),
-                SwitchRow(text: "Soft Totals", switchValue: settings.softHands, customization: {cell,row in
-                    self.softCell = cell
+            
+            Section(title: "Miscellaneous", rows: [
+                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
+                    self.quickFeedbackCell = cell
                 }, action: { _ in
-                    self.settings.softHands = !self.settings.softHands
-                }),
-                SwitchRow(text: "Hard Totals", switchValue: settings.hardHands, customization: {cell,row in
-                    self.hardCell = cell
-                }, action: { _ in
-                    self.settings.hardHands = !self.settings.hardHands
+                    self.settings.quickFeedback = !self.settings.quickFeedback
                 })
             ]),
         
@@ -202,6 +211,9 @@ class DeviationsSettings: GameTypeSettings {
                         // This is called after change to split hand, because this control's action handler affects split control
                         (self.twoHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.twoHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        
+                        (self.quickFeedbackCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.quickFeedback, animated: true)
+                        (self.quickFeedbackCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                     })
             ]),
         ]

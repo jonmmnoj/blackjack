@@ -140,15 +140,10 @@ extension GameMaster {
     func playerDoubles() {
         let player = self.players.first!
         let hand = player.activatedHand!
-        Settings.shared.bankRollAmount -= Double(hand.betAmount)
+        //Settings.shared.bankRollAmount -= Double(hand.betAmount)
+        Bankroll.shared.add(-Double(hand.betAmount))
         hand.betAmount += hand.betAmount
     
-        // NOTE:  Should this condition logic go in the GameTypeProtocol class, eg. FreePlayGameType class??
-        if hand.cards.count > 2 {
-            print("alert: > 2 cards")
-            waitForPlayerInput()
-            return
-        }
         if hand.isSplitHand && !Settings.shared.doubleAfterSplit {
             print("alert: no DAS")
             waitForPlayerInput()
@@ -160,10 +155,11 @@ extension GameMaster {
     }
     
     var canDouble: Bool {
-        return !(player.activatedHand!.cards.count > 2)
+        return !(player.activatedHand!.cards.count > 2) && !player.activatedHand!.isSplitAce
+        //return true
     }
     var canSurrender: Bool {
-        return !(player.activatedHand!.cards.count > 2)
+        return !(player.activatedHand!.cards.count > 2) && !player.activatedHand!.isSplitHand
     }
     var canSplit: Bool {
         //let hand = player.activatedHand!
@@ -248,11 +244,7 @@ extension GameMaster {
                 }
             }
         case .dealtSplit:
-            if player.activatedHand!.state == .splitAces {
-                revealFaceDownCard()
-            } else {
-                moveCards(to: .right)
-            }
+            moveCards(to: .right)
         case .movedAllCards:
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
                 player.activatedHand!.set(state: .blackjack)
@@ -261,9 +253,7 @@ extension GameMaster {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.discard(hand: self.player.activatedHand!)
                 }
-                //}
                 
-             
             } else {
                 playerHasMoreHandsOrDealersTurn()
             }
@@ -410,6 +400,8 @@ extension GameMaster {
     }
     
     private func playerHasMoreHandsOrDealersTurn() {
+        // you are at the rightmost hand that is incomplete when this is called?
+        
         player.searchForIncompleteHand()
        
         if (player.activatedHand == nil) {
@@ -426,6 +418,19 @@ extension GameMaster {
                     self.handleWon(for: self.player.activatedHand!)
                     self.discard(hand: self.player.activatedHand!)
                 }
+            }
+        } else if player.activatedHand!.isSplitAce /* this is a split ace hand to the left of another split ace hand */{
+            let hand = player.activatedHand!
+            if !hand.isAces() {
+                hand.set(state: .stand)
+                if !hand.isFirstHand {
+                    moveCards(to: .left)
+                } else {
+                    self.delegate.playerInput(enabled: false)
+                    revealFaceDownCard()
+                }
+            } else {
+                waitForPlayerInput()
             }
         } else {
             waitForPlayerInput()
@@ -502,7 +507,8 @@ extension GameMaster {
         if hand.state == .blackjack {
             finalAmount += betAmount * 0.5
         }
-        Settings.shared.bankRollAmount += finalAmount
+        //Settings.shared.bankRollAmount += finalAmount
+        Bankroll.shared.add(finalAmount)
         
         var message = ""
         if result == .won {
@@ -538,7 +544,8 @@ extension GameMaster {
     func returnBetsToPlayer() {
         for hand in player.hands {
             if hand.result == nil {
-                Settings.shared.bankRollAmount += Double(hand.betAmount)
+                //Settings.shared.bankRollAmount += Double(hand.betAmount)
+                Bankroll.shared.add(Double(hand.betAmount))
             }
         }
     }

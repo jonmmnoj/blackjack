@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
         button.backgroundColor = .clear
         button.tintColor = .white
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 1000, weight: .bold, scale: .large)
-        let image = UIImage(systemName: "arrow.backward", withConfiguration: imageConfig) //chevron.backward.circle.fill,arrow.backward.circle.fill,arrowshape.turn.up.backward.circle.fill
+        let image = UIImage(systemName: "arrow.backward", withConfiguration: imageConfig) //chevron.backward.circle.fill, arrow.backward.circle.fill, arrowshape.turn.up.backward.circle.fill
         button.setImage(image , for: .normal)
         
         return button
@@ -102,29 +102,86 @@ class GameViewController: UIViewController {
         gameMaster = GameMaster(gameType: gameType, table: self.view)
         gameMaster.delegate = self
         gameMaster.startGame()
+        
+        // hit
+        let hitGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleHitGesture(_:)))
+        self.view.addGestureRecognizer(hitGesture)
+        
+        // stand
+        let standGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.handleRightSwipe(_:)))
+        standGesture.direction = .right
+        self.view.addGestureRecognizer(standGesture)
+        
+        // surrender
+        let surrenderGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.handleUpSwipe(_:)))
+        surrenderGesture.direction = .up
+        self.view.addGestureRecognizer(standGesture)
+        
+        // double
+        let doubleGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleDoubleGesture(_:)))
+        doubleGesture.numberOfTouchesRequired = 2
+        self.view.addGestureRecognizer(doubleGesture)
+        
+        // split
+        let splitGesture = UIPinchGestureRecognizer(target: self, action: #selector(self.handlePinchGesture(_:)))
+        self.view.addGestureRecognizer(splitGesture)
+    }
+                                                        
+    @objc func handlePinchGesture(_ sender: UIPinchGestureRecognizer) {
+        guard splitButton.isEnabled else { return }
+        
+        if sender.state == .ended {
+            if sender.scale > 1.5 {
+                splitButton.sendActions(for: .touchUpInside)
+            }
+        }
     }
     
-    @objc func hitButtonAction(_ sender:UIButton!) {
+    @objc func handleHitGesture(_ sender: UITapGestureRecognizer) {
+        guard hitButton.isEnabled else { return }
+        hitButton.sendActions(for: .touchUpInside)
+    }
+    
+    @objc func handleRightSwipe(_ sender : UISwipeGestureRecognizer) {
+        guard standButton.isEnabled else { return }
+        if sender.state == .ended {
+            standButton.sendActions(for: .touchUpInside)
+        }
+    }
+    
+    @objc func handleUpSwipe(_ sender : UISwipeGestureRecognizer) {
+        guard surrenderButton.isEnabled else { return }
+        if sender.state == .ended {
+            surrenderButton.sendActions(for: .touchUpInside)
+        }
+    }
+    
+    @objc func handleDoubleGesture(_ sender : UISwipeGestureRecognizer) {
+        guard doubleButton.isEnabled else { return }
+        doubleButton.sendActions(for: .touchUpInside)
+    }
+    
+    @objc func hitButtonAction(_ sender: UIButton!) {
         gameMaster.inputReceived(type: .hit)
     }
     
-    @objc func standButtonAction(_ sender:UIButton!) {
+    @objc func standButtonAction(_ sender: UIButton!) {
         gameMaster.inputReceived(type: .stand)
     }
     
-    @objc func splitButtonAction(_ sender:UIButton!) {
+    @objc func splitButtonAction(_ sender: UIButton!) {
         gameMaster.inputReceived(type: .split)
     }
     
-    @objc func doubleButtonAction(_ sender:UIButton!) {
+    @objc func doubleButtonAction(_ sender: UIButton!) {
         gameMaster.inputReceived(type: .double)
     }
     
-    @objc func surrenderButtonAction(_ sender:UIButton!) {
+    @objc func surrenderButtonAction(_ sender: UIButton!) {
         gameMaster.inputReceived(type: .surrender)
     }
     
-    @objc func homeButtonAction(_ sender:UIButton!) {
+    @objc func homeButtonAction(_ sender: UIButton!) {
         // block the CardCounter from counting any cards that are on animation delay?
         gameMaster.returnBetsToPlayer()
         dismiss(animated: true, completion: nil)
@@ -205,6 +262,7 @@ extension GameViewController: GameViewDelegate {
     
     func showToast(message: String) {
         if gameType == .runningCount  { return }
+        Toast.show(message: message, controller: self)
         Toast.show(message: message, controller: self)
     }
     

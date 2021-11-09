@@ -16,7 +16,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
-        self.decks = StrategyGameDecks.getDecks() // need decks for devation hands only
+        self.decks = StrategyGameDeck.getDecks() // need decks for devation hands only
         for deck in decks {
             deck.shuffle()
         }
@@ -51,20 +51,23 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     
     func waitForPlayerInput() {
         let inputView = DeviationInputView(frame: .zero, deviation: self.deviation)
-            inputView.deviationSubmitHandler = { action, count, tcDirection, rcDirection in
-                
-                let inputAction = StrategyAction(rawValue: action.rawValue)!
-                let text = self.getInputText(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
-                let correctText = self.getCorrectText()
-                let isInputCorrect = self.isInputCorrect(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
-                
+        inputView.deviationSubmitHandler = { action, count, tcDirection, rcDirection in
+            
+            let inputAction = StrategyAction(rawValue: action.rawValue)!
+            let text = self.getInputText(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
+            let correctText = self.getCorrectText()
+            let isInputCorrect = self.isInputCorrect(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
+            
+            if Settings.shared.quickFeedback {
+                QuickFeedback.result(isInputCorrect, delegate: self.gameMaster.delegate)
+                self.gameMaster.discardAllHands()
+            } else {
                 self.gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: isInputCorrect, playerAction: text, correctAction: correctText) {
                     self.gameMaster.discardAllHands()
                 }
-                
-                inputView.removeFromSuperview()
-                //self.gameMaster.discardAllHands()
             }
+            inputView.removeFromSuperview()
+        }
         
         let tableView = gameMaster.tableView
         tableView.addSubview(inputView)

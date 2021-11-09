@@ -15,7 +15,7 @@ class FreePlaySettings: GameTypeSettings {
         self.vc = vc
     }
     var vc: SettingsViewController
-    var radioSection: RadioSection!
+    //var radioSection: RadioSection!
     var countSection: RadioSection!
     var settings = Settings.shared
     
@@ -29,9 +29,18 @@ class FreePlaySettings: GameTypeSettings {
     var notifyCell: UITableViewCell!
     var placeBetsCell: UITableViewCell!
     var sliderView: SliderTableViewCell!
+    var penetrationViewCell: UITableViewCell! //NavigationRow<UITableViewCell>!
     //var speedCell: UITableViewCell!
     
-
+    var navigateToOption: String?
+    
+    @objc private func methodOfReceivedNotification(notification: Notification) {
+        let string = notification.object as! String
+        penetrationViewCell.detailTextLabel?.text = string
+        let selectedValue = Penetration.convertToDouble(string: string)
+        Settings.shared.penetration = selectedValue
+    }
+    
     var tableSettings: [Section] {
         
         countSection = RadioSection(title: "Ask for true count every", options: [
@@ -42,14 +51,14 @@ class FreePlaySettings: GameTypeSettings {
         ] /*, footer: "See RadioSection for more details."*/)
         countSection.alwaysSelectsOneOption = true
         
-        radioSection = RadioSection(title: "Number of decks", options: [
-            OptionRow(text: "2", isSelected: settings.numberOfDecks == 2, action: didToggleSelection()),
-            OptionRow(text: "4", isSelected: settings.numberOfDecks == 4, action: didToggleSelection()),
-            OptionRow(text: "6", isSelected: settings.numberOfDecks == 6, action: didToggleSelection()),
-            OptionRow(text: "8", isSelected: settings.numberOfDecks == 8, action: didToggleSelection())
-        ] /*, footer: "See RadioSection for more details."*/)
-        
-        radioSection.alwaysSelectsOneOption = true
+//        radioSection = RadioSection(title: "Number of decks", options: [
+//            OptionRow(text: "2", isSelected: settings.numberOfDecks == 2, action: didToggleSelection()),
+//            OptionRow(text: "4", isSelected: settings.numberOfDecks == 4, action: didToggleSelection()),
+//            OptionRow(text: "6", isSelected: settings.numberOfDecks == 6, action: didToggleSelection()),
+//            OptionRow(text: "8", isSelected: settings.numberOfDecks == 8, action: didToggleSelection())
+//        ] /*, footer: "See RadioSection for more details."*/)
+//
+//        radioSection.alwaysSelectsOneOption = true
         
         return [
             Section(title: "", rows: [
@@ -75,10 +84,18 @@ class FreePlaySettings: GameTypeSettings {
             ]),
             
             Section(title: "Rules", rows: [
+                
+                NavigationRow(text: "Penetration", detailText: .value1("0%"), customization: { cell, row in
+                        self.penetrationViewCell = cell
+                        self.penetrationViewCell.detailTextLabel?.text = Penetration.getStringValue(for: Settings.shared.penetration)
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.methodOfReceivedNotification(notification:)), name: Notification.Name("NotificationIdentifier"), object: nil)
+                    },
+                    action: showViewPenetrationOptions()),
+                
                 SwitchRow(
                     text: "Dealer Hits Soft 17",
                     switchValue: settings.dealerHitsSoft17,
-                      customization: { cell, row in
+                    customization: { cell, row in
                         self.dealerHitsCell = cell
                         (self.dealerHitsCell.accessoryView as! UISwitch).setOn(self.settings.dealerHitsSoft17, animated: false)
                       },
@@ -181,7 +198,7 @@ class FreePlaySettings: GameTypeSettings {
             
             countSection,
             
-            radioSection,
+            //radioSection,
             
             Section(title: "Deal speed", rows: [
                 TapActionRow<SliderTableViewCell>(
@@ -267,13 +284,12 @@ class FreePlaySettings: GameTypeSettings {
                             self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
                             self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
                         }
-                        //Settings.shared.numberOfRoundsBeforeAskCount = Settings.shared.defaults.numberOfRounds
                         
-                        if Settings.shared.numberOfDecks != Settings.shared.defaults.numberOfDecks {
-                            let indexPath = IndexPath(row: 2, section: 4)
-                            self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-                            self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
-                        }
+//                        if Settings.shared.numberOfDecks != Settings.shared.defaults.numberOfDecks {
+//                            let indexPath = IndexPath(row: 2, section: 4)
+//                            self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+//                            self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
+//                        }
                         
                     })
             ]),
@@ -285,15 +301,15 @@ class FreePlaySettings: GameTypeSettings {
         tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
     }
     
-    private func didToggleSelection() -> (Row) -> Void {
-      return { row in
-        if let option = row as? OptionRowCompatible {
-            if option.isSelected {
-                Settings.shared.numberOfDecks = Int(row.text) ?? Settings.shared.defaults.numberOfDecks
-            }
-        }
-      }
-    }
+//    private func didToggleSelection() -> (Row) -> Void {
+//      return { row in
+//        if let option = row as? OptionRowCompatible {
+//            if option.isSelected {
+//                Settings.shared.numberOfDecks = Int(row.text) ?? Settings.shared.defaults.numberOfDecks
+//            }
+//        }
+//      }
+//    }
     
     private func didToggleCountSelection() -> (Row) -> Void {
       return { row in
@@ -305,8 +321,19 @@ class FreePlaySettings: GameTypeSettings {
       }
     }
     
-    func forcedSettings() {
-        
+    private func showViewPenetrationOptions() -> (Row) -> Void {
+        return { [weak self] in
+            let vc = SettingsListTableViewController()
+            
+            let penValues = Penetration.penetrationValues
+            var data = [String]()
+            for value in penValues {
+                data.append(Penetration.getStringValue(for: value))
+            }
+            vc.data = data
+            vc.title = $0.text //+ ($0.detailText?.text ?? "")
+            self?.vc.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 

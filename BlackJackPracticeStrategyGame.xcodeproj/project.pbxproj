@@ -26,7 +26,6 @@
 		FC610E9126A8FC0D0089C7C9 /* FreePlayGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9026A8FC0D0089C7C9 /* FreePlayGameType.swift */; };
 		FC610E9326A8FC4D0089C7C9 /* RunningCountGameType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */; };
 		FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */; };
-		FC610E9B26AF3D0C0089C7C9 /* StrategyDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9A26AF3D0C0089C7C9 /* StrategyDeck.swift */; };
 		FC610E9D26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9C26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift */; };
 		FC610E9F26AF71840089C7C9 /* BasicStrategySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610E9E26AF71840089C7C9 /* BasicStrategySettings.swift */; };
 		FC610EA226AF8BDA0089C7C9 /* SliderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EA026AF8BDA0089C7C9 /* SliderTableViewCell.swift */; };
@@ -34,7 +33,6 @@
 		FC610EA526AF9D440089C7C9 /* RunningCountSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EA426AF9D440089C7C9 /* RunningCountSettings.swift */; };
 		FC610EA826B0B9AC0089C7C9 /* FreePlaySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EA726B0B9AC0089C7C9 /* FreePlaySettings.swift */; };
 		FC610EAD26B4A8880089C7C9 /* DiscardTrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EAC26B4A8880089C7C9 /* DiscardTrayView.swift */; };
-		FC610EB126B61D350089C7C9 /* StrategyGameDecks+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EB026B61D340089C7C9 /* StrategyGameDecks+Extension.swift */; };
 		FC610EB526B8336C0089C7C9 /* DeviationInputView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC610EB426B8336C0089C7C9 /* DeviationInputView.xib */; };
 		FC610EB726B837340089C7C9 /* DeviationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EB626B837340089C7C9 /* DeviationInputView.swift */; };
 		FC610EBA26B840000089C7C9 /* DeviationGameTypeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC610EB926B840000089C7C9 /* DeviationGameTypeHelper.swift */; };
@@ -79,12 +77,23 @@
 		FC92B51B26A5CEA10082DA32 /* StrategyRound.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B51A26A5CEA10082DA32 /* StrategyRound.swift */; };
 		FC92B51D26A61ABF0082DA32 /* Rule.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B51C26A61ABF0082DA32 /* Rule.swift */; };
 		FC92B51F26A61AD40082DA32 /* Deviation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B51E26A61AD40082DA32 /* Deviation.swift */; };
-		FC92B52126A61B120082DA32 /* StrategyGameDecks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */; };
 		FC92B52326A733F40082DA32 /* BasicStrategy+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52226A733F40082DA32 /* BasicStrategy+Extension.swift */; };
 		FC92B52526A85AE00082DA32 /* GameTypeStrategyPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC92B52426A85AE00082DA32 /* GameTypeStrategyPattern.swift */; };
+		FC9CAF83273AF19200A94641 /* Penetration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9CAF82273AF19200A94641 /* Penetration.swift */; };
 		FCA4102726CF284F005E2177 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102626CF284F005E2177 /* UITextField+Extension.swift */; };
 		FCA4102A26D2B678005E2177 /* DeckRoundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102926D2B678005E2177 /* DeckRoundingView.swift */; };
 		FCA4102E26D2C508005E2177 /* DeckRoundingGameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */; };
+		FCA92EA227373FDC00D69FB3 /* Bankroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EA127373FDC00D69FB3 /* Bankroll.swift */; };
+		FCA92EA427373FE500D69FB3 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EA327373FE500D69FB3 /* Session.swift */; };
+		FCA92EA627383F0A00D69FB3 /* QuickFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EA527383F0A00D69FB3 /* QuickFeedback.swift */; };
+		FCA92EA9273840C900D69FB3 /* 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EA8273840C900D69FB3 /* 2.swift */; };
+		FCA92EAB273840D500D69FB3 /* 3.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EAA273840D500D69FB3 /* 3.swift */; };
+		FCA92EAD273840DC00D69FB3 /* 4.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EAC273840DC00D69FB3 /* 4.swift */; };
+		FCA92EB22738438E00D69FB3 /* StrategyDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EB12738438E00D69FB3 /* StrategyDeck.swift */; };
+		FCA92EB5273843EE00D69FB3 /* StrategyGameDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EB4273843EE00D69FB3 /* StrategyGameDeck.swift */; };
+		FCA92EB72739951B00D69FB3 /* MainMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EB62739951B00D69FB3 /* MainMenuContent.swift */; };
+		FCA92EB927399A9600D69FB3 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EB827399A9600D69FB3 /* UIImage+Extension.swift */; };
+		FCA92EBC273ADD6200D69FB3 /* SettingsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,7 +118,6 @@
 		FC610E9026A8FC0D0089C7C9 /* FreePlayGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreePlayGameType.swift; sourceTree = "<group>"; };
 		FC610E9226A8FC4D0089C7C9 /* RunningCountGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCountGameType.swift; sourceTree = "<group>"; };
 		FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		FC610E9A26AF3D0C0089C7C9 /* StrategyDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyDeck.swift; sourceTree = "<group>"; };
 		FC610E9C26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTypeSettingsProtocol.swift; sourceTree = "<group>"; };
 		FC610E9E26AF71840089C7C9 /* BasicStrategySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategySettings.swift; sourceTree = "<group>"; };
 		FC610EA026AF8BDA0089C7C9 /* SliderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderTableViewCell.swift; sourceTree = "<group>"; };
@@ -117,7 +125,6 @@
 		FC610EA426AF9D440089C7C9 /* RunningCountSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCountSettings.swift; sourceTree = "<group>"; };
 		FC610EA726B0B9AC0089C7C9 /* FreePlaySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreePlaySettings.swift; sourceTree = "<group>"; };
 		FC610EAC26B4A8880089C7C9 /* DiscardTrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscardTrayView.swift; sourceTree = "<group>"; };
-		FC610EB026B61D340089C7C9 /* StrategyGameDecks+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StrategyGameDecks+Extension.swift"; sourceTree = "<group>"; };
 		FC610EB426B8336C0089C7C9 /* DeviationInputView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DeviationInputView.xib; sourceTree = "<group>"; };
 		FC610EB626B837340089C7C9 /* DeviationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationInputView.swift; sourceTree = "<group>"; };
 		FC610EB926B840000089C7C9 /* DeviationGameTypeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationGameTypeHelper.swift; sourceTree = "<group>"; };
@@ -166,12 +173,23 @@
 		FC92B51A26A5CEA10082DA32 /* StrategyRound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyRound.swift; sourceTree = "<group>"; };
 		FC92B51C26A61ABF0082DA32 /* Rule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rule.swift; sourceTree = "<group>"; };
 		FC92B51E26A61AD40082DA32 /* Deviation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deviation.swift; sourceTree = "<group>"; };
-		FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyGameDecks.swift; sourceTree = "<group>"; };
 		FC92B52226A733F40082DA32 /* BasicStrategy+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BasicStrategy+Extension.swift"; sourceTree = "<group>"; };
 		FC92B52426A85AE00082DA32 /* GameTypeStrategyPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTypeStrategyPattern.swift; sourceTree = "<group>"; };
+		FC9CAF82273AF19200A94641 /* Penetration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Penetration.swift; sourceTree = "<group>"; };
 		FCA4102626CF284F005E2177 /* UITextField+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		FCA4102926D2B678005E2177 /* DeckRoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingView.swift; sourceTree = "<group>"; };
 		FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingGameHelper.swift; sourceTree = "<group>"; };
+		FCA92EA127373FDC00D69FB3 /* Bankroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bankroll.swift; sourceTree = "<group>"; };
+		FCA92EA327373FE500D69FB3 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		FCA92EA527383F0A00D69FB3 /* QuickFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickFeedback.swift; sourceTree = "<group>"; };
+		FCA92EA8273840C900D69FB3 /* 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 2.swift; sourceTree = "<group>"; };
+		FCA92EAA273840D500D69FB3 /* 3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 3.swift; sourceTree = "<group>"; };
+		FCA92EAC273840DC00D69FB3 /* 4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 4.swift; sourceTree = "<group>"; };
+		FCA92EB12738438E00D69FB3 /* StrategyDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyDeck.swift; sourceTree = "<group>"; };
+		FCA92EB4273843EE00D69FB3 /* StrategyGameDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyGameDeck.swift; sourceTree = "<group>"; };
+		FCA92EB62739951B00D69FB3 /* MainMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuContent.swift; sourceTree = "<group>"; };
+		FCA92EB827399A9600D69FB3 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,11 +228,9 @@
 		FC03265A269BECC4002B13D0 /* BasicStrategy */ = {
 			isa = PBXGroup;
 			children = (
+				FCA92EA7273840A900D69FB3 /* Decks */,
 				FC03265B269BECDE002B13D0 /* BasicStrategy.swift */,
 				FC92B51A26A5CEA10082DA32 /* StrategyRound.swift */,
-				FC92B52026A61B120082DA32 /* StrategyGameDecks.swift */,
-				FC610EB026B61D340089C7C9 /* StrategyGameDecks+Extension.swift */,
-				FC610E9A26AF3D0C0089C7C9 /* StrategyDeck.swift */,
 				FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */,
 			);
 			path = BasicStrategy;
@@ -264,16 +280,18 @@
 		FC610EAB26B4A8190089C7C9 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				FC610EB626B837340089C7C9 /* DeviationInputView.swift */,
-				FC610EB426B8336C0089C7C9 /* DeviationInputView.xib */,
 				FC610EA026AF8BDA0089C7C9 /* SliderTableViewCell.swift */,
 				FC610EA126AF8BDA0089C7C9 /* SliderTableViewCell.xib */,
-				FC610EAC26B4A8880089C7C9 /* DiscardTrayView.swift */,
-				FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */,
-				FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */,
-				FC24C98927094452008A0993 /* Toast.swift */,
+				FC610EB626B837340089C7C9 /* DeviationInputView.swift */,
+				FC610EB426B8336C0089C7C9 /* DeviationInputView.xib */,
 				FC3E400527247AFF005BD61E /* PlaceBetView.swift */,
 				FC3E400727247B16005BD61E /* PlaceBetView.xib */,
+				FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */,
+				FC610EAC26B4A8880089C7C9 /* DiscardTrayView.swift */,
+				FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */,
+				FC24C98927094452008A0993 /* Toast.swift */,
+				FCA92EA527383F0A00D69FB3 /* QuickFeedback.swift */,
+				FCA92EBA27399B8800D69FB3 /* ViewData */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -294,6 +312,7 @@
 				FC92B51C26A61ABF0082DA32 /* Rule.swift */,
 				FC92B51E26A61AD40082DA32 /* Deviation.swift */,
 				FC3E40092729B78E005BD61E /* Insurance.swift */,
+				FC9CAF82273AF19200A94641 /* Penetration.swift */,
 			);
 			path = Rules;
 			sourceTree = "<group>";
@@ -406,6 +425,7 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
+				FCA92EA027373FCE00D69FB3 /* Stats */,
 				FCA4102526CF2835005E2177 /* Extension */,
 				FC610EBF26B8BA050089C7C9 /* Rules */,
 				FC610EAB26B4A8190089C7C9 /* CustomViews */,
@@ -466,7 +486,7 @@
 		FC79378F2694D4410000ACB7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */,
+				FC9CAF84273AF6C200A94641 /* Settings */,
 				FC79376E2694D2E90000ACB7 /* GameViewController.swift */,
 				FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */,
 				FC610F2226C608530089C7C9 /* MainMenuViewController.swift */,
@@ -484,10 +504,20 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		FC9CAF84273AF6C200A94641 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */,
+				FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		FCA4102526CF2835005E2177 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
 				FCA4102626CF284F005E2177 /* UITextField+Extension.swift */,
+				FCA92EB827399A9600D69FB3 /* UIImage+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -499,6 +529,43 @@
 				FCA4102D26D2C508005E2177 /* DeckRoundingGameHelper.swift */,
 			);
 			path = DeckRounding;
+			sourceTree = "<group>";
+		};
+		FCA92EA027373FCE00D69FB3 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				FCA92EA127373FDC00D69FB3 /* Bankroll.swift */,
+				FCA92EA327373FE500D69FB3 /* Session.swift */,
+			);
+			path = Stats;
+			sourceTree = "<group>";
+		};
+		FCA92EA7273840A900D69FB3 /* Decks */ = {
+			isa = PBXGroup;
+			children = (
+				FCA92EAE273842BB00D69FB3 /* PrimitiveData */,
+				FCA92EB12738438E00D69FB3 /* StrategyDeck.swift */,
+				FCA92EB4273843EE00D69FB3 /* StrategyGameDeck.swift */,
+			);
+			path = Decks;
+			sourceTree = "<group>";
+		};
+		FCA92EAE273842BB00D69FB3 /* PrimitiveData */ = {
+			isa = PBXGroup;
+			children = (
+				FCA92EA8273840C900D69FB3 /* 2.swift */,
+				FCA92EAA273840D500D69FB3 /* 3.swift */,
+				FCA92EAC273840DC00D69FB3 /* 4.swift */,
+			);
+			path = PrimitiveData;
+			sourceTree = "<group>";
+		};
+		FCA92EBA27399B8800D69FB3 /* ViewData */ = {
+			isa = PBXGroup;
+			children = (
+				FCA92EB62739951B00D69FB3 /* MainMenuContent.swift */,
+			);
+			path = ViewData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -630,8 +697,8 @@
 				FC79378B2694D4070000ACB7 /* Deck.swift in Sources */,
 				FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */,
 				FC610F1C26C2E3A50089C7C9 /* TrueCountView.swift in Sources */,
-				FC610E9B26AF3D0C0089C7C9 /* StrategyDeck.swift in Sources */,
 				FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */,
+				FCA92EB5273843EE00D69FB3 /* StrategyGameDeck.swift in Sources */,
 				FCA4102726CF284F005E2177 /* UITextField+Extension.swift in Sources */,
 				FC610F2126C5F6CC0089C7C9 /* TrueCountGameHelper.swift in Sources */,
 				FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */,
@@ -647,18 +714,21 @@
 				FC7937922694D6780000ACB7 /* Dealable.swift in Sources */,
 				FCA4102E26D2C508005E2177 /* DeckRoundingGameHelper.swift in Sources */,
 				FC610EFF26BC55230089C7C9 /* RowCellObserver.swift in Sources */,
+				FCA92EA9273840C900D69FB3 /* 2.swift in Sources */,
+				FCA92EB22738438E00D69FB3 /* StrategyDeck.swift in Sources */,
 				FC7937862694D31B0000ACB7 /* GameMaster.swift in Sources */,
 				FC610F1E26C3727B0089C7C9 /* TrueCountSettings.swift in Sources */,
 				FC4E9DB426E1B7A300CAC0A0 /* Shoe.swift in Sources */,
+				FC9CAF83273AF19200A94641 /* Penetration.swift in Sources */,
 				FC610F2326C608530089C7C9 /* MainMenuViewController.swift in Sources */,
 				FC0D49EA26C9DDB200F6556E /* MenuTableViewCell.swift in Sources */,
 				FC7937842694D31B0000ACB7 /* Hand.swift in Sources */,
 				FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */,
 				FC610EAD26B4A8880089C7C9 /* DiscardTrayView.swift in Sources */,
 				FC610F0126BC55230089C7C9 /* PrettyDelegate.swift in Sources */,
+				FCA92EB927399A9600D69FB3 /* UIImage+Extension.swift in Sources */,
 				FC610F0026BC55230089C7C9 /* ChartProtocol.swift in Sources */,
 				FC610F0A26BC55230089C7C9 /* TabBarController.swift in Sources */,
-				FC92B52126A61B120082DA32 /* StrategyGameDecks.swift in Sources */,
 				FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */,
 				FC610F0726BC55230089C7C9 /* PrettyDataSource.swift in Sources */,
 				FC610F0526BC55230089C7C9 /* Charts.swift in Sources */,
@@ -667,23 +737,28 @@
 				FC610E9326A8FC4D0089C7C9 /* RunningCountGameType.swift in Sources */,
 				FC610F0326BC55230089C7C9 /* FillinChart.swift in Sources */,
 				FC7937942694DFF50000ACB7 /* Table.swift in Sources */,
-				FC610EB126B61D350089C7C9 /* StrategyGameDecks+Extension.swift in Sources */,
 				FC79376B2694D2E90000ACB7 /* AppDelegate.swift in Sources */,
 				FC4E6220269E808500D1AF93 /* Settings.swift in Sources */,
 				FC610EA526AF9D440089C7C9 /* RunningCountSettings.swift in Sources */,
+				FCA92EAB273840D500D69FB3 /* 3.swift in Sources */,
 				FC7937852694D31B0000ACB7 /* Player.swift in Sources */,
 				FC79378D2694D4240000ACB7 /* Card.swift in Sources */,
+				FCA92EA227373FDC00D69FB3 /* Bankroll.swift in Sources */,
 				FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */,
 				FCA4102A26D2B678005E2177 /* DeckRoundingView.swift in Sources */,
+				FCA92EB72739951B00D69FB3 /* MainMenuContent.swift in Sources */,
 				FC610F1726BE086F0089C7C9 /* ChartsSettings.swift in Sources */,
 				FC610EA226AF8BDA0089C7C9 /* SliderTableViewCell.swift in Sources */,
 				FC03265C269BECDE002B13D0 /* BasicStrategy.swift in Sources */,
 				FC92B52526A85AE00082DA32 /* GameTypeStrategyPattern.swift in Sources */,
+				FCA92EAD273840DC00D69FB3 /* 4.swift in Sources */,
 				FC92B51B26A5CEA10082DA32 /* StrategyRound.swift in Sources */,
+				FCA92EBC273ADD6200D69FB3 /* SettingsListTableViewController.swift in Sources */,
 				FC610EB726B837340089C7C9 /* DeviationInputView.swift in Sources */,
 				FC610E8F26A8FBEA0089C7C9 /* BasicStrategyGameType.swift in Sources */,
 				FC610E9126A8FC0D0089C7C9 /* FreePlayGameType.swift in Sources */,
 				FC3E400627247AFF005BD61E /* PlaceBetView.swift in Sources */,
+				FCA92EA627383F0A00D69FB3 /* QuickFeedback.swift in Sources */,
 				FC92B51F26A61AD40082DA32 /* Deviation.swift in Sources */,
 				FC4E622426A110AD00D1AF93 /* CountMaster.swift in Sources */,
 				FC610E9F26AF71840089C7C9 /* BasicStrategySettings.swift in Sources */,
@@ -691,6 +766,7 @@
 				FC7937892694D3DF0000ACB7 /* Enums.swift in Sources */,
 				FC4E9DB226E172EC00CAC0A0 /* DeckRoundingSettings.swift in Sources */,
 				FC79376D2694D2E90000ACB7 /* SceneDelegate.swift in Sources */,
+				FCA92EA427373FE500D69FB3 /* Session.swift in Sources */,
 				FC24C98A27094452008A0993 /* Toast.swift in Sources */,
 				FC4E622F26A21B6300D1AF93 /* FeedbackView.swift in Sources */,
 				FC3E400A2729B78E005BD61E /* Insurance.swift in Sources */,

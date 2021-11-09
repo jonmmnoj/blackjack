@@ -12,19 +12,22 @@ class MenuTableViewCell: UITableViewCell {
     @IBOutlet weak var view: UIView!
     @IBOutlet weak var customImageView: UIImageView!
     @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var detail: UILabel!
     
     override func layoutSubviews() {
         //view.backgroundColor = .systemRed
-        view.layer.cornerRadius = 10
-        customImageView.setImageColor(color: .black)
+        view.layer.cornerRadius = 12
+        customImageView.setImage(color: UIColor.black)
+        customImageView.layer.borderWidth = 2
+        customImageView.layer.borderColor = UIColor.black.withAlphaComponent(0.4).cgColor
+        customImageView.layer.cornerRadius = 10
     }
-    
 }
 
 extension UIImageView {
-  func setImageColor(color: UIColor) {
+    func setImage(color: UIColor) {
     let templateImage = self.image?.withRenderingMode(.alwaysTemplate)
     self.image = templateImage
-    self.tintColor = color
+    self.tintColor = color.withAlphaComponent(0.7)
   }
 }

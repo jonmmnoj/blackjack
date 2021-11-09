@@ -93,7 +93,12 @@ class Table {
         UIView.animate(withDuration: 0.5, delay: delay, options: [.curveLinear , .allowUserInteraction], animations: {
             card.updateFrame()
             if card.rotateAnimation {
+                
                 card.view!.setTransformRotation(toDegrees: 90)
+                card.wasTransformed = true
+                print("Card: \(card.value) \(card.suit)")
+                print("X.Y.: \(card.view?.frame.origin.x) \(card.view?.frame.origin.y)")
+                print("--- animate card rotate ---")
             }
           }, completion: { finished in
             self.animationComplete()
@@ -182,14 +187,36 @@ class Table {
                 UIView.animate(withDuration: 0.5, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
                     var newPoint = card.dealPoint!
                     newPoint.x += adjustmentX
-                    if card.rotateAnimation && direction == .left {
-                        newPoint.x += Settings.shared.cardSize * 0.15//30
-                        newPoint.y += Settings.shared.cardSize * 0.15//30
+                    if card.rotateAnimation && direction == .left && !card.hasAdjustedForRotatedMoveLeft {
+                        if card.hasAdjustedForRotatedMoveRight {
+                        } else {
+                            card.hasAdjustedForRotatedMoveLeft = true
+                            newPoint.x += Settings.shared.cardSize * 0.15//0.15
+                            newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                        }
+                    }
+                    if card.rotateAnimation && card.rotateForSplitAce && direction == .right && !card.hasAdjustedForRotatedMoveRight {
+                        card.hasAdjustedForRotatedMoveRight = true
+                        
+                        newPoint.x += Settings.shared.cardSize * 0.15//0.15
+                        newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                    }
+                    if card.rotateAnimation && card.hand!.isFirstHand && direction == .right {
+                        card.hasAdjustedForRotatedMoveRight = true
+                        newPoint.x += Settings.shared.cardSize * 0.15//0.15
+                        newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                    }
+                    if card.hand!.isFirstHand && card.rotateForSplitAce && direction == .right {
+                        newPoint.x -= Settings.shared.cardSize * 0.15//0.15
+                        newPoint.y -= Settings.shared.cardSize * 0.15//0.15
                     }
                     card.set(dealPoint: newPoint)
                     card.updateFrame()
-                }, completion: { finished in
                     
+                    //print("Card: \(card.value) \(card.suit)")
+                    //print("X.Y.: \(card.view?.frame.origin.x) \(card.view?.frame.origin.y)")
+                }, completion: { finished in
+                    //print("*** End of move cards ***")
                     // why no animation complete??
                     
                 })

@@ -21,10 +21,11 @@ class PlaceBetView: UIView {
     }()
     private var bankRollAmount: Double {
         get {
-            return Settings.shared.bankRollAmount
+            return Bankroll.shared.amount
         }
         set {
-            Settings.shared.bankRollAmount = newValue
+            //Settings.shared.bankRollAmount = newValue
+            Bankroll.shared.amount = newValue
             let currencyFormatter = NumberFormatter()
             currencyFormatter.usesGroupingSeparator = true
             currencyFormatter.numberStyle = .currency

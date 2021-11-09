@@ -35,10 +35,12 @@ class Insurance {
     
     static func betInsurance(for hand: Hand) {
         let insuredAmount = Double(hand.betAmount) * 0.5
-        Settings.shared.bankRollAmount -= insuredAmount
+        //Settings.shared.bankRollAmount -= insuredAmount
+        Bankroll.shared.add(-insuredAmount)
     }
     
     static private func payoutInsurance(for hand: Hand) {
-        Settings.shared.bankRollAmount += Double(hand.betAmount) * 0.5 * 3
+        //Settings.shared.bankRollAmount += Double(hand.betAmount) * 0.5 * 3
+        Bankroll.shared.add(Double(hand.betAmount) * 0.5 * 3)
     }
 }

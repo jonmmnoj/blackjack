@@ -10,7 +10,7 @@ import UIKit
 import QuickTableViewController
 
 class DeckRoundingSettings: GameTypeSettings {
-    var title: String = "Deck Rounding"
+    var title: String = "Deck Estimation"
     init(vc: SettingsViewController) {
         self.vc = vc
     }

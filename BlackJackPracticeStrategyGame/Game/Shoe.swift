@@ -51,7 +51,16 @@ class Shoe {
     
     func isTimeToRefillShoe() -> Bool {
         // if deck penetration... would adjust this number here
-        let value = CardCounter.shared.getNumberOfCardsLeft() < 17
-        return value
+        let numberOfDecks = Settings.shared.numberOfDecks
+        let totalNumberOfCards = numberOfDecks * 52
+        let penetrationPercent = Double(totalNumberOfCards - CardCounter.shared.getNumberOfCardsLeft()) / Double(totalNumberOfCards)
+        
+        let isTimeToShuffle = penetrationPercent > Settings.shared.penetration
+        print("percent pentration: \(penetrationPercent)% \(isTimeToShuffle)")
+        
+        let shuffleToAvoidShuffleDuringRound = CardCounter.shared.getNumberOfCardsLeft() < 17
+        //return value
+        
+        return isTimeToShuffle ? isTimeToShuffle : shuffleToAvoidShuffleDuringRound
     }
 }

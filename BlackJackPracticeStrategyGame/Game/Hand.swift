@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-
-
 class Hand {
     var betAmount: Int = 0
     var insurance: Insurance?
@@ -24,22 +22,12 @@ class Hand {
     
     var originPoint: CGPoint
     var wasSplit: Bool = false
+    var isSplitAce: Bool = false
     var isSplitHand: Bool = false
     var adjustmentX: CGFloat
     var adjustmentY: CGFloat
     var state: HandState
     var result: HandResult? = nil
-//    var canSplit: Bool {
-//        let isTwoCards = cards.count == 2
-//        let isPair = cards[0].value.rawValue == cards[1].value.rawValue
-//        if !isTwoCards || !isPair ||  wasSplit {
-//            return false
-//        } else if cards[0].value == .ace && isSplitHand && !Settings.shared.resplitAces {
-//            return false
-//        } else {
-//            return true
-//        }
-//    }
     
     init(dealToPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, owner: Dealable) {
         self.nextCardPoint = dealToPoint
@@ -63,7 +51,7 @@ class Hand {
         var newY = oldPoint.y - adjustmentY
         var newX = oldPoint.x + adjustmentX
         if isRotated {
-            newY -= adjustmentY * 1.2// /1.15 // look into better solution or save as constants? what if card size changes does that make a difference. NOTE: changed from divide by 1.15 to multiple by 0.87
+            newY -= adjustmentY * 1.2// /1.15 // look into better solution or save as constants? what if card size changes does that make a difference.  
             newX += adjustmentX * 0.6
         }
         self.nextCardPoint = CGPoint(x: newX, y: newY)
@@ -84,27 +72,25 @@ class Hand {
     func clearHand() {
         cards = []
         hasAce = false
-        //isSplitHand =
-        //resetNextCardPoint()
     }
     
     func createSplitHand() -> Hand {
         let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y), adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
         newHand.betAmount = self.betAmount
-        Settings.shared.bankRollAmount -= Double(self.betAmount)
+        //Settings.shared.bankRollAmount -= Double(self.betAmount)
+        Bankroll.shared.add(-Double(self.betAmount))
         newHand.isSplitHand = true
         self.isSplitHand = true
+        if isAces() {
+            self.isSplitAce = true
+            newHand.isSplitAce = true
+        }
         self.wasSplit = true
         let lastCard = cards.last!
         newHand.add(lastCard)
         cards.removeLast()
-        // NOTE: I thnk this condition can be removed, so commenting out for now, and just calling set(nextCardPoint:). PRobably needed this condition when developing split feature but ended up not needing this by the time feature was complete, and just overlooked this part and did not refactor.
-//        if !self.isSplitHand {
-//            //resetNextCardPoint() // so that new 2nd card is dealt to right spot on table
-//        } else {
-//            set(nextCardPoint: CGPoint(x: nextCardPoint.x - adjustmentX, y: nextCardPoint.y + adjustmentY))
-//        }
         set(nextCardPoint: CGPoint(x: nextCardPoint.x - adjustmentX, y: nextCardPoint.y + adjustmentY))
+        //resetNextCardPoint()
         owner.activatedHand = newHand
         let index = owner.index(of: self)!
         owner.hands.insert(newHand, at: index + 1)
@@ -158,5 +144,8 @@ class Hand {
         valueLabelView?.text = String(s)
     }
     
-    
+    func isAces() -> Bool {
+        guard cards.count == 2 else { return false }
+        return cards[0].value == .ace && cards[1].value == .ace
+    }
 }

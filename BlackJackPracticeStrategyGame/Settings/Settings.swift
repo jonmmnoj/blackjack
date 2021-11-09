@@ -60,7 +60,7 @@ class Settings {
 //        }
         get {
             let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSizeFactor
-            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 5.5))
+            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 6))//5.5))
             //print (adjustmentForScreenSize)
             return adjustmentForScreenSize
         }
@@ -265,6 +265,22 @@ class Settings {
             return UserDefaults.standard.object(forKey: getKey(for:"roundLastThreeDecksToHalf")) as? Bool ?? defaults.roundLastThreeDecksToHalf
         }
     }
+    var quickFeedback: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"quickFeedback"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"quickFeedback")) as? Bool ?? defaults.quickFeedback
+        }
+    }
+    var penetration: Double {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"penetration"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"penetration")) as? Double ?? defaults.penetration
+        }
+    }
     
     
     struct Defaults {
@@ -296,6 +312,9 @@ class Settings {
         var twoCardHands = true
         var threeCardHands = true
         var fourCardHands = false
+        
+        var quickFeedback = false
+        var penetration: Double = 1.0
     }
     
     private func getKey(for setting: String) -> String {
@@ -320,23 +339,10 @@ class Settings {
         let dealSpeed = self.shared.dealSpeed
         return 1.0 / dealSpeed
     }
-}
-
-//enum HandType: String {
-//    case twoCardHand = "2 card hand",
-//         threeFourCardHand = "3 and 4 card hand",
-//         twoThreeFourCardHand = "2, 3 and 4 card hand"
-//    
-//}
-
-enum DeckFraction: String {
-    case wholes,
-         halves,
-         thirds,
-         quarters
+    
     
 }
 
-enum DeckRoundedTo: String {
-    case whole, half
-}
+
+
+
