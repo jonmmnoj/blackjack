@@ -35,7 +35,7 @@ class FeedbackView: UIView {
         backgroundColor = .secondarySystemBackground
         //dismissButton.layer.borderWidth = 1
         //dismissButton.layer.borderColor = UIColor.systemBlue.cgColor
-        dismissButton.backgroundColor = Settings.shared.defaults.buttonColor
+        dismissButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         dismissButton.setTitleColor(.white, for: .normal)
     }
     

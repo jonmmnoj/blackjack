@@ -18,3 +18,12 @@ class StrategyRound {
         self.correctAction = action
     }
 }
+
+extension StrategyRound: Equatable {
+    static func == (lhs: StrategyRound, rhs: StrategyRound) -> Bool {
+        return
+            lhs.playerCards == rhs.playerCards &&
+            lhs.dealerCards == rhs.dealerCards &&
+            lhs.correctAction == rhs.correctAction
+    }
+}

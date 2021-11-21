@@ -46,6 +46,7 @@ class CardCounter {
         let divisionResult = (Float(runningCount) / getNumberOfDecksInPlay())
         let trueCount = Int(divisionResult)
         return trueCount
+        //return 3
     }
     
     func discard() {

@@ -1,7 +1,40 @@
 import UIKit
 import SnapKit
+import SideMenu
 
 class GameViewController: UIViewController {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
+    func adjustStackviewSizeForScaleChange() {
+        stackView.snp.updateConstraints { (make) in
+            var height = Settings.shared.cardSize * 1.2
+            if Settings.shared.surrender {
+                height = Settings.shared.cardSize * 1.5
+            }
+            make.height.equalTo(height)
+            let width = Settings.shared.cardWidth
+            make.width.equalTo(width)
+            make.centerY.equalTo(self.view)
+            make.right.equalTo(self.view)
+        }
+        
+        //self.stackView.setNeedsLayout()
+        //self.stackView.setNeedsDisplay()
+        
+        //self.view.setNeedsLayout()
+        //self.view.setNeedsDisplay()
+        //self.view.layoutIfNeeded()
+    }
+    
     var gameMaster: GameMaster!
     var gameType: GameType!
     var showInputButtons: Bool {
@@ -22,6 +55,19 @@ class GameViewController: UIViewController {
         return button
     }()
     
+    lazy var gearButton: UIButton = {
+        let button = makeButton(title: "")
+        button.addTarget(self, action: #selector(gearButtonAction(_:)), for: .touchUpInside)
+        button.isEnabled = false
+        button.backgroundColor = .clear
+        button.tintColor = .white
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 1000, weight: .bold, scale: .large)
+        let image = UIImage(systemName: "gearshape.fill", withConfiguration: imageConfig) //gear
+        button.setImage(image , for: .normal)
+        
+        return button
+    }()
+    
     lazy var stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -29,17 +75,23 @@ class GameViewController: UIViewController {
         stack.alignment = .fill
         stack.distribution = .fillEqually
         [hitButton, standButton, doubleButton, splitButton].forEach {
-            $0.backgroundColor = Settings.shared.defaults.buttonColor
-            $0.setTitleColor(.white.withAlphaComponent(0.5), for: .disabled)
             stack.addArrangedSubview($0)
         }
         if Settings.shared.surrender {
-            surrenderButton.backgroundColor = Settings.shared.defaults.buttonColor
+            surrenderButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
             surrenderButton.setTitleColor(.white.withAlphaComponent(0.5), for: .disabled)
             stack.addArrangedSubview(surrenderButton)
         }
+        setButtonColor()
         return stack
     }()
+    
+    func setButtonColor() {
+        [hitButton, standButton, doubleButton, splitButton, surrenderButton].forEach {
+            $0.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
+            $0.setTitleColor(.white.withAlphaComponent(0.5), for: .disabled)
+        }
+    }
     
     lazy var hitButton: UIButton = {
         let button = makeButton(title: "HIT")
@@ -95,8 +147,15 @@ class GameViewController: UIViewController {
         homeButton.snp.makeConstraints { (make) in
             make.height.equalTo(20)
             make.width.equalTo(20)
-            make.bottom.equalTo(self.view).offset(-20)
-            make.left.equalTo(self.view).offset(20)
+            make.bottom.equalTo(self.view).offset(-30)
+            make.left.equalTo(self.view).offset(30)
+        }
+        super.view.addSubview(gearButton)
+        gearButton.snp.makeConstraints { (make) in
+            make.height.equalTo(20)
+            make.width.equalTo(20)
+            make.bottom.equalTo(self.view).offset(-30)
+            make.right.equalTo(self.view).offset(-30)
         }
             
         gameMaster = GameMaster(gameType: gameType, table: self.view)
@@ -115,7 +174,7 @@ class GameViewController: UIViewController {
         // surrender
         let surrenderGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.handleUpSwipe(_:)))
         surrenderGesture.direction = .up
-        self.view.addGestureRecognizer(standGesture)
+        self.view.addGestureRecognizer(surrenderGesture)
         
         // double
         let doubleGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleDoubleGesture(_:)))
@@ -187,6 +246,22 @@ class GameViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @objc func gearButtonAction(_ sender: UIButton!) {
+        
+        let sVC = TableSettingsViewController()
+        sVC.gameVC = self
+//        let vc = SideMenuNavigationController(rootViewController: sVC)
+//        let presentationStyle = SideMenuPresentationStyle.menuSlideIn
+//        presentationStyle.presentingEndAlpha = 0.3
+//        vc.settings.presentationStyle = presentationStyle
+//        vc.settings.menuWidth = min(view.frame.width, view.frame.height) * 0.8
+//        vc.settings.statusBarEndAlpha = 0 // 0 shows status bar, 1 blacks out status bar
+//        vc.enableSwipeToDismissGesture = false
+       self.navigationController?.pushViewController(sVC, animated: true)
+        
+//        adjustStackView()
+    }
+    
     func makeButton(title: String) -> UIButton {
         let button = UIButton()//frame: CGRect(x: view.frame.width - buttonWidth, y: buttonY, width: buttonWidth, height: buttonHeight))
         button.backgroundColor = .systemBlue
@@ -226,12 +301,14 @@ extension GameViewController: GameViewDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
         let placeBetView = PlaceBetView()
+        placeBetView.vc = vc
         if gameMaster.dealer.table.discardTray.isOpen {
             placeBetView.discardTrayIsOpen = true
         }
         placeBetView.discardTray.delegate = self
         vc.view.addSubview(placeBetView)
         vc.view.addSubview(placeBetView.discardTray)
+        vc.view.bringSubviewToFront(placeBetView.discardTray)
         
         placeBetView.snp.makeConstraints { (make) in
             make.center.equalTo(vc.view.center)
@@ -267,6 +344,8 @@ extension GameViewController: GameViewDelegate {
     }
     
     func playerInput(enabled value: Bool) {
+        gearButton.isEnabled = value
+        
         hitButton.isEnabled = value
         standButton.isEnabled = value
         splitButton.isEnabled = value
@@ -300,16 +379,16 @@ extension GameViewController: GameViewDelegate {
         self.present(vc, animated: true, completion: nil)
     }
     
-    func alertMistake(message: String, completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(title: "Strategy Mistake", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Continue", style: .destructive, handler: { _ in completion(false) }))
-        alert.addAction(UIAlertAction(title: "Fix", style: .cancel, handler: { _ in completion(true) }))
-        self.present(alert, animated: true)
-    }
+//    func alertMistake(message: String, completion: @escaping (Bool) -> Void) {
+//        let alert = UIAlertController(title: "Strategy Mistake", message: message, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "Continue", style: .destructive, handler: { _ in completion(false) }))
+//        alert.addAction(UIAlertAction(title: "Fix", style: .cancel, handler: { _ in completion(true) }))
+//        self.present(alert, animated: true)
+//    }
     
     func present(_ vc: UIViewController) {
         //vc.modalPresentationStyle = .overCurrentContext
         //vc.modalTransitionStyle = .crossDissolve
-        self.present(vc, animated: true, completion: nil)
+        self.present(vc, animated: true)
     }
 }

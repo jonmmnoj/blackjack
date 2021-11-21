@@ -18,7 +18,7 @@ class DeviationsSettings: GameTypeSettings {
     var settings = Settings.shared
     var surrenderCell: UITableViewCell!
     var es10Cell: UITableViewCell!
-    var enhcCell: UITableViewCell!
+    //var enhcCell: UITableViewCell!
     var twoHandCell: UITableViewCell!
     var threeHandCell: UITableViewCell!
     var fourHandCell: UITableViewCell!
@@ -61,8 +61,11 @@ class DeviationsSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
-                        gvc.modalPresentationStyle = .overFullScreen
-                        self.vc.present(gvc, animated: true, completion: nil)
+                        let nvc = UINavigationController(rootViewController: gvc)
+                        nvc.modalPresentationStyle = .fullScreen
+                        self.vc.present(nvc, animated: true, completion: nil)
+                        //gvc.modalPresentationStyle = .overFullScreen
+                        //self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),
         
@@ -77,21 +80,21 @@ class DeviationsSettings: GameTypeSettings {
                       action: { _ in
                         self.settings.dealerHitsSoft17 = !self.settings.dealerHitsSoft17
                       }),
-                SwitchRow(
-                    text: "ENHC",
-                    switchValue: settings.ENHC,
-                    customization:  { (cell, row) in
-                        self.enhcCell = cell
-                    },action: { row in
-                        self.settings.ENHC = !self.settings.ENHC
-                        UIView.transition(with: self.surrenderCell.textLabel!,
-                                          duration: 0.5,
-                                      options: .transitionFlipFromTop,
-                                    animations: { [weak self] in
-                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
-                                 }, completion: nil)
-
-                    }),
+//                SwitchRow(
+//                    text: "ENHC",
+//                    switchValue: settings.ENHC,
+//                    customization:  { (cell, row) in
+//                        self.enhcCell = cell
+//                    },action: { row in
+//                        self.settings.ENHC = !self.settings.ENHC
+//                        UIView.transition(with: self.surrenderCell.textLabel!,
+//                                          duration: 0.5,
+//                                      options: .transitionFlipFromTop,
+//                                    animations: { [weak self] in
+//                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
+//                                 }, completion: nil)
+//
+//                    }),
                 
                 SwitchRow(
                     text: "Surrender",
@@ -122,7 +125,7 @@ class DeviationsSettings: GameTypeSettings {
                           },
                           action: { _ in
                             self.settings.splitHands = !self.settings.splitHands
-                            print("split: \(self.settings.splitHands)")
+                            //print("split: \(self.settings.splitHands)")
                           }),
                 SwitchRow(text: "Soft Totals", switchValue: settings.softHands, customization: {cell,row in
                     self.softCell = cell
@@ -142,7 +145,7 @@ class DeviationsSettings: GameTypeSettings {
                 },
                           action: { _ in
                     self.settings.twoCardHands = !self.settings.twoCardHands
-                            print("two card: \(self.settings.twoCardHands)")
+                            //print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
                     self.setupSoftControl()
                 }), //detailText: .subtitle("Pair, Soft and Hard hands. Hit, Stand, Double, Split and Surrender"),
@@ -181,8 +184,8 @@ class DeviationsSettings: GameTypeSettings {
                         (self.dealerHitsCell.accessoryView as! UISwitch).setOn(self.settings.defaults.dealerHitsSoft17, animated: true)
                         (self.dealerHitsCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
-                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+//                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
+//                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         (self.surrenderCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.surrenderCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)

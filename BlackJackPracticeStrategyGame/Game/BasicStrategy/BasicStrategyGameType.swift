@@ -20,6 +20,7 @@ class BasicStrategyGameType: GameTypeStrategyPatternProtocol {
         }
     }
     
+   
     func dealCards() {
         let deck = decks.randomElement()!
         let r = deck.nextRound()

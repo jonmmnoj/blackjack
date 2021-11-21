@@ -56,7 +56,7 @@ class Shoe {
         let penetrationPercent = Double(totalNumberOfCards - CardCounter.shared.getNumberOfCardsLeft()) / Double(totalNumberOfCards)
         
         let isTimeToShuffle = penetrationPercent > Settings.shared.penetration
-        print("percent pentration: \(penetrationPercent)% \(isTimeToShuffle)")
+        //print("percent pentration: \(penetrationPercent)% \(isTimeToShuffle)")
         
         let shuffleToAvoidShuffleDuringRound = CardCounter.shared.getNumberOfCardsLeft() < 17
         //return value

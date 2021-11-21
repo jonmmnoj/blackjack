@@ -12,11 +12,7 @@ class Settings {
     static let shared = Settings()
     private init() {}
     
-    var gameType: GameType! {
-        didSet {
-            
-        }
-    }
+    var gameType: GameType!
     var placeBets: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "placeBets")
@@ -44,24 +40,21 @@ class Settings {
     var gameSettings: [GameType: Defaults]!
     let defaults = Defaults()
     
-    var cardSizeFactor: CGFloat {
+    var cardSizeFactor: Float {
         set {
-            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSizeFactor"))
+            UserDefaults.standard.set(newValue, forKey: "cardSizeFactor")
         }
         get {
             
-            return UserDefaults.standard.object(forKey: getKey(for:"cardSizeFactor")) as? CGFloat ?? defaults.cardSizeFactor
+            return UserDefaults.standard.object(forKey: "cardSizeFactor") as? Float ?? defaults.cardSizeFactor
         }
     }
-    
     var cardSize: CGFloat {
-//        set {
-//            UserDefaults.standard.set(newValue, forKey: getKey(for: "cardSize"))
-//        }
         get {
-            let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? CGFloat ?? defaults.cardSizeFactor
-            let adjustmentForScreenSize = round(size * (UIScreen.main.bounds.height / 6))//5.5))
-            //print (adjustmentForScreenSize)
+            //let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? Float ?? defaults.cardSizeFactor * 2
+            
+            let size = cardSizeFactor / 5
+            let adjustmentForScreenSize = round(CGFloat(size) * (UIScreen.main.bounds.height / 6))//5.5))
             return adjustmentForScreenSize
         }
     }
@@ -281,25 +274,159 @@ class Settings {
             return UserDefaults.standard.object(forKey: getKey(for:"penetration")) as? Double ?? defaults.penetration
         }
     }
-    
+    var betSpread: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpread"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpread")) as? Bool ?? defaults.betSpread
+        }
+    }
+    var betSpreadNeg3: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadNeg3"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadNeg3")) as? Int ?? defaults.betSpreadNeg3
+        }
+    }
+    var betSpreadNeg2: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadNeg2"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadNeg2")) as? Int ?? defaults.betSpreadNeg2
+        }
+    }
+    var betSpreadNeg1: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadNeg1"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadNeg1")) as? Int ?? defaults.betSpreadNeg1
+        }
+    }
+    var betSpreadZero: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadZero"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadZero")) as? Int ?? defaults.betSpreadZero
+        }
+    }
+    var betSpreadPos1: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos1"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos1")) as? Int ?? defaults.betSpreadPos1
+        }
+    }
+    var betSpreadPos2: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos2"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos2")) as? Int ?? defaults.betSpreadPos2
+        }
+    }
+    var betSpreadPos3: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos3"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos3")) as? Int ?? defaults.betSpreadPos3
+        }
+    }
+    var betSpreadPos4: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos4"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos4")) as? Int ?? defaults.betSpreadPos4
+        }
+    }
+    var betSpreadPos5: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos5"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos5")) as? Int ?? defaults.betSpreadPos5
+        }
+    }
+    var betSpreadPos6: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos6"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos6")) as? Int ?? defaults.betSpreadPos6
+        }
+    }
+    var betSpreadPos7: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos7"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos7")) as? Int ?? defaults.betSpreadPos7
+        }
+    }
+    var tableColor: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "tableColor")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "tableColor") as? String ?? defaults.tableColor.rawValue
+        }
+    }
+    var buttonColor: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "buttonColor")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "buttonColor") as? String ?? defaults.buttonColor.rawValue
+        }
+    }
+    var cardColor: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "cardColor")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "cardColor") as? String ?? defaults.cardColor.rawValue
+        }
+    }
+    var maxRunningCount: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"maxRunningCount"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"maxRunningCount")) as? Int ?? defaults.maxRunningCount
+        }
+    }
     
     struct Defaults {
-        var dealSpeed: Float = 1.0
+        var dealSpeed: Float = 7.5
         var ENHC: Bool = false
         var numberOfDecks = 6
         var dealerHitsSoft17 = true
-        var surrender = false
+        var surrender = true
         var resplitAces = false
         var doubleAfterSplit = true
         var notifyMistakes = true
         var showHandTotal = false
         var showDiscardTray = true
-        var deviations = false
+        var deviations: Bool {
+            if Settings.shared.gameType == .basicStrategy {
+                return false
+            }
+            return true
+        }
         var numberOfRoundsBeforeAskRunningCount = CountRounds.oneRound.rawValue
         var numberOfRoundsBeforeAskTrueCount = CountRounds.onceAtEnd.rawValue
-        var tableColor = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
-        var buttonColor = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
-        var cardSizeFactor: CGFloat = 1//150.0
+        //var tableColor = TableColor.green.tableCode//#colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
+        //var buttonColor = TableColor.green.buttonCode//#colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
+        //var tc = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
+        //var bc = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
+        var cardSizeFactor: Float = 5//150.0 0 to 10
         
         var deckFraction: String = DeckFraction.quarters.rawValue
         var deckRoundedTo: String = DeckRoundedTo.whole.rawValue
@@ -307,14 +434,33 @@ class Settings {
         var roundLastThreeDecksToHalf = false
         var bankRollAmount = 10000.00
         var previousBetAmount = 0
-        var placeBets = false
+        var placeBets = true
         
         var twoCardHands = true
         var threeCardHands = true
         var fourCardHands = false
         
         var quickFeedback = false
-        var penetration: Double = 1.0
+        var penetration: Double = 0.75
+        
+        var betSpread = false
+        var betSpreadNeg3: Int = 25
+        var betSpreadNeg2: Int = 25
+        var betSpreadNeg1: Int = 25
+        var betSpreadZero: Int = 25
+        var betSpreadPos1: Int = 200
+        var betSpreadPos2: Int = 300
+        var betSpreadPos3: Int = 500
+        var betSpreadPos4: Int = 1000
+        var betSpreadPos5: Int = 1500
+        var betSpreadPos6: Int = 2000
+        var betSpreadPos7: Int = 2500
+        
+        var tableColor = TableColor.Green
+        var buttonColor = TableColor.Green
+        var cardColor = CardColor.Red
+        
+        var maxRunningCount: Int = 30
     }
     
     private func getKey(for setting: String) -> String {
@@ -337,7 +483,7 @@ class Settings {
     
     static var dealSpeedFactor: Float {
         let dealSpeed = self.shared.dealSpeed
-        return 1.0 / dealSpeed
+        return 5 / dealSpeed
     }
     
     

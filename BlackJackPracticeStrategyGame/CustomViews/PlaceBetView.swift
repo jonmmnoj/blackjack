@@ -9,6 +9,7 @@ import UIKit
 import Foundation
 
 class PlaceBetView: UIView {
+    var vc: UIViewController!
     var dealHandler: ((Int) -> Void)!
     var exitGameHandler: (() -> Void)!
     var discardTrayIsOpen: Bool = false
@@ -54,6 +55,7 @@ class PlaceBetView: UIView {
     }
     
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var stackView: UIView!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var chipsView: UIView!
     @IBOutlet weak var betView: UIView!
@@ -94,7 +96,25 @@ class PlaceBetView: UIView {
     }
     
     @IBAction func dealAction(_ sender: UIButton!) {
-        dealHandler(betAmount)
+        if Settings.shared.betSpread {
+            let actualTrueCount = CardCounter.shared.getTrueCount()
+            var adjustedTrueCount = actualTrueCount
+            if actualTrueCount < -3 { adjustedTrueCount = -3 }
+            if actualTrueCount > 7 { adjustedTrueCount = 7 }
+            let settingAmount = BetSpread.getBetAmount(for: adjustedTrueCount)
+            if betAmount != settingAmount {
+                let message = "You should bet $\(settingAmount) @ TC \(actualTrueCount)"
+                PlayError.notifyMistake(presenter: self.vc, message: message, completion: { [weak self] fix in
+                    if !fix {
+                        self?.dealHandler(self?.betAmount ?? 0)
+                    }
+                })
+            } else {
+                dealHandler(betAmount)
+            }
+        } else {
+            dealHandler(betAmount)
+        }
     }
     @IBAction func endGameAction(_ sender: UIButton!) {
         exitGameHandler()
@@ -116,15 +136,17 @@ class PlaceBetView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
         
         bankRollAmount = Settings.shared.bankRollAmount
         betAmount = Settings.shared.previousBetAmount
         
-        dealButton.backgroundColor = Settings.shared.defaults.buttonColor
+        dealButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         dealButton.setTitleColor(.white, for: .normal)
-        titleView.backgroundColor = Settings.shared.defaults.buttonColor
+        titleView.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         titleLabel.textColor = .white
-        chipsView.backgroundColor = Settings.shared.defaults.tableColor
+        chipsView.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.tableColor)!.tableCode)
         clearBetButton.setTitleColor(.gray, for: .normal)
         endGameButton.setTitleColor(.white, for: .normal)
         bankRollLabel.textColor = .darkGray

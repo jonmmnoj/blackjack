@@ -5,8 +5,6 @@
 //  Created by JON on 7/19/21.
 //
 
-import Foundation
-
 class Rule {
     var type: RuleType
     var dealerCardValue: Int
@@ -30,8 +28,6 @@ class Rule {
     
     func getDeviation() -> Deviation? {
         var deviation: Deviation?
-
-          //  deviation = self.deviations?.first(where: { $0.type == Deviation.getType() })
         var deviations: [Deviation] = []
         self.deviations?.forEach {
             if $0.type == Deviation.getType() {
@@ -46,67 +42,6 @@ class Rule {
         if countDependentDeviation != nil && CardCounter.shared.doesDeviationApply(countDependentDeviation!) {
             deviation = countDependentDeviation
         }
-        
         return deviation
-    }
-}
-
-class Surrender {
-    var isSurrender: Bool
-    var deviations: [Deviation]?
-    
-    init(_ isSurrender: Bool, deviations: [Deviation]? = nil) {
-        self.isSurrender = isSurrender
-        self.deviations = deviations
-    }
-    
-    func getDeviation() -> Deviation? {
-        var deviation: Deviation?
-        deviation = self.deviations?.first(where: { $0.type == Deviation.getType() })
-        return deviation
-    }
-}
-
-
-class Deviation {
-    var type: DeviationType
-    var count: Int?
-    var direction: String?
-    var action: StrategyAction
-    
-    init(type: DeviationType, count: Int?, direction: String?, action: StrategyAction) {
-        self.type = type
-        self.count = count
-        self.direction = direction
-        self.action = action
-    }
-    
-    func doesApply() -> Bool {
-        // get true/running count and compare to self.count
-        return false
-    }
-    func getSign() -> String? {
-        return direction
-    }
-    func getCount() -> Int? {
-        return count
-    }
-    
-    func getAction(numberOfPlayerCards num: Int) -> StrategyAction {
-        if self.action == .doubleStand {
-            if num > 2 {
-                return .stand
-            } else {
-                return .double
-            }
-        }
-        return self.action
-    }
-    
-    static func getType() -> DeviationType {
-        let dealerHitsSoft17 = Settings.shared.dealerHitsSoft17
-        //let enhc = Settings.shared.ENHC
-        let type: DeviationType = dealerHitsSoft17 ? .hard17 : .soft17
-        return type
     }
 }

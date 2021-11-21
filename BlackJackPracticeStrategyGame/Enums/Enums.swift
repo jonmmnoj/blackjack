@@ -194,7 +194,7 @@ enum StrategyDeckType: Int {
          fourCards
 }
 
-enum CountRounds: String {
+enum CountRounds: String, CaseIterable {
     case oneRound = "one round",
          threeRounds = "three rounds",
          fiveRounds = "five rounds",
@@ -222,15 +222,65 @@ enum Colors {
     case green
 }
 
-enum DeckFraction: String {
+enum DeckFraction: String, CaseIterable {
     case wholes, halves, thirds, quarters
 }
 
-enum DeckRoundedTo: String {
-    case whole, half
+enum DeckRoundedTo: String, CaseIterable {
+    case whole, half, quarter
+    
+    var floatValue: Float {
+        switch self {
+        case .whole: return 1.0
+        case .half: return 0.5
+        case .quarter: return 0.25
+        }
+    }
 }
 
-enum NumberOfDecks: Int {
+enum NumberOfDecks: Int, CaseIterable {
     case two = 2, four = 4, six = 6, eight = 8
+}
+
+enum TableColor: String, CaseIterable {
+    case Green, Blue, Red, Purple, Yellow, Brown, Black
+    
+    var tableCode: String {
+        switch self {
+        case .Green: return "#005d4b"//"#35654d"
+        case .Blue: return "#043c7d"
+        case .Red: return "#C70000"
+        case .Purple: return "#"
+        case .Yellow: return "#368776"
+        case .Brown: return "#"
+        case .Black: return "#35654d"
+            
+        }
+    }
+    
+    // green: 35654d 005d4b
+    // red:
+    // yellow:
+    // blue: 043c7d 368776
+    
+    
+    var buttonCode: String {
+        switch self {
+        case .Green: return "#00c39d"//"#009074"
+        case .Blue: return "#0660c7"
+        case .Red: return ""
+        case .Purple: return ""
+        case .Yellow: return ""
+        case .Brown: return ""
+        case .Black: return "#009074"
+            
+        }
+    }
+    
+}
+
+enum CardColor: String, CaseIterable {
+    case Red, Blue, Purple, Yellow, Green, Gray//, Astronaut
+    
 }
 

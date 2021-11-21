@@ -11,7 +11,7 @@ protocol GameViewDelegate {
     //func presentCountInputView(countMaster: CountMaster, callback: (Int) -> Void)
     func dismissViewController(completion: (() -> Void)?)
     func presentBasicStrategyFeedbackView(isCorrect: Bool, playerAction: String, correctAction: String, completion: @escaping () -> Void)
-    func alertMistake(message: String, completion: @escaping ((Bool) -> Void))
+    //func alertMistake(message: String, completion: @escaping ((Bool) -> Void))
     func present(_: UIViewController)
     func showToast(message: String)
     //func showDiscardTrayExpanded(image: UIImage)

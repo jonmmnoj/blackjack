@@ -61,8 +61,11 @@ class BasicStrategySettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
-                        gvc.modalPresentationStyle = .overFullScreen
-                        self.vc.present(gvc, animated: true, completion: nil)
+                        let nvc = UINavigationController(rootViewController: gvc)
+                        nvc.modalPresentationStyle = .fullScreen
+                        self.vc.present(nvc, animated: true, completion: nil)
+                        //gvc.modalPresentationStyle = .overFullScreen
+                        //self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),
         
@@ -112,7 +115,7 @@ class BasicStrategySettings: GameTypeSettings {
                           },
                           action: { _ in
                             self.settings.splitHands = !self.settings.splitHands
-                            print("split: \(self.settings.splitHands)")
+                            //print("split: \(self.settings.splitHands)")
                           }),
                 SwitchRow(text: "Soft Totals", switchValue: settings.softHands, customization: {cell,row in
                     self.softCell = cell
@@ -132,7 +135,7 @@ class BasicStrategySettings: GameTypeSettings {
                 },
                           action: { _ in
                     self.settings.twoCardHands = !self.settings.twoCardHands
-                            print("two card: \(self.settings.twoCardHands)")
+                            //print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
                 }), //, detailText: .subtitle("Split, Soft and Hard hands")
                 SwitchRow(text: "3 card hands", detailText: .subtitle("Soft and Hard hands only"), switchValue: settings.threeCardHands, customization: {cell,row in

@@ -29,18 +29,34 @@ class GameMaster {
     var tableView: UIView
     var gameState: GameState!
     var navBarHeight: CGFloat = 0
-    var dealerHand: Hand {
-
+    var dealerHandDealPoint: CGPoint {
         var x = tableView.center.x - Settings.shared.cardWidth
         if showDiscardTray {
             if UIScreen.main.bounds.width / 2 < Settings.shared.cardWidth * 2 {
                 x = Settings.shared.cardWidth + 3
             }
         }
-        return Hand(dealToPoint: CGPoint(x: x , y: 50), adjustmentX: Card.width + 2, adjustmentY: 0, owner: self.dealer) 
+        return CGPoint(x: x , y: 50)
+    }
+    var dealerHandAdjustmentX: CGFloat {
+        return Card.width + 2
+    }
+    var dealerHandAdjustmentY: CGFloat {
+        return 0
+    }
+    var dealerHand: Hand {
+        return Hand(dealToPoint: dealerHandDealPoint, adjustmentX: dealerHandAdjustmentX , adjustmentY: dealerHandAdjustmentY, owner: self.dealer)
+    }
+    var playerHandDealPoint: CGPoint {
+        var numberOfHandsAdjustment: CGFloat = 0
+        numberOfHandsAdjustment += CGFloat(player.hands.count) * (Settings.shared.cardWidth * 1.9)
+        return  CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7 + numberOfHandsAdjustment, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30)
+    }
+    var playerAdjustmentXorY: CGFloat {
+        return Settings.shared.cardSize * 0.2
     }
     var playerHand: Hand {
-        return Hand(dealToPoint: CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30), adjustmentX: Settings.shared.cardSize * 0.2, adjustmentY: Settings.shared.cardSize * 0.2, owner: player)
+        return Hand(dealToPoint: playerHandDealPoint, adjustmentX: playerAdjustmentXorY, adjustmentY: playerAdjustmentXorY, owner: player)
     }
     
     init(gameType: GameType, table: UIView) {
@@ -93,8 +109,10 @@ class GameMaster {
         self.players.forEach {
             self.dealer.access(to: $0)
         }
-        let hand = playerHand//Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
+        var hand = playerHand//Hand(dealToPoint: CGPoint(x: 10, y: table.frame.height - 300), adjustmentX: 50, adjustmentY: 50, owner: player)
         player.add(hand: hand)
+        //hand = playerHand
+        //player.add(hand: hand)
         //player.add(hand: hand)
     }
     
@@ -159,7 +177,7 @@ extension GameMaster {
         //return true
     }
     var canSurrender: Bool {
-        return !(player.activatedHand!.cards.count > 2) && !player.activatedHand!.isSplitHand
+        return Settings.shared.surrender && !(player.activatedHand!.cards.count > 2) && !player.activatedHand!.isSplitHand
     }
     var canSplit: Bool {
         //let hand = player.activatedHand!
@@ -193,15 +211,11 @@ extension GameMaster {
         if gameType != .freePlay {
             return result
         }
-        
         if dealer.shoe.isTimeToRefillShoe() {
-            // show toast shuffling()
-            print("shuffling")
             result = true
             delegate.showToast(message: "Shuffling...")
             dealer.shoe.refill()
         }
-        
         return result
     }
 }
@@ -515,7 +529,7 @@ extension GameMaster {
             message = "Won"
             if playerBets {
                 let amount = finalAmount - betAmount
-                if hasRemainder(amount) {
+                if Rules.hasRemainder(amount) {
                     message += String(format: " +$%.2f", amount)
                 } else {
                     message += " +$\(Int(amount))"
@@ -529,7 +543,7 @@ extension GameMaster {
         } else if result == .surrender {
             message = "Lost"
             if playerBets {
-                if hasRemainder(finalAmount) {
+                if Rules.hasRemainder(finalAmount) {
                     message += String(format: " -$%.2f", finalAmount)
                 } else {
                     message += " -$\(Int(finalAmount))"
@@ -551,10 +565,7 @@ extension GameMaster {
     }
     
     
-    private func hasRemainder(_ value: Double) -> Bool {
-        let i = Int(value)
-        return Double(i) - value != 0
-    }
+    
     
     private func handleSurrender(for hand: Hand) {
         //DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -582,17 +593,14 @@ extension GameMaster {
     
     private func askInsurance() {
         if dealer.activatedHand!.cards[1].value == .ace {
-            let alertVC = Insurance.askInsurance(for: player.activatedHand!, dealerHasBlackjack: dealerHasBlackjack) { (message, amount) in
-                var message = message
-                if message.count > 0 {
-                    message += self.hasRemainder(amount) ? String(format: "%.2f", amount) : "\(Int(amount))"
+            Insurance.askInsurance(delegate, hand: player.activatedHand!, dealerHasBlackjack: dealerHasBlackjack, completion: { (playerWantsToInsure, message, amount) in
+                if playerWantsToInsure {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                        self.delegate.showToast(message: message)
+                        Insurance.showToastForInsureBet(self.delegate, message: message, amount: amount)
                     }
                 }
                 self.resumeAfterInsurance()
-            }
-            delegate.present(alertVC)
+            })
         } else {
             resumeAfterInsurance()
         }

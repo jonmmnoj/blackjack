@@ -22,6 +22,8 @@ class DeckRoundingView: NSObject {
         [imageView,
          bottomStackView
          ].forEach { stack.addArrangedSubview($0) }
+        stack.layer.cornerRadius = 10
+        stack.layer.masksToBounds = true
         return stack
     }()
     
@@ -108,7 +110,7 @@ class DeckRoundingView: NSObject {
     }()
     lazy var submitButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = Settings.shared.defaults.buttonColor
+        button.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -166,76 +168,81 @@ class DeckRoundingView: NSObject {
     var increment: Float {
         if roundLast3DecksToHalf || roundDeckToNearest == 0.5 {
             return 0.5
+        } else if roundDeckToNearest == 0.25 {
+            return 0.25
         }
         return 1.0
     }
-    let roundDeckToNearest: Float = Settings.shared.deckRoundedTo == "whole" ? 1.0 : 0.5
+    let roundDeckToNearest: Float = DeckRoundedTo(rawValue: Settings.shared.deckRoundedTo)!.floatValue
     let roundLast3DecksToHalf = Settings.shared.roundLastThreeDecksToHalf
     var numberOfDecksLeftInPlay: Float!
-    func setup() {
-        let numberOfDecks = Settings.shared.numberOfDecks
-        let numberOfCardsInDeck = 52
-        var runningCounts: [Int] = [0]
-        for i in 1...10 {
-            runningCounts.append(i)
-            runningCounts.append(i * -1)
-        }
-        
-        var array: [Float]!
-        let whole: [Float] = [1.0]
-        let half: [Float] = [0.5, 1.0]
-        let third: [Float] = [0.333, 0.666, 1.0]
-        let quarter: [Float] = [0.25, 0.5, 0.75, 1.0]
-        if  Settings.shared.deckFraction == "wholes" {
-            array = whole
-        } else if Settings.shared.deckFraction == "halves" {
-            array = half
-        } else if Settings.shared.deckFraction == "third" {
-            array  = third
-        }else if Settings.shared.deckFraction == "quarters" {
-            array = quarter
-        }
-        
-        var numberOfDecksDiscarded: [Float] = []
-        for i in 0..<numberOfDecks {
-            let n = Float(i)
-            for fraction in array {
-                numberOfDecksDiscarded.append(n + fraction)
+    
+    func setup(previousAnswer: Float? = -99) -> Float {
+        repeat {
+            let numberOfDecks = Settings.shared.numberOfDecks
+            let numberOfCardsInDeck = 52
+            var runningCounts: [Int] = [0]
+            for i in 1...10 {
+                runningCounts.append(i)
+                runningCounts.append(i * -1)
             }
-            if i == numberOfDecks - 1 { numberOfDecksDiscarded.removeLast() }
-        }
-        
-        // # of Discarded Cards
-        let randomNumberOfDiscardedDecks = numberOfDecksDiscarded.randomElement()!
-        let numberOfCardsDiscarded = Int(randomNumberOfDiscardedDecks * Float(numberOfCardsInDeck))
-        let imageName = String("D\(numberOfDecks)_\(numberOfCardsDiscarded)")//decks/D\(numberOfDecks)/
-        let image = UIImage(named: imageName)
-        self.imageView.image = image
-        resizeImageView()
-        
-        //let randomRunningCount = runningCounts.randomElement()!
-        //self.rcValueLabel.text = String(randomRunningCount)
-        
-        // # of Discarded Decks
-        let adjustedNumberOfDiscardedDecks: Float
-        if roundDeckToNearest == 1 {
-            if roundLast3DecksToHalf && (Float(numberOfDecks) - randomNumberOfDiscardedDecks) <= 3 {
-                adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: 0.5)
-            } else {
-                // if 0.9 -> 0, if 1.25 -> 1, if 1.5 -> 1, if 1.75 -> 1, if 1.99 -> 1
-                adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.rounded(.towardZero)
+            
+            var array: [Float]!
+            let whole: [Float] = [1.0]
+            let half: [Float] = [0.5, 1.0]
+            let third: [Float] = [0.333, 0.666, 1.0]
+            let quarter: [Float] = [0.25, 0.5, 0.75, 1.0]
+            if  Settings.shared.deckFraction == "wholes" {
+                array = whole
+            } else if Settings.shared.deckFraction == "halves" {
+                array = half
+            } else if Settings.shared.deckFraction == "third" {
+                array  = third
+            }else if Settings.shared.deckFraction == "quarters" {
+                array = quarter
             }
-        } else { // roundDeckToNearest = 0.5 {
-            // if 0.4 -> 0, if 0.5 -> 0.5, if 0.9 -> 0.5, if 0.99 -> 0.5, if 1 -> 1
-            adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: 0.5)
-        }
-         
-        // # of Decks In PLay - DIVISOR
-        numberOfDecksLeftInPlay = Float(numberOfDecks) - adjustedNumberOfDiscardedDecks
-        if numberOfDecksLeftInPlay == 0 { numberOfDecksLeftInPlay = 1 }
+            
+            var numberOfDecksDiscarded: [Float] = []
+            for i in 0..<numberOfDecks {
+                let n = Float(i)
+                for fraction in array {
+                    numberOfDecksDiscarded.append(n + fraction)
+                }
+                if i == numberOfDecks - 1 { numberOfDecksDiscarded.removeLast() }
+            }
+            
+            // # of Discarded Cards
+            let randomNumberOfDiscardedDecks = numberOfDecksDiscarded.randomElement()!
+            let numberOfCardsDiscarded = Int(randomNumberOfDiscardedDecks * Float(numberOfCardsInDeck))
+            let imageName = String("D\(numberOfDecks)_\(numberOfCardsDiscarded)")//decks/D\(numberOfDecks)/
+            let image = UIImage(named: imageName)
+            self.imageView.image = image
+            resizeImageView()
+            
+            //let randomRunningCount = runningCounts.randomElement()!
+            //self.rcValueLabel.text = String(randomRunningCount)
+            
+            // # of Discarded Decks
+            let adjustedNumberOfDiscardedDecks: Float
+            if roundDeckToNearest == 1 {
+                if roundLast3DecksToHalf && (Float(numberOfDecks) - randomNumberOfDiscardedDecks) <= 3 {
+                    adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: 0.5)
+                } else {
+                    // if 0.9 -> 0, if 1.25 -> 1, if 1.5 -> 1, if 1.75 -> 1, if 1.99 -> 1
+                    adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.rounded(.towardZero)
+                }
+            } else { // roundDeckToNearest = 0.5 || 0.25 {
+                // if 0.4 -> 0, if 0.5 -> 0.5, if 0.9 -> 0.5, if 0.99 -> 0.5, if 1 -> 1
+                adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: roundDeckToNearest)
+            }
+             
+            // # of Decks In PLay - DIVISOR
+            numberOfDecksLeftInPlay = Float(numberOfDecks) - adjustedNumberOfDiscardedDecks
+            if numberOfDecksLeftInPlay == 0 { numberOfDecksLeftInPlay = 1 }
+            self.decksDiscardedLabel.text = "Decks discarded: \(randomNumberOfDiscardedDecks)"
+        } while numberOfDecksLeftInPlay == previousAnswer && !(Settings.shared.numberOfDecks == 2 && Settings.shared.deckFraction == DeckFraction.wholes.rawValue)
         
-        self.decksDiscardedLabel.text = "Decks discarded: \(randomNumberOfDiscardedDecks)"
-        //self.decksRemainingLabel.text = "Decks remaining (rounded): \(numberOfDecksLeftInPlay)"
+        return numberOfDecksLeftInPlay
     }
     
     private func resizeImageView() {

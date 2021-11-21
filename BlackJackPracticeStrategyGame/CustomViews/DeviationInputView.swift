@@ -70,14 +70,14 @@ class DeviationInputView: UIView {
         addSubview(contentView)
         contentView.frame = self.bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        contentView.layer.cornerRadius = 10
+        contentView.layer.masksToBounds = true
         
         if !Settings.shared.surrender {
             actionSegmentedControl.setEnabled(false, forSegmentAt: 4)
         }
         
-        //submitButton.layer.borderWidth = 1
-        //submitButton.layer.borderColor = UIColor.systemBlue.cgColor
-        submitButton.backgroundColor = Settings.shared.defaults.buttonColor
+        submitButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         submitButton.setTitleColor(.white, for: .normal)
     }
     
@@ -172,13 +172,13 @@ class DeviationInputView: UIView {
         updateTextField(number: i)
     }
     
-    func getInt() -> Int {
+    private func getInt() -> Int {
         let s = textField.text ?? ""
         let i = Int(s) ?? 0
         return i
     }
     
-    func updateTextField(number: Int) {
+    private func updateTextField(number: Int) {
         textField.text = String(number)
         submitButton.isEnabled = true
     }

@@ -113,4 +113,9 @@ class Rules {
         let value = Rules.value(of: h)
         return value
     }
+    
+    static func hasRemainder(_ value: Double) -> Bool {
+        let i = Int(value)
+        return Double(i) - value != 0
+    }
 }

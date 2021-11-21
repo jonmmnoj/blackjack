@@ -16,10 +16,10 @@ class MenuTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         //view.backgroundColor = .systemRed
-        view.layer.cornerRadius = 12
-        customImageView.setImage(color: UIColor.black)
+        view.layer.cornerRadius = 10
+        customImageView.setImage(color: UIColor.label)
         customImageView.layer.borderWidth = 2
-        customImageView.layer.borderColor = UIColor.black.withAlphaComponent(0.4).cgColor
+        customImageView.layer.borderColor = UIColor.secondaryLabel.withAlphaComponent(0.4).cgColor
         customImageView.layer.cornerRadius = 10
     }
 }

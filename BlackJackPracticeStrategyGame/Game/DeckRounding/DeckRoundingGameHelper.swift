@@ -17,8 +17,9 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
         self.gameMaster = gameMaster
     }
     
+    
+    var lastSetupDeckRemaining: Float?
     func dealCards() {
-        
         dv = DeckRoundingView()
         dv.tableView = gameMaster.tableView
         stackView = dv.stackView
@@ -27,25 +28,31 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
             make.centerWithinMargins.equalTo(gameMaster.tableView.snp.centerWithinMargins)
             make.height.lessThanOrEqualTo(gameMaster.tableView.snp.height)
         }
-        dv.setup()
+        lastSetupDeckRemaining = dv.setup(previousAnswer: lastSetupDeckRemaining)
         dv.submitHandler = { isCorrect, text, correctText in
-            self.gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: isCorrect, playerAction: text, correctAction: correctText) {
-                     self.dealCards()
+            
+            if !Settings.shared.quickFeedback {
+                self.stackView.removeFromSuperview()
+                self.gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: isCorrect, playerAction: text, correctAction: correctText) {
+                    self.dealCards()
+                    self.gameMaster.gameState = .dealtCards
+                    self.gameMaster.tableView.isUserInteractionEnabled = true
+                }
+            } else {
+                QuickFeedback.result(isCorrect, delegate: self.gameMaster.delegate, moreMessage: correctText)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    self.stackView.removeFromSuperview()
+                    self.dealCards()
+                    self.gameMaster.gameState = .dealtCards
+                    self.gameMaster.tableView.isUserInteractionEnabled = true
+                }
             }
-            self.stackView.removeFromSuperview()
-
         }
-
-        //gameMaster.delegate.playerInput(enabled: true)
-        gameMaster.tableView.isUserInteractionEnabled = true
-        //stackView.isUserInteractionEnabled = true
-        gameMaster.gameState = .dealtCards
     }
     
     func inputReceived(action: PlayerAction) {
         gameMaster.delegate.playerInput(enabled: true)
     }
-    
     
     func tasksForEndOfRound() {
         

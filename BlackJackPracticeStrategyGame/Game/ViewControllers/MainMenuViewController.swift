@@ -8,13 +8,11 @@
 import UIKit
 
 class MainMenuViewController: UITableViewController {
-    var cellContents: [MainMenuCellContent]!
+    var cellContents = MainMenuContent().contents
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cellContents = MainMenuContent().contents
-        //navigationItem.title = "Blackjack Trainer"
-        view.backgroundColor = Settings.shared.defaults.tableColor
+        view.backgroundColor = UIColor(hex: TableColor.Green.tableCode)
         tableView.rowHeight = UITableView.automaticDimension;
         tableView.estimatedRowHeight = 44.0;
     }
@@ -40,7 +38,7 @@ class MainMenuViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Logo", for: indexPath)
-            cell.backgroundColor = Settings.shared.defaults.tableColor
+            cell.backgroundColor = UIColor(hex: TableColor.Green.tableCode)
             cell.isUserInteractionEnabled = false
             return cell
         }

@@ -35,16 +35,28 @@ class DiscardTrayView: UIView {
     override init (frame: CGRect) {
         super.init(frame: frame)
     }
+    
+    func adjustSizeForScaleChange() {
+        imageView.snp.updateConstraints { (make) in
+            make.top.left.right.equalTo(self)
+            let ratio = imageView.image!.size.height / imageView.image!.size.width
+            let newHeight = Settings.shared.cardWidth * ratio
+            make.width.equalTo(Settings.shared.cardWidth)
+            make.height.equalTo(newHeight)
+        }
+    }
 
     override func layoutSubviews() {
         
         if button != nil { return }
         self.backgroundColor = .clear
         
+        var selfHeight = discardImageHeight + buttonHeight
+        if isOpen { selfHeight += (counterViewHeight - buttonHeight) }
         self.snp.makeConstraints { (make) in
             make.top.equalTo(self.superview!).offset(50)
             make.left.equalTo(self.superview!)
-            make.height.equalTo(discardImageHeight + counterViewHeight + buttonHeight)
+            make.height.equalTo(selfHeight)
         }
         
         imageView = UIImageView()
@@ -114,7 +126,7 @@ class DiscardTrayView: UIView {
         
         button = UIButton()
         self.addSubview(button)
-        button.backgroundColor = Settings.shared.defaults.buttonColor//.systemBlue
+        button.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 15, weight: .bold, scale: .large)
         image = UIImage(systemName: "line.horizontal.3", withConfiguration: imageConfig)!
         button.setImage(image, for: .normal)
@@ -164,14 +176,19 @@ class DiscardTrayView: UIView {
         UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseOut, .allowUserInteraction], animations: {
             self.layoutIfNeeded()
           })
+        
+        var selfHeight = discardImageHeight + buttonHeight
+        if isOpen { selfHeight += (counterViewHeight - buttonHeight) }
+        
+        self.snp.updateConstraints { (make) in
+            //make.top.equalTo(self.superview!).offset(50)
+            //make.left.equalTo(self.superview!)
+            make.height.equalTo(selfHeight)
+        }
+        self.layoutIfNeeded()
     }
 
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        //let tappedImageView = tapGestureRecognizer.view as! UIImageView
-
-        // Your action
-        print("tap")
-        
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
         

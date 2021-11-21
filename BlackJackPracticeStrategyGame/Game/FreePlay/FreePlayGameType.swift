@@ -23,23 +23,41 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     }
     
     func dealCards() {
+        //gameMaster.player.add(hand: gameMaster.playerHand)
+        //gameMaster.dealer.moveCards(for: gameMaster.player, to: .right)
+        
+        
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
+        
+//        for _ in 1..<gameMaster.player.hands.count {
+//            gameMaster.dealer.moveCards(for: gameMaster.player, to: .right)
+//        }
         gameMaster.gameState = .askInsurance
     }
     
     func inputReceived(action: PlayerAction) {
         let correctAction = gameMaster.getPlayerAction()
         if action != correctAction && Settings.shared.notifyMistakes {
-            gameMaster.delegate.alertMistake(message: "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
+            
+            let message = "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())"
+            PlayError.notifyMistake(gameMaster.delegate, message: message, completion: { fix in
                 if fix {
                     self.gameMaster.waitForPlayerInput()
                 } else {
                     self.accept(action)
-                }
-            })
+                }})
+            
+            
+//            gameMaster.delegate.alertMistake(message: "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
+//                if fix {
+//                    self.gameMaster.waitForPlayerInput()
+//                } else {
+//                    self.accept(action)
+//                }
+//            })
         } else {
             accept(action)
         }

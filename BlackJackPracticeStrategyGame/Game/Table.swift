@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 class Table {
+    var currentAnimator: UIViewPropertyAnimator!
     var view: UIView
     var isBusy: Bool = false
     var gameMaster: GameMaster
@@ -31,7 +32,7 @@ class Table {
     }
     
     init(view table: UIView, gameMaster: GameMaster) {
-        table.backgroundColor = Settings.shared.defaults.tableColor
+        table.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.tableColor)!.tableCode)
         self.view = table
         self.gameMaster = gameMaster
         self.arrowView = UIImageView(image: UIImage(named: "down_arrow"))
@@ -55,6 +56,13 @@ class Table {
             self.arrowView.frame = frame.offsetBy(dx: 0, dy: 5)
         })
     }
+    
+//    func updateIndicatorForScaleChange() {
+//        let dim = Settings.shared.cardWidth / 5
+//        var frame = arrowView.frame
+//        arrowView.frame = CGRect(x: Double, y: <#T##Double#>, width: dim, height: dim)
+//        
+//    }
     
     func stopIndicator() {
         self.arrowView.removeFromSuperview()
@@ -90,22 +98,35 @@ class Table {
         self.isBusy = true
         self.view.bringSubviewToFront(card.view!)
         let delay = delayAnimation ? TimeInterval(dealSpeed) : 0
-        UIView.animate(withDuration: 0.5, delay: delay, options: [.curveLinear , .allowUserInteraction], animations: {
+        
+        currentAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .linear, animations: {
             card.updateFrame()
             if card.rotateAnimation {
-                
                 card.view!.setTransformRotation(toDegrees: 90)
                 card.wasTransformed = true
-                print("Card: \(card.value) \(card.suit)")
-                print("X.Y.: \(card.view?.frame.origin.x) \(card.view?.frame.origin.y)")
-                print("--- animate card rotate ---")
-            }
-          }, completion: { finished in
-            self.animationComplete()
-            if !move {
-                self.updateCount(card: card)
             }
           })
+        currentAnimator.startAnimation(afterDelay: delay)
+        currentAnimator.addCompletion({ finished in
+              self.animationComplete()
+              if !move {
+                  self.updateCount(card: card)
+              }
+        })
+        
+        
+//        UIView.animate(withDuration: 0.5, delay: delay, options: [.curveLinear , .allowUserInteraction], animations: {
+//            card.updateFrame()
+//            if card.rotateAnimation {
+//                card.view!.setTransformRotation(toDegrees: 90)
+//                card.wasTransformed = true
+//            }
+//          }, completion: { finished in
+//            self.animationComplete()
+//            if !move {
+//                self.updateCount(card: card)
+//            }
+//          })
     }
     
     func animateDiscard(card: Card) {

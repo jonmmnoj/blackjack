@@ -26,7 +26,7 @@ class MainMenuContent {
             MainMenuCellContent(
                 gameType: .freePlay,
                 title: "Free Play",
-                detail: getAttrString(["Simulate a casino game.", "Immediate feedback on playing errors", "Customization for table rules, and skill level."]),
+                detail: getAttrString(["Simulate a casino game.", "Feedback on play errors. Perfect counting skills.", "Customization for table rules, and skill level."]),
                 imageName: "Image"),
             
             MainMenuCellContent(
@@ -44,13 +44,13 @@ class MainMenuContent {
             MainMenuCellContent(
                 gameType: .deckRounding,
                 title: "Deck Estimation",
-                detail: getAttrString(["Drill decks remaining in the discard tray.", "Improve estimation accuracy and speed.", "Customize to level of skill."]),
+                detail: getAttrString(["Drill decks remaining in the discard tray.", "Improve estimation accuracy and speed.", "Customize to skill level."]),
                 imageName: "downBox"),
             
             MainMenuCellContent(
                 gameType: .trueCount,
                 title: "True Count Conversion",
-                detail: getAttrString(["Drill deck estimation and true count conversion.", "Improve true count conversion accuracy and speed.", "Customize to level of skill."]),
+                detail: getAttrString(["Drill deck estimation and true count conversion.", "Improve true count conversion accuracy and speed.", "Customize to skill level."]),
                 imageName: "divide"),
             
             MainMenuCellContent(

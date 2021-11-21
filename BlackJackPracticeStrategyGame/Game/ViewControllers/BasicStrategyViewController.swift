@@ -20,6 +20,8 @@ class BasicStrategyViewController: UIViewController, FeedbackViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         feedbackView.delegate = self
         feedbackView.updateViewForBasicStrategy(isCorrect: isCorrect, playerAction: playerAction , correctAction: correctAction)
+        feedbackView.layer.cornerRadius = 10
+        feedbackView.layer.masksToBounds = true
     }
     
     func dimiss() {

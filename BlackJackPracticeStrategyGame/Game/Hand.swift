@@ -29,6 +29,36 @@ class Hand {
     var state: HandState
     var result: HandResult? = nil
     
+    func adjustForScaleChange(dealPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, changeInDealPointX: CGFloat? = nil, changeInDealPointY: CGFloat? = nil) {
+        var changeX = originPoint.x - dealPoint.x
+        var changeY = originPoint.y - dealPoint.y
+        if changeInDealPointX != nil {
+            changeX = changeInDealPointX!
+        }
+        if changeInDealPointY != nil {
+            changeY = changeInDealPointY!
+        }
+        
+        //var dp: CGPoint
+        //dp = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
+        
+//        print("originPoint.x: \(originPoint.x)")
+//        print("originPoint.y: \(originPoint.y)")
+//        print("dp.x: \(dp.x)")
+//        print("dp.y: \(dp.y)")
+        self.nextCardPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)//CGPoint(x: nextCardPoint.x - changeX, y: nextCardPoint.y - changeY)
+        self.originPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
+        self.adjustmentX = adjustmentX
+        self.adjustmentY = adjustmentY
+        for (i, card) in cards.enumerated() {
+            if i > 0 {
+                adjustDealPoint(isRotated: card.rotateAnimation)
+                //card.dealPoint = nextCardPoint
+            }
+            card.dealPoint = nextCardPoint
+        }
+    }
+    
     init(dealToPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, owner: Dealable) {
         self.nextCardPoint = dealToPoint
         self.originPoint = dealToPoint
@@ -75,7 +105,9 @@ class Hand {
     }
     
     func createSplitHand() -> Hand {
-        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y), adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
+        //let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + Card.width * 1.6, y: self.originPoint.y),
+        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y),
+                           adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
         newHand.betAmount = self.betAmount
         //Settings.shared.bankRollAmount -= Double(self.betAmount)
         Bankroll.shared.add(-Double(self.betAmount))

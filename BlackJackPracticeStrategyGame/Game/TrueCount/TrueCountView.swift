@@ -20,6 +20,10 @@ class TrueCountView: NSObject {
         stack.distribution = .fill
         [topStackView,
          bottomStackView].forEach { stack.addArrangedSubview($0) }
+        
+        stack.layer.cornerRadius = 10
+        stack.layer.masksToBounds = true
+        
         return stack
     }()
     
@@ -79,7 +83,7 @@ class TrueCountView: NSObject {
         let label = UILabel()
         label.font = UIFont.preferredFont(forTextStyle: .subheadline)
         label.textColor = .systemRed
-        label.text = "Decks remaining (rounded): 0"
+        label.text = "Decks remaining: 0"//(rounded): 0"
         label.textAlignment = .center
         //label.backgroundColor = .systemBackground
         label.isHidden = !Settings.shared.showDiscardedRemainingDecks
@@ -158,7 +162,7 @@ class TrueCountView: NSObject {
     }()
     lazy var submitButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = Settings.shared.defaults.buttonColor
+        button.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         button.setTitle("Submit", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -200,11 +204,11 @@ class TrueCountView: NSObject {
     
     func setup() {
         let numberOfDecks = Settings.shared.numberOfDecks
-        let roundDeckToNearest: Float = Settings.shared.deckRoundedTo == "whole" ? 1.0 : 0.5
+        let roundDeckToNearest: Float = DeckRoundedTo(rawValue: Settings.shared.deckRoundedTo)!.floatValue
         let roundLast3DecksToHalf = Settings.shared.roundLastThreeDecksToHalf
         let numberOfCardsInDeck = 52
         var runningCounts: [Int] = [0]
-        for i in 1...10 {
+        for i in 1...Settings.shared.maxRunningCount {
             runningCounts.append(i)
             runningCounts.append(i * -1)
         }
@@ -253,9 +257,9 @@ class TrueCountView: NSObject {
                 // if 0.9 -> 0, if 1.25 -> 1, if 1.5 -> 1, if 1.75 -> 1, if 1.99 -> 1
                 adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.rounded(.towardZero)
             }
-        } else { // roundDeckToNearest = 0.5 {
+        } else { //if roundDeckToNearest == 0.5 || 0.25 {
             // if 0.4 -> 0, if 0.5 -> 0.5, if 0.9 -> 0.5, if 0.99 -> 0.5, if 1 -> 1
-            adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: 0.5)
+            adjustedNumberOfDiscardedDecks = randomNumberOfDiscardedDecks.floor(nearest: roundDeckToNearest)
         }
          
         // # of Decks In PLay - DIVISOR
@@ -263,19 +267,19 @@ class TrueCountView: NSObject {
         if numberOfDecksLeftInPlay == 0 { numberOfDecksLeftInPlay = 1 }
         
         self.decksDiscardedLabel.text = "Decks discarded: \(randomNumberOfDiscardedDecks)"
-        self.decksRemainingLabel.text = "Decks remaining (rounded): \(numberOfDecksLeftInPlay)"
+        self.decksRemainingLabel.text = "Decks remaining (divisor): \(numberOfDecksLeftInPlay)"//(rounded): \(numberOfDecksLeftInPlay)"
         
         // True Count
         let divisionResult = (Float(randomRunningCount) / numberOfDecksLeftInPlay)
         self.trueCount = Int(divisionResult)
         
-        print("------------")
-        print("RC: \(randomRunningCount)")
-        print("Actual discarded decks: \(randomNumberOfDiscardedDecks)")
-        print("Adjusted dicarded decks: \(adjustedNumberOfDiscardedDecks)")
-        print("Decks in play: \(numberOfDecksLeftInPlay)")
-        print("RC ÷ Decks in play: \(divisionResult)")
-        print("TC: \(trueCount!)")
+//        print("------------")
+//        print("RC: \(randomRunningCount)")
+//        print("Actual discarded decks: \(randomNumberOfDiscardedDecks)")
+//        print("Adjusted dicarded decks: \(adjustedNumberOfDiscardedDecks)")
+//        print("Decks in play: \(numberOfDecksLeftInPlay)")
+//        print("RC ÷ Decks in play: \(divisionResult)")
+//        print("TC: \(trueCount!)")
     }
     
     private func resizeImageView() {

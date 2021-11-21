@@ -9,7 +9,9 @@ import Foundation
 import UIKit
 
 class Card {
-    static var height: CGFloat = Settings.shared.cardSize
+    static var height: CGFloat {
+        return Settings.shared.cardSize
+    }
     static var width: CGFloat {
         return (self.height * 0.708).rounded() //0.708
     }
@@ -45,6 +47,18 @@ class Card {
         self.view!.frame = frame
     }
     
+    func adjustSizeForScaleChange() {
+        let frame = CGRect(x: self.dealPoint.x, y: self.dealPoint.y, width: Card.width, height: Card.height)
+        self.view!.frame = frame
+        self.layoutSublayers(of: self.view!.layer)
+    }
+    
+    func adjustSizeForScaleChange(changeX: CGFloat, changeY: CGFloat) {
+        let frame = CGRect(x: self.view!.frame.minX - changeX, y: self.view!.frame.minY - changeY, width: Card.width, height: Card.height)
+        self.view!.frame = frame
+        self.layoutSublayers(of: self.view!.layer)
+    }
+    
     func dealFaceDown() {
         self.isFaceDown = true
     }
@@ -74,11 +88,11 @@ class Card {
         //view.backgroundColor = .black
         
         let back = UIImageView()
-        back.image = UIImage(named:"red_back")
+        back.image = UIImage(named: backImageName())
         back.isHidden = !isFaceDown
         
         let front = UIImageView()
-        front.image = UIImage(named:imageName())
+        front.image = UIImage(named: imageName())
         front.isHidden = isFaceDown
 
         view.addSubview(front)
@@ -89,8 +103,27 @@ class Card {
         self.backView = back
     }
     
+    func backImageName() -> String {
+        var str: String = Settings.shared.cardColor.lowercased()
+        str += "_back"
+        return str
+    }
+    
     func imageName() -> String {
         return String("\(self.value.stringValue)\(self.suit.letter)")
+    }
+    
+    func layoutSublayers(of layer: CALayer) {
+        if layer == self.view?.layer {
+            layer.sublayers?.forEach {
+                // By disabling actions we make sure that
+                // frame changes for sublayers are applied immediately without animation
+                CATransaction.begin()
+                CATransaction.setDisableActions(true)
+                $0.frame = layer.bounds
+                CATransaction.commit()
+            }
+        }
     }
 }
 

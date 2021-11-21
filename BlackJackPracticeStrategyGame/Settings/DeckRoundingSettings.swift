@@ -16,36 +16,61 @@ class DeckRoundingSettings: GameTypeSettings {
     }
     var vc: SettingsViewController
     var sliderView: SliderTableViewCell!
-    var numberOfDecksSection: RadioSection!
+    //var numberOfDecksSection: RadioSection!
     var deckFractionsSection: RadioSection!
     var deckRoundedToSection: RadioSection!
     var roundCell: UITableViewCell!
     var showCell: UITableViewCell!
+    var quickFeedbackCell: UITableViewCell!
+    var numberOfDecksViewCell: UITableViewCell!
+    var deckRoundedToCell: UITableViewCell!
+    var deckFractionCell: UITableViewCell!
+   
+    @objc private func setNumberOfDecksSetting(notification: Notification) {
+        let string = notification.object as! String
+        numberOfDecksViewCell.detailTextLabel?.text = string
+        Settings.shared.numberOfDecks = Int(string)!
+    }
+    @objc private func setDeckRoundedToSetting(notification: Notification) {
+        let string = notification.object as! String
+        deckRoundedToCell.detailTextLabel?.text = string
+        Settings.shared.deckRoundedTo = string
+    }
+    @objc private func setDeckFractionSetting(notification: Notification) {
+        let string = notification.object as! String
+        deckFractionCell.detailTextLabel?.text = string
+        Settings.shared.deckFraction = string
+    }
+    private func showViewSettingOptions(sectionTitle: String, data: [String], checkMarkedValue: String, notificationName: String) {
+        let vc = SettingsListTableViewController(sectionTitle: sectionTitle, data: data, checkMarkedValue: checkMarkedValue, notificationName: notificationName)
+        //vc.title = $0.text //+ ($0.detailText?.text ?? "")
+        self.vc.navigationController?.pushViewController(vc, animated: true)
+    }
     
     var settings = Settings.shared
     
     var tableSettings: [Section] {
-        deckRoundedToSection = RadioSection(title: "Rounding", options: [
-            OptionRow(text: "whole", isSelected: settings.deckRoundedTo == "whole", action: didToggleDeckRoundedToSelection()),
-            OptionRow(text: "half", isSelected: settings.deckRoundedTo == "half", action: didToggleDeckRoundedToSelection())
-        ], footer: "Always rounds down")
-        deckRoundedToSection.alwaysSelectsOneOption = true
-        
-        numberOfDecksSection = RadioSection(title: "Number of Decks", options: [
-            OptionRow(text: "2", isSelected: settings.numberOfDecks == 2, action: didToggleSelection()),
-            OptionRow(text: "4", isSelected: settings.numberOfDecks == 4, action: didToggleSelection()),
-            OptionRow(text: "6", isSelected: settings.numberOfDecks == 6, action: didToggleSelection()),
-            OptionRow(text: "8", isSelected: settings.numberOfDecks == 8, action: didToggleSelection())
-        ] /*, footer: "See RadioSection for more details."*/)
-        numberOfDecksSection.alwaysSelectsOneOption = true
-        
-        deckFractionsSection = RadioSection(title: "Amount Discarded", options: [
-            OptionRow(text: "wholes", isSelected: settings.deckFraction == "wholes", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "halves", isSelected: settings.deckFraction == "halves", action: didToggleDeckFractionSelection()),
-//            OptionRow(text: "third", isSelected: settings.deckFraction == "third", action: didToggleDeckFractionSelection()),
-            OptionRow(text: "quarters", isSelected: settings.deckFraction == "quarters", action: didToggleDeckFractionSelection())
-        ] )//, footer: "")
-        deckFractionsSection.alwaysSelectsOneOption = true
+//        deckRoundedToSection = RadioSection(title: "Rounding", options: [
+//            OptionRow(text: "whole", isSelected: settings.deckRoundedTo == "whole", action: didToggleDeckRoundedToSelection()),
+//            OptionRow(text: "half", isSelected: settings.deckRoundedTo == "half", action: didToggleDeckRoundedToSelection())
+//        ], footer: "Always rounds down")
+//        deckRoundedToSection.alwaysSelectsOneOption = true
+//
+////        numberOfDecksSection = RadioSection(title: "Number of Decks", options: [
+////            OptionRow(text: "2", isSelected: settings.numberOfDecks == 2, action: didToggleSelection()),
+////            OptionRow(text: "4", isSelected: settings.numberOfDecks == 4, action: didToggleSelection()),
+////            OptionRow(text: "6", isSelected: settings.numberOfDecks == 6, action: didToggleSelection()),
+////            OptionRow(text: "8", isSelected: settings.numberOfDecks == 8, action: didToggleSelection())
+////        ] /*, footer: "See RadioSection for more details."*/)
+////        numberOfDecksSection.alwaysSelectsOneOption = true
+//
+//        deckFractionsSection = RadioSection(title: "Amount Discarded", options: [
+//            OptionRow(text: "wholes", isSelected: settings.deckFraction == "wholes", action: didToggleDeckFractionSelection()),
+//            OptionRow(text: "halves", isSelected: settings.deckFraction == "halves", action: didToggleDeckFractionSelection()),
+////            OptionRow(text: "third", isSelected: settings.deckFraction == "third", action: didToggleDeckFractionSelection()),
+//            OptionRow(text: "quarters", isSelected: settings.deckFraction == "quarters", action: didToggleDeckFractionSelection())
+//        ] )//, footer: "")
+//        deckFractionsSection.alwaysSelectsOneOption = true
         
         return [
             Section(title: "", rows: [
@@ -65,14 +90,58 @@ class DeckRoundingSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
-                        gvc.modalPresentationStyle = .overFullScreen
-                        self.vc.present(gvc, animated: true, completion: nil)
+                        let nvc = UINavigationController(rootViewController: gvc)
+                        nvc.modalPresentationStyle = .fullScreen
+                        self.vc.present(nvc, animated: true, completion: nil)
+                        //gvc.modalPresentationStyle = .overFullScreen
+                        //self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),
             
-            deckRoundedToSection,
-            numberOfDecksSection,
-            deckFractionsSection,
+            Section(title: "Deck settings", rows: [
+                NavigationRow(text: "Number of Decks", detailText: .value1(""), customization: { cell, row in
+                        self.numberOfDecksViewCell = cell
+                        self.numberOfDecksViewCell.detailTextLabel?.text = String(Settings.shared.numberOfDecks)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setNumberOfDecksSetting(notification:)), name: Notification.Name("NumberOfDecksSetting"), object: nil)
+                    },
+                              action: { row in
+                        let values = NumberOfDecks.allCases
+                        var data = [String]()
+                        for value in values {
+                            data.append("\(value.rawValue)")
+                        }
+                      self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: String(Settings.shared.numberOfDecks), notificationName: "NumberOfDecksSetting")
+                        return
+                    }),
+                NavigationRow(text: "Divisor rounding", detailText: .value1(""), customization: { cell, row in
+                        self.deckRoundedToCell = cell
+                        self.deckRoundedToCell.detailTextLabel?.text = String(Settings.shared.deckRoundedTo)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setDeckRoundedToSetting(notification:)), name: Notification.Name("DeckRoundedToSetting"), object: nil)
+                    },
+                              action: { row in
+                        let values = DeckRoundedTo.allCases
+                        var data = [String]()
+                        for value in values {
+                            data.append("\(value.rawValue)")
+                        }
+                      self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: String(Settings.shared.deckRoundedTo), notificationName: "DeckRoundedToSetting")
+                        return
+                    }),
+                NavigationRow(text: "Amount of deck discarded", detailText: .value1(""), customization: { cell, row in
+                        self.deckFractionCell = cell
+                        self.deckFractionCell.detailTextLabel?.text = String(Settings.shared.deckFraction)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setDeckFractionSetting(notification:)), name: Notification.Name("DeckFractionSetting"), object: nil)
+                    },
+                              action: { row in
+                        let values = DeckFraction.allCases
+                        var data = [String]()
+                        for value in values {
+                            data.append("\(value.rawValue)")
+                        }
+                        self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: String(Settings.shared.deckFraction), notificationName: "DeckFractionSetting")
+                        return
+                    }),
+            ]),
             
             Section(title: "Miscellaneous", rows: [
                 SwitchRow(text: "Show Amount Discarded", detailText: .subtitle(""), switchValue: settings.showDiscardedRemainingDecks, customization: {cell,row in
@@ -85,6 +154,11 @@ class DeckRoundingSettings: GameTypeSettings {
                 }, action: { _ in
                     self.settings.roundLastThreeDecksToHalf = !self.settings.roundLastThreeDecksToHalf
                 }),
+                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
+                    self.quickFeedbackCell = cell
+                }, action: { _ in
+                    self.settings.quickFeedback = !self.settings.quickFeedback
+                })
                 
             ])
 

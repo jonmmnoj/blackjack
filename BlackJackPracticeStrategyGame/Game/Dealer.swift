@@ -37,7 +37,7 @@ class Dealer: Dealable {
     
     func dealCardToSelf() {
         let card = getCard()
-        //let card = Card(value: .ten, suit: .clubs) // SOFT 17 TEST
+        //let card = Card(value: .ace, suit: .clubs) // SOFT 17 TEST
         if self.activatedHand!.cards.count == 0 {
             card.isFaceDown = true
             //card.value = .ace
@@ -54,6 +54,10 @@ class Dealer: Dealable {
     //let values: [CardValue] = [.ten, .five]//, .five]
     //var i = 0
     func deal(to player: Player) {
+        
+        //let hands = player.hands.reversed()
+        //hands.forEach {
+        //    let card = getCard()
         player.hands.forEach {
             let card = getCard()
             //let card = Card(value: .ace, suit: .diamonds)
