@@ -20,6 +20,7 @@ class DeckRoundingGameHelper: GameTypeStrategyPatternProtocol {
     
     var lastSetupDeckRemaining: Float?
     func dealCards() {
+        SoundPlayer.shared.playSound(type: .discard)
         dv = DeckRoundingView()
         dv.tableView = gameMaster.tableView
         stackView = dv.stackView

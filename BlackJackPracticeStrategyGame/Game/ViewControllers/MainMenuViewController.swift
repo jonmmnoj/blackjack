@@ -15,6 +15,8 @@ class MainMenuViewController: UITableViewController {
         view.backgroundColor = UIColor(hex: TableColor.Green.tableCode)
         tableView.rowHeight = UITableView.automaticDimension;
         tableView.estimatedRowHeight = 44.0;
+        
+        //self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     override func viewWillAppear(_ animated: Bool) {

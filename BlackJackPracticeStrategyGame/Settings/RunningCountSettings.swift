@@ -10,7 +10,7 @@ import UIKit
 import QuickTableViewController
 
 class RunningCountSettings: GameTypeSettings {
-    var title: String = "Running Count"
+    var title: String = "Running Count #2"
     init(vc: SettingsViewController) {
         self.vc = vc
     }
@@ -60,6 +60,7 @@ class RunningCountSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
+                        gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
                         self.vc.present(nvc, animated: true, completion: nil)
@@ -78,7 +79,8 @@ class RunningCountSettings: GameTypeSettings {
                     }
                     self.sliderView.setTextHandler = { value in
                         let percentage = Int(value * 10)
-                        let message = "\(percentage)%"
+                        var message = "\(percentage)%"
+                        if percentage == 0 { message = "<\(1)%" }
                         return message
                         
                     }
@@ -117,36 +119,36 @@ class RunningCountSettings: GameTypeSettings {
             
             //radioSection,
             
-            Section(title: "", rows: [
-               TapActionRow(
-                    text: "Reset to defaults",
-                    customization: {(cell,row) in
-                        cell.textLabel?.textColor = .systemRed
-                        cell.tintColor = .systemRed
-                        cell.backgroundColor = .secondarySystemGroupedBackground
-                        //cell.textLabel?.textColor = .systemBlue
-                        cell.textLabel?.font = .systemFont(ofSize: 17, weight: .regular)//font-family: "UICTFontTextStyleBody"; font-weight: normal; font-style: normal; font-size: 17.00pt
-                        cell.selectionStyle = .default
-                    },
-                
-                    action: { _ in
-                        
-                        self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
-                        self.sliderView.slider.sendActions(for: .valueChanged)
-                        
-                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
-                            let indexPath = IndexPath(row: 0, section: 2)
-                            self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-                            self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
-                        }
-                        
-                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
-                            Settings.shared.numberOfRoundsBeforeAskRunningCount = Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount
-                            NotificationCenter.default.post(name: Notification.Name("AskRunningCountSetting"), object: Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount)
-                        }
-                        
-                    })
-            ]),
+//            Section(title: "", rows: [
+//               TapActionRow(
+//                    text: "Reset to defaults",
+//                    customization: {(cell,row) in
+//                        cell.textLabel?.textColor = .systemRed
+//                        cell.tintColor = .systemRed
+//                        cell.backgroundColor = .secondarySystemGroupedBackground
+//                        //cell.textLabel?.textColor = .systemBlue
+//                        cell.textLabel?.font = .systemFont(ofSize: 17, weight: .regular)//font-family: "UICTFontTextStyleBody"; font-weight: normal; font-style: normal; font-size: 17.00pt
+//                        cell.selectionStyle = .default
+//                    },
+//                
+//                    action: { _ in
+//                        
+//                        self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
+//                        self.sliderView.slider.sendActions(for: .valueChanged)
+//                        
+//                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
+//                            let indexPath = IndexPath(row: 0, section: 2)
+//                            self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+//                            self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
+//                        }
+//                        
+//                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
+//                            Settings.shared.numberOfRoundsBeforeAskRunningCount = Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount
+//                            NotificationCenter.default.post(name: Notification.Name("AskRunningCountSetting"), object: Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount)
+//                        }
+//                        
+//                    })
+//            ]),
         ]
     }
     

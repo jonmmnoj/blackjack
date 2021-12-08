@@ -33,8 +33,8 @@ class FreePlaySettings: GameTypeSettings {
     var numberOfDecksViewCell: UITableViewCell!
     var trueCountCell: UITableViewCell!
     var betSpreadCell: UITableViewCell!
-    //var speedCell: UITableViewCell!
-    
+    var ghostHandCell: UITableViewCell!
+
     var navigateToOption: String?
     
     @objc private func setPenentrationSetting(notification: Notification) {
@@ -58,7 +58,7 @@ class FreePlaySettings: GameTypeSettings {
     
     @objc private func setBetSpreadSetting(notification: Notification) {
         //let set = notification.object as! Bool
-        betSpreadCell.detailTextLabel?.text = Settings.shared.betSpread ? "yes" : "no"
+        betSpreadCell.detailTextLabel?.text = Settings.shared.betSpread ? "On" : "Off"
         //Settings.shared.betSpread = set
     }
     
@@ -222,19 +222,6 @@ class FreePlaySettings: GameTypeSettings {
                           //self.setupWatchBetSpread()
                       }),
                 
-                NavigationRow(text: "Monitor Bet Spread", detailText: .value1(""), customization: { cell, row in
-                        self.betSpreadCell = cell
-                        self.betSpreadCell.detailTextLabel?.text = Settings.shared.betSpread ? "yes" : "no"
-                        NotificationCenter.default.addObserver(self, selector: #selector(self.setBetSpreadSetting(notification:)), name: Notification.Name("BetSpreadSetting"), object: nil)
-                    },
-                      action: { row in
-                          var data = BetSpread.trueCounts
-                          data.insert("switch row", at: 0)
-                          let checkMarkedValue = "-99"
-                          self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "BetSpreadSetting", isBetSpreadTable: true)
-                          return
-                      }),
-                
                 SwitchRow(
                     text: "Place Bets",
                     switchValue: settings.placeBets,
@@ -245,6 +232,21 @@ class FreePlaySettings: GameTypeSettings {
                       action: { _ in
                         self.settings.placeBets = !self.settings.placeBets
                       }),
+                
+                NavigationRow(text: "Monitor Bet Spread", detailText: .value1(""), customization: { cell, row in
+                        self.betSpreadCell = cell
+                        self.betSpreadCell.detailTextLabel?.text = Settings.shared.betSpread ? "On" : "Off"
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.setBetSpreadSetting(notification:)), name: Notification.Name("BetSpreadSetting"), object: nil)
+                    },
+                      action: { row in
+                          var data = BetSpread.trueCounts
+                          data.insert("switch row", at: 0)
+                          let checkMarkedValue = "-99"
+                          self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "BetSpreadSetting", isBetSpreadTable: true)
+                          return
+                      }),
+                
+                
                 
                 SwitchRow(
                     text: "Show Discard Tray",
@@ -286,6 +288,21 @@ class FreePlaySettings: GameTypeSettings {
                 
             ]),
             
+            
+            Section(title: "Miscellaneous", rows: [
+                SwitchRow(
+                    text: "Ghost Hand",
+                    switchValue: settings.ghostHand,
+                      customization: { cell, row in
+                        self.ghostHandCell = cell
+                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.ghostHand, animated: false)
+                      },
+                      action: { _ in
+                        self.settings.ghostHand = !self.settings.ghostHand
+                          //self.setupWatchBetSpread()
+                      }),
+            ]),
+            
             //countSection,
             
             //radioSection,
@@ -300,7 +317,8 @@ class FreePlaySettings: GameTypeSettings {
                     }
                     self.sliderView.setTextHandler = { value in
                         let percentage = Int(value * 10)
-                        let message = "\(percentage)%"
+                        var message = "\(percentage)%"
+                        if percentage == 0 { message = "<\(1)%" }
                         return message
                         
                     }
@@ -405,6 +423,11 @@ class FreePlaySettings: GameTypeSettings {
                             NotificationCenter.default.post(name: Notification.Name("BetSpreadSetting"), object: nil)
                         }
                         
+                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ghostHand, animated: true)
+                        (self.ghostHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        if self.ghostHandCell.isHidden {
+                            self.settings.ghostHand = self.settings.defaults.ghostHand
+                        }
                         
                         
 //                        if Settings.shared.numberOfRoundsBeforeAskTrueCount != Settings.shared.defaults.numberOfRoundsBeforeAskTrueCount {

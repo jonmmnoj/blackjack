@@ -65,7 +65,14 @@ class BetSpreadTableViewCell: UITableViewCell {
     }
     
     @IBAction func textFieldEditingChange(number: Int) {
+        
         setBet(strAmount: betAmountTextField.text ?? "")
+    }
+    
+    @IBAction func textFieldDidBeginEditing() {
+        if  betAmountTextField.text == "0" {
+            betAmountTextField.text = ""
+        }
     }
     
     private func setBet(strAmount: String) {

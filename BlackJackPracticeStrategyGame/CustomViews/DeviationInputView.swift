@@ -54,10 +54,6 @@ class DeviationInputView: UIView {
         } else {
             initRunningCount()
         }
-        
-        textField.keyboardType = UIKeyboardType.numberPad
-        textField.returnKeyType = UIReturnKeyType.done
-        textField.addNumericAccessory(addPlusMinus: true)
     }
     
     required init?(coder: NSCoder) {
@@ -79,6 +75,10 @@ class DeviationInputView: UIView {
         
         submitButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         submitButton.setTitleColor(.white, for: .normal)
+        
+        textField.keyboardType = UIKeyboardType.numberPad
+        textField.returnKeyType = UIReturnKeyType.done
+        textField.addNumericAccessory(addPlusMinus: true)
     }
     
     private func initRunningCount() {
@@ -189,6 +189,11 @@ class DeviationInputView: UIView {
         } else {
             runningCountSubmitHandler(getInt())
         }
-        
+    }
+    
+    @IBAction func textFieldDidBeginEditing() {
+        if  textField.text == "0" {
+            textField.text = ""
+        }
     }
 }

@@ -28,10 +28,14 @@ class Hand {
     var adjustmentY: CGFloat
     var state: HandState
     var result: HandResult? = nil
+    var isGhostHand = false
     
     func adjustForScaleChange(dealPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, changeInDealPointX: CGFloat? = nil, changeInDealPointY: CGFloat? = nil) {
-        var changeX = originPoint.x - dealPoint.x
+        var changeX = originPoint.x - dealPoint.x // The originPoint is the orginal point... The new deal point is apparently adjusted for the new card size.
         var changeY = originPoint.y - dealPoint.y
+        
+        // changeInDealPoint is never nil, so just use that and get rid of dealPoint argument
+        
         if changeInDealPointX != nil {
             changeX = changeInDealPointX!
         }
@@ -39,14 +43,8 @@ class Hand {
             changeY = changeInDealPointY!
         }
         
-        //var dp: CGPoint
-        //dp = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
         
-//        print("originPoint.x: \(originPoint.x)")
-//        print("originPoint.y: \(originPoint.y)")
-//        print("dp.x: \(dp.x)")
-//        print("dp.y: \(dp.y)")
-        self.nextCardPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)//CGPoint(x: nextCardPoint.x - changeX, y: nextCardPoint.y - changeY)
+        self.nextCardPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
         self.originPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
         self.adjustmentX = adjustmentX
         self.adjustmentY = adjustmentY
@@ -72,8 +70,15 @@ class Hand {
         self.cards.append(card)
         card.hand = self
         if card.value == .ace { self.hasAce = true }
-        if self.cards.count > 1 { adjustDealPoint(isRotated: card.rotateAnimation) }
-        card.set(dealPoint: nextCardPoint)
+        
+        if Settings.shared.gameType != .runningCount_v2 {
+            if cards.count > 1 { adjustDealPoint(isRotated: card.rotateAnimation) }
+            card.set(dealPoint: nextCardPoint)
+        }
+        
+//        if self.cards.count == 2 && Rules.hasBlackjack(hand: self) {
+//            state = .blackjack
+//        }
     }
     
     func adjustDealPoint(isRotated: Bool = false) {
@@ -105,14 +110,15 @@ class Hand {
     }
     
     func createSplitHand() -> Hand {
-        //let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + Card.width * 1.6, y: self.originPoint.y),
-        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y),
+        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + Card.width * 1.6, y: self.originPoint.y),
+        //let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y),
                            adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
         newHand.betAmount = self.betAmount
         //Settings.shared.bankRollAmount -= Double(self.betAmount)
         Bankroll.shared.add(-Double(self.betAmount))
         newHand.isSplitHand = true
         self.isSplitHand = true
+        newHand.isGhostHand = self.isGhostHand
         if isAces() {
             self.isSplitAce = true
             newHand.isSplitAce = true
@@ -144,8 +150,15 @@ class Hand {
     
     var valueLabelView: UILabel?
     
-    func updateValueOfHand(for table: Table) {
-        guard Settings.shared.showHandTotal else { return }
+    func updateViewValueOfHand(for table: Table) {
+        guard Settings.shared.showHandTotal else {
+            if valueLabelView != nil {
+                valueLabelView?.removeFromSuperview()
+            }
+            return
+        }
+        
+        //if owner.isDealer && cards[0].isFaceDown { return }
         
         if valueLabelView == nil {
             let width: CGFloat = 45
@@ -153,6 +166,7 @@ class Hand {
             let padding: CGFloat = 10
             let x: CGFloat = self.owner.isDealer ? originPoint.x + Settings.shared.cardWidth * 0.5 : originPoint.x + Settings.shared.cardWidth * 0.5 //originPoint.x + Settings.shared.cardWidth - width
             valueLabelView = UILabel(frame: CGRect(x: x, y: originPoint.y + Settings.shared.cardSize + padding, width: width, height: height))
+            valueLabelView?.font = UIFont.preferredFont(forTextStyle: .body)
             valueLabelView?.backgroundColor = .white
             valueLabelView?.textAlignment = .center
             table.view.addSubview(valueLabelView!)
@@ -163,11 +177,11 @@ class Hand {
         }
         let h = Hand(dealToPoint: .zero, adjustmentX: 0, adjustmentY:0, owner: self.owner)
         h.cards = array
-        let value = Rules.value(of: cards)
+        let value = Rules.value(of: h.cards)
         var s = String(value)
 
         var cardValues: [Int] = []
-        for card in cards {
+        for card in h.cards {
             cardValues.append(card.value.rawValue)
         }
         if BasicStrategy.getRuleType(playerCardValues: cardValues) == .soft {

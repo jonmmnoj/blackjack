@@ -16,7 +16,7 @@ class Card {
         return (self.height * 0.708).rounded() //0.708
     }
     var rotateAnimation: Bool {
-        return isDouble || rotateForSplitAce
+        return isDouble || rotateForSplitAce || customRotation
     }
     var hasAdjustedForRotatedMoveLeft = false
     var hasAdjustedForRotatedMoveRight = false
@@ -32,6 +32,11 @@ class Card {
     var isFaceDown: Bool = false
     var isDouble: Bool = false
     var wasDealt: Bool = false
+    var rotationDegrees: CGFloat = 90
+    var customRotation = false
+    var adjustDealPoint = true
+    var customDealDelay: Double?
+    var isPenetrationCard = false
     
     init(value: CardValue, suit: CardSuit) {
         self.value = value
@@ -43,6 +48,7 @@ class Card {
     }
     
     func updateFrame() {
+        guard self.dealPoint != nil else { return }
         let frame = CGRect(x: self.dealPoint.x, y: self.dealPoint.y, width: Card.width, height: Card.height)
         self.view!.frame = frame
     }
@@ -90,6 +96,14 @@ class Card {
         let back = UIImageView()
         back.image = UIImage(named: backImageName())
         back.isHidden = !isFaceDown
+        if isPenetrationCard {
+            back.image = nil
+            back.backgroundColor = .yellow//UIColor.init(hex: "#b82e25")
+
+            back.layer.cornerRadius = 10
+            back.layer.borderWidth = 1
+            back.layer.borderColor = UIColor.init(hex: "#c7c703")?.cgColor
+        }
         
         let front = UIImageView()
         front.image = UIImage(named: imageName())

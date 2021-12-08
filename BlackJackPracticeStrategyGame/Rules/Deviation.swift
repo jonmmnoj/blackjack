@@ -10,9 +10,9 @@ class Deviation {
     var type: DeviationType
     var count: Int?
     var direction: String?
-    var action: StrategyAction
+    var action: PlayerAction
     
-    init(type: DeviationType, count: Int?, direction: String?, action: StrategyAction) {
+    init(type: DeviationType, count: Int?, direction: String?, action: PlayerAction) {
         self.type = type
         self.count = count
         self.direction = direction
@@ -30,7 +30,7 @@ class Deviation {
         return count
     }
     
-    func getAction(numberOfPlayerCards num: Int) -> StrategyAction {
+    func getAction(numberOfPlayerCards num: Int) -> PlayerAction {
         if self.action == .doubleStand {
             if num > 2 {
                 return .stand

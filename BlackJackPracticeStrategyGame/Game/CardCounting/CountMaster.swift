@@ -40,12 +40,20 @@ class CountMaster {
         let gameType = Settings.shared.gameType!
         let inputView = DeviationInputView(frame: .zero, gameType: gameType)
             inputView.runningCountSubmitHandler = { inputRC in
-                let correctCount = gameType == .runningCount ? self.cardCounter.runningCount : self.cardCounter.getTrueCount()
+                let correctCount = gameType == .runningCount || gameType == .runningCount_v2 ? self.cardCounter.runningCount : self.cardCounter.getTrueCount()
                 let isInputCorrect = inputRC == correctCount
-                self.gameMaster!.delegate.presentBasicStrategyFeedbackView(isCorrect: isInputCorrect, playerAction: String(inputRC), correctAction: String(correctCount)) {
+                
+                let decision = Decision(type: gameType == .runningCount || gameType == .runningCount_v2 ? .runningCount : .trueCount, isCorrect: inputRC == correctCount, yourAnswer: String(inputRC), correctAnswer: String(correctCount), decisionBasedOn: nil)
+                Stats.shared.update(decision: decision)
+                
+                inputView.removeFromSuperview()
+                if Settings.shared.notifyMistakes {
+                    self.gameMaster!.delegate.presentBasicStrategyFeedbackView(isCorrect: isInputCorrect, playerAction: String(inputRC), correctAction: String(correctCount)) {
+                        self.taskComplete()
+                    }
+                } else {
                     self.taskComplete()
                 }
-                inputView.removeFromSuperview()
         }
         
         let tableView = gameMaster!.tableView

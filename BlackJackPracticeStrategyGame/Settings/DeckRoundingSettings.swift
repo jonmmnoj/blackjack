@@ -90,6 +90,7 @@ class DeckRoundingSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
+                        gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
                         self.vc.present(nvc, animated: true, completion: nil)

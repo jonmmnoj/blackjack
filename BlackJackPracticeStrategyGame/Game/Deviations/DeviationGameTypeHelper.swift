@@ -53,7 +53,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         let inputView = DeviationInputView(frame: .zero, deviation: self.deviation)
         inputView.deviationSubmitHandler = { action, count, tcDirection, rcDirection in
             
-            let inputAction = StrategyAction(rawValue: action.rawValue)!
+            let inputAction = PlayerAction(rawValue: action.rawValue)!
             let text = self.getInputText(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
             let correctText = self.getCorrectText()
             let isInputCorrect = self.isInputCorrect(action: inputAction, count: count, tcDirection: tcDirection, rcDirection: rcDirection)
@@ -85,9 +85,9 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         }
     }
     
-    private func isInputCorrect(action: StrategyAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> Bool {
+    private func isInputCorrect(action: PlayerAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> Bool {
         
-        let correctAction = getCorrectAction()
+        let correctAction = getCorrectAction().action
         let devCount = deviation.count
         if devCount == nil {
             return action == correctAction
@@ -98,7 +98,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
         }
     }
     
-    private func getInputText(action: StrategyAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> String {
+    private func getInputText(action: PlayerAction, count inputCount: Int, tcDirection: String, rcDirection: String) -> String {
         let devCount = deviation.count
         let action = action.rawValue.uppercased()
         if devCount == nil {
@@ -111,7 +111,7 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     }
     
     private func getCorrectText() -> String {
-        let correctAction = getCorrectAction().rawValue.uppercased()
+        let correctAction = getCorrectAction().action.rawValue.uppercased()
         let devCount = deviation.count
         
         if devCount == nil {
@@ -124,11 +124,13 @@ class DeviationGameTypeHelper: GameTypeStrategyPatternProtocol {
     }
     
     private func getCorrectAction() -> StrategyAction {
-        var correctAction = self.deviation.action
-        if correctAction == .doubleHit || correctAction == .doubleStand {
-            correctAction = .double
+        var sa = StrategyAction()
+        sa.isDeviation = true
+        sa.action = self.deviation.action
+        if sa.action == .doubleHit || sa.action == .doubleStand {
+            sa.action = .double
         }
-        return correctAction
+        return sa
     }
 
 }

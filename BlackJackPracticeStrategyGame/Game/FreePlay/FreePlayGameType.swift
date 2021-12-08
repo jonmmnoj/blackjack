@@ -18,46 +18,40 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
     
     init(gameMaster: GameMaster) {
         self.gameMaster = gameMaster
-        //countMaster.delegate = gameMaster.delegate
         countMaster.gameMaster = gameMaster
     }
     
     func dealCards() {
-        //gameMaster.player.add(hand: gameMaster.playerHand)
-        //gameMaster.dealer.moveCards(for: gameMaster.player, to: .right)
-        
-        
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
         dealer.dealCardToPlayers()
         dealer.dealCardToSelf()
-        
-//        for _ in 1..<gameMaster.player.hands.count {
-//            gameMaster.dealer.moveCards(for: gameMaster.player, to: .right)
-//        }
         gameMaster.gameState = .askInsurance
     }
     
+    private func updateStats(_ sa: StrategyAction, action: PlayerAction) {
+        let type = sa.isDeviation ? DecisionType.deviation : DecisionType.basicStrategy
+        var basedOn = gameMaster.getStringOfPlayerAndDealerHandValue()
+        if sa.isDeviation {
+            basedOn += " @ TC \(CardCounter.shared.getTrueCount())"
+        }
+        let decision = Decision(type: type, isCorrect: action == sa.action, yourAnswer: action.rawValue.uppercased(), correctAnswer: sa.action.rawValue.uppercased(), decisionBasedOn: basedOn)
+        Stats.shared.update(decision: decision)
+    }
+    
     func inputReceived(action: PlayerAction) {
-        let correctAction = gameMaster.getPlayerAction()
-        if action != correctAction && Settings.shared.notifyMistakes {
+        let correctStrategyAction = gameMaster.getPlayerAction()
+        let right = action == correctStrategyAction.action
+        updateStats(correctStrategyAction, action: action)
+        if !right && Settings.shared.notifyMistakes {
             
-            let message = "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())"
+            let message = "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctStrategyAction.action.rawValue.uppercased())"
             PlayError.notifyMistake(gameMaster.delegate, message: message, completion: { fix in
                 if fix {
                     self.gameMaster.waitForPlayerInput()
                 } else {
                     self.accept(action)
                 }})
-            
-            
-//            gameMaster.delegate.alertMistake(message: "You want to \(action.rawValue.uppercased()) \nCorrect strategy is \(correctAction.rawValue.uppercased())", completion: { fix in
-//                if fix {
-//                    self.gameMaster.waitForPlayerInput()
-//                } else {
-//                    self.accept(action)
-//                }
-//            })
         } else {
             accept(action)
         }
@@ -75,6 +69,8 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
             gameMaster.playerSplits()
         case .surrender:
             gameMaster.playerSurrenders()
+        case .doubleHit, .doubleStand, .splitIfDAS, .doNotSplit:
+            break
         }
     }
     
@@ -82,15 +78,19 @@ class FreePlayGameTypeStrategy: GameTypeStrategyPatternProtocol {
         if countMaster.isTimeToAskForCount() {
             countMaster.endOfRoundTasks(gameMaster: gameMaster, completion: {
                 self.gameMaster.prepareForNewRound()
-            })// let countMaster call back to GameMaster when task is complete
-            //print("GM waiting on CM")
+            })
         } else {
             gameMaster.prepareForNewRound()
         }
     }
     
     func waitForPlayerInput() {
-        dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
-        gameMaster.delegate.playerInput(enabled: true)
+        if gameMaster.player.activatedHand!.isGhostHand {
+            let sAction = self.gameMaster.getPlayerAction()
+            self.gameMaster.inputReceived(type: sAction.action)
+        } else {
+            dealer.indicateDealerIsReadyForPlayerInput(on: player.activatedHand!)
+            gameMaster.delegate.playerInput(enabled: true)
+        }
     }
 }

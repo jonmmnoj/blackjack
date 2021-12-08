@@ -36,9 +36,15 @@ class MainMenuContent {
                 imageName: "basicStrategy"),
             
             MainMenuCellContent(
+                gameType: .runningCount_v2,
+                title: "Running Count #1",
+                detail: getAttrString(["Keep the running count", "Improve counting accuracy and speed", "Customize level of difficulty"]),
+                imageName: "countdown"),
+            
+            MainMenuCellContent(
                 gameType: .runningCount,
-                title: "Running Count",
-                detail: getAttrString(["Keep the running count using an automated game simulator.", "Improve running count accuracy and speed.", "Customize deal speed."]),
+                title: "Running Count #2",
+                detail: getAttrString(["Keep the running count during an automated game simulator.", "Improve running count accuracy and speed.", "Customize deal speed."]),
                 imageName: "runCount"),
             
             MainMenuCellContent(

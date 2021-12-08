@@ -25,6 +25,7 @@ class TrueCountSettings: GameTypeSettings {
     var deckRoundedToCell: UITableViewCell!
     var deckFractionCell: UITableViewCell!
     var maxRunningCountCell: UITableViewCell!
+    var highCountBias: UITableViewCell!
    
     @objc private func setNumberOfDecksSetting(notification: Notification) {
         let string = notification.object as! String
@@ -95,6 +96,7 @@ class TrueCountSettings: GameTypeSettings {
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = self.vc.gameType
+                        gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
                         self.vc.present(nvc, animated: true, completion: nil)
@@ -132,6 +134,11 @@ class TrueCountSettings: GameTypeSettings {
                       self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: String(Settings.shared.deckRoundedTo), notificationName: "DeckRoundedToSetting")
                         return
                     }),
+                SwitchRow(text: "Round Last 3 Decks to Half", detailText: .subtitle(""), switchValue: settings.roundLastThreeDecksToHalf, customization: {cell,row in
+                    self.roundCell = cell
+                }, action: { _ in
+                    self.settings.roundLastThreeDecksToHalf = !self.settings.roundLastThreeDecksToHalf
+                }),
                 NavigationRow(text: "Amount of deck discarded", detailText: .value1(""), customization: { cell, row in
                         self.deckFractionCell = cell
                         self.deckFractionCell.detailTextLabel?.text = String(Settings.shared.deckFraction)
@@ -161,22 +168,23 @@ class TrueCountSettings: GameTypeSettings {
                             self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: String(Settings.shared.maxRunningCount), notificationName: "MaxRunningCountSetting")
                         return
                     }),
+                SwitchRow(text: "High Running Count Bias", detailText: .subtitle(""), switchValue: settings.highRunningCountBias, customization: {cell,row in
+                    self.highCountBias = cell
+                }, action: { _ in
+                    self.settings.highRunningCountBias = !self.settings.highRunningCountBias
+                }),
+                
             ]),
             
             //deckRoundedToSection,
             //numberOfDecksSection,
             //deckFractionsSection,
             
-            Section(title: "Miscellaneous", rows: [
+            Section(title: "Assistance", rows: [
                 SwitchRow(text: "Show Amount Discarded/Remaining", detailText: .subtitle(""), switchValue: settings.showDiscardedRemainingDecks, customization: {cell,row in
                     self.showCell = cell
                 }, action: { _ in
                     self.settings.showDiscardedRemainingDecks = !self.settings.showDiscardedRemainingDecks
-                }),
-                SwitchRow(text: "Round Last 3 Decks to Half", detailText: .subtitle(""), switchValue: settings.roundLastThreeDecksToHalf, customization: {cell,row in
-                    self.roundCell = cell
-                }, action: { _ in
-                    self.settings.roundLastThreeDecksToHalf = !self.settings.roundLastThreeDecksToHalf
                 }),
                 
             ])

@@ -44,9 +44,11 @@ class CardCounter {
     
     func getTrueCount() -> Int {
         let divisionResult = (Float(runningCount) / getNumberOfDecksInPlay())
+        if divisionResult.isInfinite {
+            return -99
+        }
         let trueCount = Int(divisionResult)
         return trueCount
-        //return 3
     }
     
     func discard() {

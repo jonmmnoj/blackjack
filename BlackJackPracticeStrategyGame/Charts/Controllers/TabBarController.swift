@@ -74,11 +74,9 @@ class TabBarController: UITabBarController {
             return S17HardTotalsChart()
         case (.surrender, .soft17):
             return S17SurrenderChart()
-//
-        default:
-            return SurrenderChart()
-
         }
+//
+
     }
     
     private func setupVCs(deviation: DeviationType) {

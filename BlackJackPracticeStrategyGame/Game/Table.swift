@@ -9,6 +9,9 @@ import Foundation
 import UIKit
 
 class Table {
+
+    var movementsForScaleChange = 0
+    var movements = 0
     var currentAnimator: UIViewPropertyAnimator!
     var view: UIView
     var isBusy: Bool = false
@@ -35,19 +38,33 @@ class Table {
         table.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.tableColor)!.tableCode)
         self.view = table
         self.gameMaster = gameMaster
-        self.arrowView = UIImageView(image: UIImage(named: "down_arrow"))
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 1.0, weight: .bold, scale: .large)
+        let image = UIImage(systemName: "arrowtriangle.down.fill", withConfiguration: imageConfig)!
+        let imageView = UIImageView(image: image)//UIImage(named: "down_arrow"))
+        imageView.tintColor = .red
+        self.arrowView = imageView
+        
+        
         self.view.addSubview(discardTray)
         if !Settings.shared.showDiscardTray || Settings.shared.gameType != .freePlay {
             discardTray.isHidden = true
         }
         gradient.frame = view.bounds
         view.layer.insertSublayer(gradient, at: 0)
+        
+        
+        let gt = Settings.shared.gameType!
+        let games: [GameType] = [.freePlay, .runningCount, .runningCount_v2, .basicStrategy, .deviations]
+        if games.contains(gt) {
+            SoundPlayer.shared.playSound(type: .shuffle)
+        }
     }
     
     func showIndicator(on hand: Hand) {
         let point = hand.nextCardPoint
-        let dim = Settings.shared.cardWidth / 5
-        let frame = CGRect(x: point.x, y: point.y - dim * 2, width: dim, height: dim)
+        let dimension = Settings.shared.cardWidth / 6
+        let frame = CGRect(x: point.x + (Settings.shared.cardWidth/5), y: point.y - dimension * 2, width: dimension, height: dimension)
         arrowView.frame = frame
         self.view.addSubview(arrowView)
         arrowView.alpha = 1
@@ -56,13 +73,6 @@ class Table {
             self.arrowView.frame = frame.offsetBy(dx: 0, dy: 5)
         })
     }
-    
-//    func updateIndicatorForScaleChange() {
-//        let dim = Settings.shared.cardWidth / 5
-//        var frame = arrowView.frame
-//        arrowView.frame = CGRect(x: Double, y: <#T##Double#>, width: dim, height: dim)
-//        
-//    }
     
     func stopIndicator() {
         self.arrowView.removeFromSuperview()
@@ -74,75 +84,84 @@ class Table {
         }
         self.totalAnimationsNotComplete += 1
         if card.view == nil { card.createViews() }
-        moveCardOffScreen(card)
+        moveCardOffTable(card)
         self.view.addSubview(card.view!)
         animate(card, delayAnimation: isDelay)
     }
     
-    func animateMove(card: Card) {
+    func animateMove(card: Card, isDelay: Bool = true) {
         self.totalAnimationsNotComplete += 1
-        animate(card, move: true)
+        animate(card, delayAnimation: isDelay, move: true, soundType: nil)
     }
     
     private var firstCard: Bool = true
-    private var dealSpeed: Float {
+    private var dealSpeed: Double {
         if firstCard {
             firstCard = false
-            return Float(self.totalAnimationsNotComplete)
+            return Double(self.totalAnimationsNotComplete)
         }
-        let speed = (Float(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor) - (Settings.dealSpeedFactor - 1.0)
-        return speed
+        let speed = (Double(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor) - (Settings.dealSpeedFactor - 1.0)
+        //return speed
+        
+        return Double(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor
+        
     }
     
-    private func animate(_ card: Card, delayAnimation: Bool = true, move: Bool = false, rotate: Bool = false) {
+    private func animate(_ card: Card, delayAnimation: Bool = true, move: Bool = false, rotate: Bool = false, soundType: SoundType? = .deal) {
         self.isBusy = true
         self.view.bringSubviewToFront(card.view!)
         let delay = delayAnimation ? TimeInterval(dealSpeed) : 0
         
-        currentAnimator = UIViewPropertyAnimator(duration: 0.5, curve: .linear, animations: {
+        currentAnimator = UIViewPropertyAnimator(duration: 0.70 * Settings.dealSpeedFactor, curve: .linear, animations: {
+            guard card != nil else { return }
             card.updateFrame()
             if card.rotateAnimation {
-                card.view!.setTransformRotation(toDegrees: 90)
+                var degrees = card.rotationDegrees
+                if Settings.shared.cardsAskew {
+                    degrees += self.askewedCardDegrees()
+                }
+                card.view!.setTransformRotation(toDegrees: degrees)
+                card.wasTransformed = true
+            } else if Settings.shared.cardsAskew {
+                card.view!.setTransformRotation(toDegrees: self.askewedCardDegrees())
                 card.wasTransformed = true
             }
           })
-        currentAnimator.startAnimation(afterDelay: delay)
+        
+        currentAnimator.startAnimation(afterDelay: card.customDealDelay != nil ? card.customDealDelay! : delay)
+       
         currentAnimator.addCompletion({ finished in
-              self.animationComplete()
-              if !move {
-                  self.updateCount(card: card)
-              }
+            guard card != nil else { return }
+            if soundType != nil {
+                SoundPlayer.shared.playSound(type: soundType!)
+            }
+            self.animationComplete()
+            if !move {
+                self.updateCount(card: card)
+            }
         })
-        
-        
-//        UIView.animate(withDuration: 0.5, delay: delay, options: [.curveLinear , .allowUserInteraction], animations: {
-//            card.updateFrame()
-//            if card.rotateAnimation {
-//                card.view!.setTransformRotation(toDegrees: 90)
-//                card.wasTransformed = true
-//            }
-//          }, completion: { finished in
-//            self.animationComplete()
-//            if !move {
-//                self.updateCount(card: card)
-//            }
-//          })
+    }
+    
+    private func askewedCardDegrees() -> CGFloat {
+        return CGFloat(Int.random(in: -2...2))
     }
     
     func animateDiscard(card: Card) {
         self.isBusy = true
         self.totalAnimationsNotComplete += 1
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveLinear , .allowUserInteraction], animations: {
+        UIView.animate(withDuration: 0.5 * Settings.dealSpeedFactor, delay: 0, options: [.curveLinear , .allowUserInteraction], animations: {
             card.set(dealPoint: self.offScreenDiscardPoint)
             card.updateFrame()
             if let label = card.hand?.valueLabelView {
                 label.removeFromSuperview()
             }
+            //self.playSound(type: .discard)
+            SoundPlayer.shared.playSound(type: .discard)
           }, completion: { finished in
-            self.animationComplete()
-            card.destroyViews()
-            CardCounter.shared.discard()
-            self.discardTray.updateViews()
+              self.animationComplete()
+              card.destroyViews()
+              CardCounter.shared.discard()
+              self.discardTray.updateViews()
           })
     }
     
@@ -150,8 +169,12 @@ class Table {
         card.backView!.isHidden = true
         card.faceView!.isHidden = false
         self.totalAnimationsNotComplete += 1
+        let options = card.isDouble ? UIView.AnimationOptions.transitionFlipFromBottom : UIView.AnimationOptions.transitionFlipFromRight
         
-        UIView.transition(from: card.backView!, to: card.faceView!, duration: 0.5, options: .transitionFlipFromRight, completion: { finished in
+        //self.playSound(type: .flip)
+        SoundPlayer.shared.playSound(type: .flip)
+        
+        UIView.transition(from: card.backView!, to: card.faceView!, duration: 0.5 * Settings.dealSpeedFactor, options: options, completion: { finished in
             card.isFaceDown = false
             self.animationComplete()
             self.updateCount(card: card)
@@ -162,7 +185,12 @@ class Table {
         card.wasDealt = true
         CardCounter.shared.count(card: card)
         discardTray.updateViews()
-        card.hand?.updateValueOfHand(for: self)
+        
+        if card.hand?.owner.isDealer != nil && (card.hand?.owner.isDealer)! && card.isFaceDown {
+        
+        } else {
+            card.hand?.updateViewValueOfHand(for: self)
+        }
     }
     
     
@@ -180,14 +208,15 @@ class Table {
         }
     }
     
-    private func moveCardOffScreen(_ card: Card) {
+    private func moveCardOffTable(_ card: Card) {
         card.view!.frame = CGRect(x: offScreenCardStartPoint.x, y: offScreenCardStartPoint.y, width: Card.width, height: Card.height)
         card.backView!.frame = card.view!.bounds
         card.faceView!.frame = card.view!.bounds
     }
     
     func moveAllCards(for player: Player, to direction: MoveCardsDirection, startIndex: Int? = nil) {
-        var adjustmentX: CGFloat = Settings.shared.cardSize + 31
+        movements += direction == .right ? 1 : -1
+        var adjustmentX: CGFloat = Settings.shared.cardSize * 1.15//+ 31
         adjustmentX *= direction == .right ? -1 : 1
         for (i, hand) in player.hands.enumerated() {
             if startIndex != nil {
@@ -198,14 +227,14 @@ class Table {
             hand.set(nextCardPoint: newPoint)
             
             if let view = hand.valueLabelView {
-                UIView.animate(withDuration: 0.5, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
+                UIView.animate(withDuration: 0.5 * Settings.dealSpeedFactor, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
                     let frame = CGRect(x: view.frame.minX + adjustmentX, y: view.frame.minY, width: view.frame.width, height: view.frame.height)
                     view.frame = frame
                 })
             }
             
             for card in hand.cards {
-                UIView.animate(withDuration: 0.5, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
+                UIView.animate(withDuration: 0.5 * Settings.dealSpeedFactor, delay: TimeInterval(self.totalAnimationsNotComplete), options: [.curveLinear , .allowUserInteraction], animations: {
                     var newPoint = card.dealPoint!
                     newPoint.x += adjustmentX
                     if card.rotateAnimation && direction == .left && !card.hasAdjustedForRotatedMoveLeft {

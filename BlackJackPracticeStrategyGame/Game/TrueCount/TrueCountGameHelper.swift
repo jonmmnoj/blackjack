@@ -18,6 +18,7 @@ class TrueCountGameHelper: GameTypeStrategyPatternProtocol {
     }
     
     func dealCards() {
+        SoundPlayer.shared.playSound(type: .discard)
         vc = TrueCountView()
         vc.tableView = gameMaster.tableView
         stackView = vc.stackView

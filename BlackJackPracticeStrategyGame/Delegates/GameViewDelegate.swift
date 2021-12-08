@@ -16,4 +16,5 @@ protocol GameViewDelegate {
     func showToast(message: String)
     //func showDiscardTrayExpanded(image: UIImage)
     func showPlaceBetView()
+    func enableTableSettingsButton(_ setting: Bool)
 }

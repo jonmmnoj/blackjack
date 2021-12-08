@@ -63,9 +63,6 @@ class DiscardTrayView: UIView {
         self.addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
         var image = UIImage(named: getImageName())!
-        imageView.image = image
-        imageView.image = image
-        imageView.backgroundColor = .cyan
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         imageView.isUserInteractionEnabled = true
@@ -191,6 +188,7 @@ class DiscardTrayView: UIView {
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
+        vc.view.addGestureRecognizer(tapGestureRecognizer)
         
         let imageView = UIImageView()
         vc.view.addSubview(imageView)
@@ -211,6 +209,7 @@ class DiscardTrayView: UIView {
         }
         
         let v = self.findViewController()!
+        vc.view.addGestureRecognizer(tapGestureRecognizer)
         vc.modalPresentationStyle = .overCurrentContext
         vc.modalTransitionStyle = .crossDissolve
         v.present(vc, animated: true)
@@ -234,3 +233,10 @@ extension UIView {
         }
     }
 }
+
+
+
+
+
+
+

@@ -10,6 +10,22 @@
 		9E1843084AF29E86476F95F3 /* Pods_BlackJackPracticeStrategyGame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AE22D6AD31DF36DF2FE3DBB /* Pods_BlackJackPracticeStrategyGame.framework */; };
 		FC03265C269BECDE002B13D0 /* BasicStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC03265B269BECDE002B13D0 /* BasicStrategy.swift */; };
 		FC0D49EA26C9DDB200F6556E /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */; };
+		FC0EE12C2759208A00517546 /* StrategyAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EE12B2759208A00517546 /* StrategyAction.swift */; };
+		FC0EE12E2759361E00517546 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EE12D2759361E00517546 /* Stats.swift */; };
+		FC0EE131275BCC7600517546 /* StatsSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EE130275BCC7600517546 /* StatsSummaryView.swift */; };
+		FC0EE133275BCC9C00517546 /* StatsSummaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE132275BCC9C00517546 /* StatsSummaryView.xib */; };
+		FC0EE13D275FF00400517546 /* shuffle2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE136275FF00300517546 /* shuffle2.mp3 */; };
+		FC0EE13E275FF00400517546 /* shuffle.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE137275FF00300517546 /* shuffle.mp3 */; };
+		FC0EE13F275FF00400517546 /* flip.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE138275FF00400517546 /* flip.mp3 */; };
+		FC0EE140275FF00400517546 /* discard.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE139275FF00400517546 /* discard.mp3 */; };
+		FC0EE141275FF00400517546 /* deal.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE13A275FF00400517546 /* deal.mp3 */; };
+		FC0EE142275FF00400517546 /* deal4.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE13B275FF00400517546 /* deal4.mp3 */; };
+		FC0EE143275FF00400517546 /* deal2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE13C275FF00400517546 /* deal2.mp3 */; };
+		FC0EE145275FFBBB00517546 /* clear.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE144275FFBBB00517546 /* clear.mp3 */; };
+		FC0EE1472760078000517546 /* chips.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE1462760078000517546 /* chips.mp3 */; };
+		FC0EE149276009AD00517546 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EE148276009AD00517546 /* SoundPlayer.swift */; };
+		FC0EE14B27600DFE00517546 /* clear2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FC0EE14A27600DFD00517546 /* clear2.mp3 */; };
+		FC0EE14D27602C4600517546 /* CrashReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC0EE14C27602C4600517546 /* CrashReport.swift */; };
 		FC24C98A27094452008A0993 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC24C98927094452008A0993 /* Toast.swift */; };
 		FC3E400627247AFF005BD61E /* PlaceBetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3E400527247AFF005BD61E /* PlaceBetView.swift */; };
 		FC3E400827247B16005BD61E /* PlaceBetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FC3E400727247B16005BD61E /* PlaceBetView.xib */; };
@@ -103,6 +119,9 @@
 		FCC7A9C92740A73B0021486E /* FillinChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9C82740A73B0021486E /* FillinChart.swift */; };
 		FCC7A9CB27417FB50021486E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9CA27417FB40021486E /* UIColor+Extension.swift */; };
 		FCC7A9CD27421AF80021486E /* Surrender.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9CC27421AF80021486E /* Surrender.swift */; };
+		FCE8BFA627516B090043AAEE /* TableSettingsController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE8BFA527516B090043AAEE /* TableSettingsController+Extension.swift */; };
+		FCE8BFA92753FEBF0043AAEE /* RunningCount_v2_GameHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE8BFA82753FEBF0043AAEE /* RunningCount_v2_GameHelper.swift */; };
+		FCE8BFAB275400910043AAEE /* RunningCountSettings_v2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCE8BFAA275400910043AAEE /* RunningCountSettings_v2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -111,6 +130,22 @@
 		CE4608C3DEFAC854F2FC0FFA /* Pods-BlackJackPracticeStrategyGame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BlackJackPracticeStrategyGame.release.xcconfig"; path = "Target Support Files/Pods-BlackJackPracticeStrategyGame/Pods-BlackJackPracticeStrategyGame.release.xcconfig"; sourceTree = "<group>"; };
 		FC03265B269BECDE002B13D0 /* BasicStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategy.swift; sourceTree = "<group>"; };
 		FC0D49E826C9DDB200F6556E /* MenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		FC0EE12B2759208A00517546 /* StrategyAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrategyAction.swift; sourceTree = "<group>"; };
+		FC0EE12D2759361E00517546 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
+		FC0EE130275BCC7600517546 /* StatsSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsSummaryView.swift; sourceTree = "<group>"; };
+		FC0EE132275BCC9C00517546 /* StatsSummaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatsSummaryView.xib; sourceTree = "<group>"; };
+		FC0EE136275FF00300517546 /* shuffle2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shuffle2.mp3; sourceTree = "<group>"; };
+		FC0EE137275FF00300517546 /* shuffle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shuffle.mp3; sourceTree = "<group>"; };
+		FC0EE138275FF00400517546 /* flip.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = flip.mp3; sourceTree = "<group>"; };
+		FC0EE139275FF00400517546 /* discard.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = discard.mp3; sourceTree = "<group>"; };
+		FC0EE13A275FF00400517546 /* deal.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = deal.mp3; sourceTree = "<group>"; };
+		FC0EE13B275FF00400517546 /* deal4.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = deal4.mp3; sourceTree = "<group>"; };
+		FC0EE13C275FF00400517546 /* deal2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = deal2.mp3; sourceTree = "<group>"; };
+		FC0EE144275FFBBB00517546 /* clear.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clear.mp3; sourceTree = "<group>"; };
+		FC0EE1462760078000517546 /* chips.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = chips.mp3; sourceTree = "<group>"; };
+		FC0EE148276009AD00517546 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		FC0EE14A27600DFD00517546 /* clear2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clear2.mp3; sourceTree = "<group>"; };
+		FC0EE14C27602C4600517546 /* CrashReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReport.swift; sourceTree = "<group>"; };
 		FC24C98927094452008A0993 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FC3E400527247AFF005BD61E /* PlaceBetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceBetView.swift; sourceTree = "<group>"; };
 		FC3E400727247B16005BD61E /* PlaceBetView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlaceBetView.xib; sourceTree = "<group>"; };
@@ -208,6 +243,9 @@
 		FCC7A9C82740A73B0021486E /* FillinChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillinChart.swift; sourceTree = "<group>"; };
 		FCC7A9CA27417FB40021486E /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FCC7A9CC27421AF80021486E /* Surrender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surrender.swift; sourceTree = "<group>"; };
+		FCE8BFA527516B090043AAEE /* TableSettingsController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableSettingsController+Extension.swift"; sourceTree = "<group>"; };
+		FCE8BFA82753FEBF0043AAEE /* RunningCount_v2_GameHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCount_v2_GameHelper.swift; sourceTree = "<group>"; };
+		FCE8BFAA275400910043AAEE /* RunningCountSettings_v2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCountSettings_v2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,8 +288,36 @@
 				FC03265B269BECDE002B13D0 /* BasicStrategy.swift */,
 				FC92B51A26A5CEA10082DA32 /* StrategyRound.swift */,
 				FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */,
+				FC0EE12B2759208A00517546 /* StrategyAction.swift */,
 			);
 			path = BasicStrategy;
+			sourceTree = "<group>";
+		};
+		FC0EE12F275BCC2700517546 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FC0EE130275BCC7600517546 /* StatsSummaryView.swift */,
+				FC0EE132275BCC9C00517546 /* StatsSummaryView.xib */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FC0EE135275FF00300517546 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				FC0EE144275FFBBB00517546 /* clear.mp3 */,
+				FC0EE14A27600DFD00517546 /* clear2.mp3 */,
+				FC0EE136275FF00300517546 /* shuffle2.mp3 */,
+				FC0EE137275FF00300517546 /* shuffle.mp3 */,
+				FC0EE1462760078000517546 /* chips.mp3 */,
+				FC0EE138275FF00400517546 /* flip.mp3 */,
+				FC0EE139275FF00400517546 /* discard.mp3 */,
+				FC0EE13A275FF00400517546 /* deal.mp3 */,
+				FC0EE13B275FF00400517546 /* deal4.mp3 */,
+				FC0EE13C275FF00400517546 /* deal2.mp3 */,
+				FC0EE148276009AD00517546 /* SoundPlayer.swift */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		FC4E621D269E806A00D1AF93 /* Settings */ = {
@@ -260,6 +326,7 @@
 				FCC7A9C72740A3B90021486E /* ViewControllers */,
 				FC4E621F269E808500D1AF93 /* Settings.swift */,
 				FC610EA426AF9D440089C7C9 /* RunningCountSettings.swift */,
+				FCE8BFAA275400910043AAEE /* RunningCountSettings_v2.swift */,
 				FC610E9E26AF71840089C7C9 /* BasicStrategySettings.swift */,
 				FC610EA726B0B9AC0089C7C9 /* FreePlaySettings.swift */,
 				FC610EBB26B84B600089C7C9 /* DeviationsSettings.swift */,
@@ -452,6 +519,7 @@
 		FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */ = {
 			isa = PBXGroup;
 			children = (
+				FC0EE135275FF00300517546 /* Sounds */,
 				FC610EE826BC53AE0089C7C9 /* Charts */,
 				FC610EBF26B8BA050089C7C9 /* Rules */,
 				FC610EAB26B4A8190089C7C9 /* CustomViews */,
@@ -480,13 +548,14 @@
 				FC79378A2694D4070000ACB7 /* Deck.swift */,
 				FC79378C2694D4240000ACB7 /* Card.swift */,
 				FC7937932694DFF50000ACB7 /* Table.swift */,
+				FC4E621E269E807000D1AF93 /* CardCounting */,
 				FC610EA626B0A8E10089C7C9 /* FreePlay */,
 				FC610F1A26C217240089C7C9 /* RunningCount */,
+				FCE8BFA72753FE740043AAEE /* RunningCount_v2 */,
 				FC610F1F26C5F68D0089C7C9 /* TrueCount */,
 				FCA4102826D2B65F005E2177 /* DeckRounding */,
 				FC610EB826B83FE50089C7C9 /* Deviations */,
 				FC03265A269BECC4002B13D0 /* BasicStrategy */,
-				FC4E621E269E807000D1AF93 /* CardCounting */,
 				FC79378F2694D4410000ACB7 /* ViewControllers */,
 			);
 			path = Game;
@@ -552,8 +621,11 @@
 		FCA92EA027373FCE00D69FB3 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
+				FC0EE12F275BCC2700517546 /* Views */,
 				FCA92EA127373FDC00D69FB3 /* Bankroll.swift */,
 				FCA92EA327373FE500D69FB3 /* Session.swift */,
+				FC0EE12D2759361E00517546 /* Stats.swift */,
+				FC0EE14C27602C4600517546 /* CrashReport.swift */,
 			);
 			path = Stats;
 			sourceTree = "<group>";
@@ -605,8 +677,17 @@
 				FC610E9626AC63F40089C7C9 /* SettingsViewController.swift */,
 				FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */,
 				FCC7A9B6273C65A40021486E /* TableSettingsViewController.swift */,
+				FCE8BFA527516B090043AAEE /* TableSettingsController+Extension.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		FCE8BFA72753FE740043AAEE /* RunningCount_v2 */ = {
+			isa = PBXGroup;
+			children = (
+				FCE8BFA82753FEBF0043AAEE /* RunningCount_v2_GameHelper.swift */,
+			);
+			path = RunningCount_v2;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -675,13 +756,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC7937772694D2EC0000ACB7 /* LaunchScreen.storyboard in Resources */,
+				FC0EE133275BCC9C00517546 /* StatsSummaryView.xib in Resources */,
 				FC610EB526B8336C0089C7C9 /* DeviationInputView.xib in Resources */,
+				FC0EE140275FF00400517546 /* discard.mp3 in Resources */,
+				FC0EE141275FF00400517546 /* deal.mp3 in Resources */,
 				FCC7A9BD273ED22E0021486E /* BetSpreadTableViewCell.xib in Resources */,
+				FC0EE13E275FF00400517546 /* shuffle.mp3 in Resources */,
+				FC0EE143275FF00400517546 /* deal2.mp3 in Resources */,
+				FC0EE142275FF00400517546 /* deal4.mp3 in Resources */,
 				FC7937742694D2EC0000ACB7 /* Assets.xcassets in Resources */,
 				FC3E400827247B16005BD61E /* PlaceBetView.xib in Resources */,
+				FC0EE13D275FF00400517546 /* shuffle2.mp3 in Resources */,
 				FCC7A9C4273F2ADE0021486E /* SwitchTableViewCell.xib in Resources */,
 				FC610F1026BC55430089C7C9 /* Chart.storyboard in Resources */,
+				FC0EE145275FFBBB00517546 /* clear.mp3 in Resources */,
+				FC0EE1472760078000517546 /* chips.mp3 in Resources */,
 				FC610F0B26BC55230089C7C9 /* PrettyHeaderView.xib in Resources */,
+				FC0EE14B27600DFE00517546 /* clear2.mp3 in Resources */,
+				FC0EE13F275FF00400517546 /* flip.mp3 in Resources */,
 				FC610F0D26BC55230089C7C9 /* PrettyRowCell.xib in Resources */,
 				FC610EA326AF8BDA0089C7C9 /* SliderTableViewCell.xib in Resources */,
 				FC7937722694D2E90000ACB7 /* Main.storyboard in Resources */,
@@ -738,6 +830,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC79378B2694D4070000ACB7 /* Deck.swift in Sources */,
+				FCE8BFA92753FEBF0043AAEE /* RunningCount_v2_GameHelper.swift in Sources */,
 				FC7937832694D31B0000ACB7 /* Dealer.swift in Sources */,
 				FC610F1C26C2E3A50089C7C9 /* TrueCountView.swift in Sources */,
 				FC610E9726AC63F40089C7C9 /* SettingsViewController.swift in Sources */,
@@ -746,6 +839,7 @@
 				FCA4102726CF284F005E2177 /* UITextField+Extension.swift in Sources */,
 				FC610F2126C5F6CC0089C7C9 /* TrueCountGameHelper.swift in Sources */,
 				FC4E622826A1D71900D1AF93 /* GameViewDelegate.swift in Sources */,
+				FCE8BFAB275400910043AAEE /* RunningCountSettings_v2.swift in Sources */,
 				FC610F0926BC55230089C7C9 /* ChartViewController.swift in Sources */,
 				FC610F0426BC55230089C7C9 /* CellContentEnumeration.swift in Sources */,
 				FC92B52326A733F40082DA32 /* BasicStrategy+Extension.swift in Sources */,
@@ -757,6 +851,7 @@
 				FC610F0C26BC55230089C7C9 /* PrettyRowCell.swift in Sources */,
 				FC610E9D26AF6C380089C7C9 /* GameTypeSettingsProtocol.swift in Sources */,
 				FC7937922694D6780000ACB7 /* Dealable.swift in Sources */,
+				FC0EE131275BCC7600517546 /* StatsSummaryView.swift in Sources */,
 				FCA4102E26D2C508005E2177 /* DeckRoundingGameHelper.swift in Sources */,
 				FC610EFF26BC55230089C7C9 /* RowCellObserver.swift in Sources */,
 				FCA92EA9273840C900D69FB3 /* 2.swift in Sources */,
@@ -772,13 +867,16 @@
 				FC549BA026A8F3F700FFD50E /* BasicStrategyViewController.swift in Sources */,
 				FC610EAD26B4A8880089C7C9 /* DiscardTrayView.swift in Sources */,
 				FC610F0126BC55230089C7C9 /* PrettyDelegate.swift in Sources */,
+				FCE8BFA627516B090043AAEE /* TableSettingsController+Extension.swift in Sources */,
 				FCA92EB927399A9600D69FB3 /* UIImage+Extension.swift in Sources */,
+				FC0EE149276009AD00517546 /* SoundPlayer.swift in Sources */,
 				FC610F0026BC55230089C7C9 /* ChartProtocol.swift in Sources */,
 				FCC7A9C0273F2A430021486E /* SliderTableViewCell.swift in Sources */,
 				FC610F0A26BC55230089C7C9 /* TabBarController.swift in Sources */,
 				FC4E6222269E86D200D1AF93 /* CardCounter.swift in Sources */,
 				FC610F0726BC55230089C7C9 /* PrettyDataSource.swift in Sources */,
 				FC610F0526BC55230089C7C9 /* Charts.swift in Sources */,
+				FC0EE12E2759361E00517546 /* Stats.swift in Sources */,
 				FC79376F2694D2E90000ACB7 /* GameViewController.swift in Sources */,
 				FC610EA826B0B9AC0089C7C9 /* FreePlaySettings.swift in Sources */,
 				FCC7A9B7273C65A40021486E /* TableSettingsViewController.swift in Sources */,
@@ -794,6 +892,7 @@
 				FCC7A9CB27417FB50021486E /* UIColor+Extension.swift in Sources */,
 				FCC7A9C6273F3B270021486E /* BetSpread.swift in Sources */,
 				FC610F0626BC55230089C7C9 /* PECountry.swift in Sources */,
+				FC0EE12C2759208A00517546 /* StrategyAction.swift in Sources */,
 				FCA4102A26D2B678005E2177 /* DeckRoundingView.swift in Sources */,
 				FCA92EB72739951B00D69FB3 /* MainMenuContent.swift in Sources */,
 				FCC7A9C3273F2ADE0021486E /* SwitchTableViewCell.swift in Sources */,
@@ -803,6 +902,7 @@
 				FCA92EAD273840DC00D69FB3 /* 4.swift in Sources */,
 				FCC7A9C92740A73B0021486E /* FillinChart.swift in Sources */,
 				FC92B51B26A5CEA10082DA32 /* StrategyRound.swift in Sources */,
+				FC0EE14D27602C4600517546 /* CrashReport.swift in Sources */,
 				FCA92EBC273ADD6200D69FB3 /* SettingsListTableViewController.swift in Sources */,
 				FC610EB726B837340089C7C9 /* DeviationInputView.swift in Sources */,
 				FC610E8F26A8FBEA0089C7C9 /* BasicStrategyGameType.swift in Sources */,

@@ -18,12 +18,20 @@ class TableSettingsViewController: QuickTableViewController {
     var gestureCell: UITableViewCell!
     var showButtonsCell: UITableViewCell!
     var leftButtonsCell: UITableViewCell!
+    var useGesturesCell: UITableViewCell!
+    var useButtonsCell: UITableViewCell!
+    var buttonsOnLeftCell: UITableViewCell!
+    var handTotalsCell: UITableViewCell!
+    var cardsAskewCell: UITableViewCell!
+    var dealDoubleFaceDownCell: UITableViewCell!
+    var dealSpeedCell: SliderTableViewCell!
     var tableColorData: [String] {
         var data = [String]()
         let colors = TableColor.allCases
         for color in colors {
             data.append(color.rawValue)
         }
+        data.sort()
         return data
     }
     var cardColorData: [String] {
@@ -64,47 +72,18 @@ class TableSettingsViewController: QuickTableViewController {
     
     var cardSizeFactorOnLoad: Float!
     var cardColorOnLoad: String!
+    var showHandValueOnLoad: Bool!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         cardSizeFactorOnLoad = Settings.shared.cardSizeFactor
         cardColorOnLoad = Settings.shared.cardColor
+        showHandValueOnLoad = Settings.shared.showHandTotal
         registerCustomViews(for: tableView)
         
         tableContents = [
-            Section(title: "UI Scale", rows: [
-                TapActionRow<SliderTableViewCell>(
-                  text: " ",
-                customization: { cell, row in
-                    self.sliderView = cell as? SliderTableViewCell
-                    self.sliderView.initHandler = { slider in
-                        slider.maximumValue = 5.5
-                        slider.minimumValue = 4.5
-                        print(Settings.shared.cardSizeFactor)
-                        return Settings.shared.cardSizeFactor
-                    }
-                    self.sliderView.setTextHandler = { value in
-                        let num = Int(((value - 5.0) * 10).rounded())
-                        var str = "\(num)"
-                        if num > 0 { str = "+" + str }
-                        return str
-                        
-                    }
-                    self.sliderView.changedValueHandler = { value in
-                        let step: Float = 0.1
-                        let roundedValue = round(value / step) * step
-                        Settings.shared.cardSizeFactor = roundedValue
-                        return roundedValue
-                    }
-                    self.sliderView.setup()
-                },
-                    action: { _ in
-                        
-                    }
-                ),
-            ]),
             
-            Section(title: "", rows: [
+            Section(title: "Colors", rows: [
             
             NavigationRow(text: "Table Color", detailText: .value1(""), customization: { cell, row in
                     self.tableColorCell = cell
@@ -138,6 +117,140 @@ class TableSettingsViewController: QuickTableViewController {
                   self.showViewSettingOptions(sectionTitle: row.text, data: self.cardColorData, checkMarkedValue: checkMarkedValue, notificationName: "CardColorSetting")
                   return
               }),
+            ]),
+            
+            Section(title: "Input", rows: [
+                SwitchRow(
+                    text: "Use Gestures",
+                    switchValue: Settings.shared.useGestures,
+                      customization: { cell, row in
+                        self.useGesturesCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.useGestures = !Settings.shared.useGestures
+                      }),
+                
+                SwitchRow(
+                    text: "Use Buttons",
+                    switchValue: Settings.shared.useButtons,
+                      customization: { cell, row in
+                        self.useButtonsCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.useButtons = !Settings.shared.useButtons
+                      }),
+                
+                SwitchRow(
+                    text: "Buttons on Left Side",
+                    switchValue: Settings.shared.buttonsOnLeft,
+                      customization: { cell, row in
+                        self.buttonsOnLeftCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.buttonsOnLeft = !Settings.shared.buttonsOnLeft
+                      }),
+                
+                SwitchRow(
+                    text: "Show Hand Totals",
+                    switchValue: Settings.shared.showHandTotal,
+                      customization: { cell, row in
+                        self.handTotalsCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.showHandTotal = !Settings.shared.showHandTotal
+                      }),
+            ]),
+            
+            Section(title: "Miscellaneous", rows: [
+                SwitchRow(
+                    text: "Cards Dealt Askew",
+                    switchValue: Settings.shared.cardsAskew,
+                      customization: { cell, row in
+                        self.cardsAskewCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.cardsAskew = !Settings.shared.cardsAskew
+                      }),
+    
+                SwitchRow(
+                    text: "Deal Double Face Down",
+                    switchValue: Settings.shared.dealDoubleFaceDown,
+                      customization: { cell, row in
+                        self.dealDoubleFaceDownCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.dealDoubleFaceDown = !Settings.shared.dealDoubleFaceDown
+                      }),
+                ]),
+            
+            
+            Section(title: "UI Scale", rows: [
+                TapActionRow<SliderTableViewCell>(
+                  text: " ",
+                customization: { cell, row in
+                    self.sliderView = cell as? SliderTableViewCell
+                    self.sliderView.initHandler = { slider in
+                        slider.maximumValue = 5.5
+                        slider.minimumValue = 4.5
+                        print(Settings.shared.cardSizeFactor)
+                        return Settings.shared.cardSizeFactor
+                    }
+                    self.sliderView.setTextHandler = { value in
+                        let num = Int(((value - 5.0) * 10).rounded())
+                        var str = "\(num)"
+                        if num > 0 { str = "+" + str }
+                        return str
+                        
+                    }
+                    self.sliderView.changedValueHandler = { value in
+                        let step: Float = 0.1
+                        let roundedValue = round(value / step) * step
+                        Settings.shared.cardSizeFactor = roundedValue
+                        return roundedValue
+                    }
+                    self.sliderView.setup()
+                },
+                    action: { _ in
+                        
+                    }
+                ),
+            ]),
+            
+            Section(title: "Deal speed", rows: [
+                TapActionRow<SliderTableViewCell>(
+                  text: " ",
+                customization: { cell, row in
+                    self.dealSpeedCell = cell as? SliderTableViewCell
+                    self.dealSpeedCell.initHandler = { slider in
+                        return Settings.shared.dealSpeed
+                    }
+                    self.dealSpeedCell.setTextHandler = { value in
+                        let percentage = Int(value * 10)
+                        var message = "\(percentage)%"
+                        if percentage == 0 { message = "<\(1)%" }
+                        return message
+                        
+                    }
+                    self.dealSpeedCell.changedValueHandler = { value in
+                        let step: Float = 0.5
+                        let roundedValue = round(value / step) * step
+                        Settings.shared.dealSpeed = roundedValue
+                        return roundedValue
+                    }
+                    self.dealSpeedCell.setup()
+                },
+                    action: { _ in
+                        
+                    }
+                ),
+            ])
+            
+            
+            
+            
+      
+            
+            
             
 //            SwitchRow(
 //                text: "UI Gestures",
@@ -173,7 +286,7 @@ class TableSettingsViewController: QuickTableViewController {
 //                  action: { _ in
 //                      Settings.shared.placeBets = !Settings.shared.placeBets
 //                  }),
-            ])
+            
         ]
       }
 
@@ -188,74 +301,5 @@ class TableSettingsViewController: QuickTableViewController {
         tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        // update card sizes
-        // update discard tray size
-        // update buttons size or hide/show (right or left)
-        // enable/disable gestures
-        // update table colors
-        gameVC.gameMaster!.dealer.table.view.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.tableColor)!.tableCode)
-        gameVC.gameMaster!.dealer.table.discardTray.button.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
-        gameVC.setButtonColor()
-        
-       
-        
-        if cardSizeFactorOnLoad != Settings.shared.cardSizeFactor {
-            gameVC.adjustStackviewSizeForScaleChange()
-            gameVC.gameMaster.dealer.table.discardTray.adjustSizeForScaleChange()
-            
-            var changeX: CGFloat = 0
-            var changeY: CGFloat = 0
-            for (i, hand) in gameVC.gameMaster!.player!.hands.enumerated() {
-                if i == 0 {
-                    changeX = hand.originPoint.x - gameVC.gameMaster!.playerHandDealPoint.x
-                    changeY = hand.originPoint.y - gameVC.gameMaster!.playerHandDealPoint.y
-                }
-                hand.adjustForScaleChange(dealPoint: gameVC.gameMaster!.playerHandDealPoint, adjustmentX: gameVC.gameMaster!.playerAdjustmentXorY, adjustmentY: gameVC.gameMaster!.playerAdjustmentXorY, changeInDealPointX: changeX, changeInDealPointY: changeY)
-                
-                for card in hand.cards {
-                    //card.adjustSizeForScaleChange()
-                    card.adjustSizeForScaleChange(changeX: changeX, changeY: changeY)
-                    //card.layoutSublayers(of: card.view!.layer)
-                }
-                if hand === gameVC.gameMaster!.player!.activatedHand {
-                    gameVC.gameMaster!.dealer!.table.stopIndicator()
-                    gameVC.gameMaster!.dealer!.table.showIndicator(on: hand)
-                }
-            }
-            
-            for (i, hand) in gameVC.gameMaster!.dealer!.hands.enumerated() {
-                if i == 0 {
-                    changeX = hand.originPoint.x - gameVC.gameMaster!.dealerHandDealPoint.x
-                    changeY = hand.originPoint.y - gameVC.gameMaster!.dealerHandDealPoint.y
-                }
-                hand.adjustForScaleChange(dealPoint: gameVC.gameMaster!.dealerHandDealPoint, adjustmentX: gameVC.gameMaster!.dealerHandAdjustmentX, adjustmentY: gameVC.gameMaster!.dealerHandAdjustmentY, changeInDealPointX: changeX, changeInDealPointY: changeY)
-                for card in hand.cards {
-                    //card.adjustSizeForScaleChange()
-                    card.adjustSizeForScaleChange(changeX: changeX, changeY: changeY)
-                    //card.layoutSublayers(of: card.view!.layer)
-                    
-                }
-            }
-        }
-        
-        if cardColorOnLoad != Settings.shared.cardColor {
-            for hand in gameVC.gameMaster!.dealer!.hands {
-                for card in hand.cards {
-                    if card.isFaceDown {
-                        card.backView?.image = UIImage(named: card.backImageName())
-                    }
-                }
-            }
-        }
-        
-//        gm.dealer.table.view.setNeedsDisplay()
-//        gm.dealer.table.view.setNeedsLayout()
-//        gm.dealer.table.view.layoutIfNeeded()
-//
-//       gameVC.view.setNeedsDisplay()
-//        gameVC.view.setNeedsLayout()
-//        gameVC.view.layoutIfNeeded()
-        
-    }
+    
 }

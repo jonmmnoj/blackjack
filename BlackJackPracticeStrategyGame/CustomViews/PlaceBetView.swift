@@ -7,8 +7,11 @@
 
 import UIKit
 import Foundation
+//import SideMenu
 
 class PlaceBetView: UIView {
+    
+    var player: Player
     var vc: UIViewController!
     var dealHandler: ((Int) -> Void)!
     var exitGameHandler: (() -> Void)!
@@ -25,7 +28,6 @@ class PlaceBetView: UIView {
             return Bankroll.shared.amount
         }
         set {
-            //Settings.shared.bankRollAmount = newValue
             Bankroll.shared.amount = newValue
             let currencyFormatter = NumberFormatter()
             currencyFormatter.usesGroupingSeparator = true
@@ -38,9 +40,15 @@ class PlaceBetView: UIView {
         willSet {
             if newValue == 0 {
                 bankRollAmount += Double(betAmount)
+                if player.dealt2Hands {
+                    bankRollAmount += Double(betAmount)
+                }
             } else {
                 let dif = newValue - betAmount
                 bankRollAmount -= Double(dif)
+                if player.dealt2Hands {
+                    bankRollAmount -= Double(dif)
+                }
             }
         }
         didSet {
@@ -74,6 +82,8 @@ class PlaceBetView: UIView {
     @IBOutlet weak var clearBetButton: UIButton!
     @IBOutlet weak var dealButton: UIButton!
     @IBOutlet weak var endGameButton: UIButton!
+    @IBOutlet weak var oneHandButton: UIButton!
+    @IBOutlet weak var twoHandsButton: UIButton!
     
     @IBAction func chip5Action(_ sender: UIButton!) {
         betAmount += 5
@@ -99,10 +109,11 @@ class PlaceBetView: UIView {
         if Settings.shared.betSpread {
             let actualTrueCount = CardCounter.shared.getTrueCount()
             var adjustedTrueCount = actualTrueCount
-            if actualTrueCount < -3 { adjustedTrueCount = -3 }
-            if actualTrueCount > 7 { adjustedTrueCount = 7 }
+            if actualTrueCount < -2 { adjustedTrueCount = -2 }
+            if actualTrueCount > 6 { adjustedTrueCount = 6 }
             let settingAmount = BetSpread.getBetAmount(for: adjustedTrueCount)
-            if betAmount != settingAmount {
+            Stats.shared.update(decision: Decision(type: .betSpread, isCorrect: betAmount == settingAmount, yourAnswer: String(betAmount), correctAnswer: String(settingAmount), decisionBasedOn: "@ TC \(CardCounter.shared.getTrueCount())"))
+            if betAmount != settingAmount && Settings.shared.notifyMistakes {
                 let message = "You should bet $\(settingAmount) @ TC \(actualTrueCount)"
                 PlayError.notifyMistake(presenter: self.vc, message: message, completion: { [weak self] fix in
                     if !fix {
@@ -121,14 +132,14 @@ class PlaceBetView: UIView {
         bankRollAmount += Double(betAmount)
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    required init(player: Player) {
+        self.player = player
+        super.init(frame: .zero)
         commonInit()
     }
-    
+   
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        commonInit()
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func commonInit() {
@@ -151,5 +162,40 @@ class PlaceBetView: UIView {
         endGameButton.setTitleColor(.white, for: .normal)
         bankRollLabel.textColor = .darkGray
         bankRollAmountLabel.textColor = .darkGray
+    }
+    
+    func setupNumberOfHands() {
+        oneHandButton.backgroundColor = .systemBackground
+        oneHandButton.layer.borderColor = UIColor.systemFill.cgColor
+        oneHandButton.layer.borderWidth = 1
+        oneHandButton.layer.cornerRadius = 10
+        twoHandsButton.backgroundColor = .systemBackground
+        twoHandsButton.layer.borderColor = UIColor.systemFill.cgColor
+        twoHandsButton.layer.borderWidth = 1
+        twoHandsButton.layer.cornerRadius = 10
+        if player.dealt2Hands {
+            twoHandsButton.backgroundColor = .systemFill
+        } else {
+            oneHandButton.backgroundColor = .systemFill
+        }
+    }
+    
+    @IBAction func numberOfHandsHandler(sender: UIButton) {
+        if (player.dealt2Hands && sender == twoHandsButton) || (!player.dealt2Hands && sender == oneHandButton) {
+            return
+        }
+        
+        if sender.title(for: .normal) == "1 Hand" {
+            //oneHandButton.setTitleColor(UIColor.green, for: .normal)
+            oneHandButton.backgroundColor = .systemFill
+            twoHandsButton.backgroundColor = .systemBackground
+            player.dealt2Hands = false
+            bankRollAmount += Double(betAmount)
+        } else {
+            player.dealt2Hands = true
+            oneHandButton.backgroundColor = .systemBackground
+            twoHandsButton.backgroundColor = .systemFill
+            bankRollAmount -= Double(betAmount)
+        }
     }
 }

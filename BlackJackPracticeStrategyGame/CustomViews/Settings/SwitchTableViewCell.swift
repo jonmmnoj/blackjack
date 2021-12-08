@@ -16,7 +16,7 @@ class SwitchTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         uiSwitch.isOn = Settings.shared.betSpread
-        label.text = "On/Off Switch"
+        label.text = "On/Off"
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

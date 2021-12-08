@@ -5,9 +5,6 @@
 //  Created by JON on 7/11/21.
 //
 
-import Foundation
-
-
 class BasicStrategy {
     static func getStrategyAction(dealerCardValue: Int, playerCardValues: [Int]) -> StrategyAction {
         let ruleType = BasicStrategy.getRuleType(playerCardValues: playerCardValues)
@@ -16,7 +13,7 @@ class BasicStrategy {
     }
     
     static private func getStrategyAction(for type: RuleType, dealerCardValue: Int, playerRuleValue: Int, numberOfPlayerCards: Int) -> StrategyAction {
-        var action: StrategyAction!
+        var sa = StrategyAction()
         let rules = type == .pair ? pairRules : type == .soft ? softRules : hardRules
         for rule in rules {
             if rule.isMatch(dealerCardValue: dealerCardValue, playerRuleValue: playerRuleValue) {
@@ -25,32 +22,34 @@ class BasicStrategy {
                         if Settings.shared.deviations && surrender.getDeviation() != nil {
                             let deviation = surrender.getDeviation()!
                             if CardCounter.shared.doesDeviationApply(deviation) {
-                                action = deviation.action
+                                sa.action = deviation.action
+                                sa.isDeviation = true
                                 break
                             }
                         }
                         if surrender.isSurrender {
-                            action = .surrender
+                            sa.action = .surrender
                             break
                         }
-                        action = rule.action
+                        sa.action = rule.action
                         break
                     }
                 }
                 if Settings.shared.deviations {
                     if let deviation = rule.getDeviation() {
                         if CardCounter.shared.doesDeviationApply(deviation) {
-                            action = deviation.action
+                            sa.action = deviation.action
+                            sa.isDeviation = true
                             break
                         }
                     }
                 }
-                action = rule.action 
+                sa.action = rule.action
                 
                 break
             }
         }
-        return action
+        return sa
     }
     
     // this method returns an action that the player can actually input into the game, ie. it is not "doNotSplit"... or... "doubleStand"... "doubleHit"... etc., Rather, the action is one of the following: stand, hit, split, double, surrender.
@@ -63,39 +62,43 @@ class BasicStrategy {
     // this method will keep converting strategyaction until it is an actionalbe result... ie hit, stand, double, split, surrender. Not all strategyAction are actionable, eg. doNotSplit, doubleHit...that isn't specific enough fro the game's user input options.
     
     static private func getPlayerAction(ruleType: RuleType, dealerCardValue: Int, playerRuleValue: Int,  playerCardValues: [Int]) -> StrategyAction {
-        var action: StrategyAction!
-        let strategyAction = getStrategyAction(for: ruleType, dealerCardValue: dealerCardValue, playerRuleValue: playerRuleValue, numberOfPlayerCards: playerCardValues.count)
+        //var sa = StrategyAction()
+        var sa = getStrategyAction(for: ruleType, dealerCardValue: dealerCardValue, playerRuleValue: playerRuleValue, numberOfPlayerCards: playerCardValues.count)
     
-        if strategyAction == .doNotSplit {
+        if sa.action == .doNotSplit {
             let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)
             return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doubledPlayerRuleValue, playerCardValues: playerCardValues)
-        } else if strategyAction == .splitIfDAS {
+        } else if sa.action == .splitIfDAS {
             if Settings.shared.doubleAfterSplit {
-                action = .split
+                sa.action = .split
             } else {
                 let doubledPlayerRuleValue = double(playerRuleValue: playerRuleValue)
                 return getPlayerAction(ruleType: .hard, dealerCardValue: dealerCardValue, playerRuleValue: doubledPlayerRuleValue, playerCardValues: playerCardValues)
             }
         }
-        else if strategyAction == .doubleHit {
+        else if sa.action == .doubleHit {
             if playerCardValues.count == 2 {
-                return .double
+                sa.action = .double
+                return sa
             } else {
-                return .hit
+                sa.action = .hit
+                return sa
             }
         }
-        else if strategyAction == .doubleStand {
+        else if sa.action == .doubleStand {
             if playerCardValues.count == 2 {
-                return .double
+                sa.action = .double
+                return sa
             } else {
-                return .stand
+                sa.action = .stand
+                return sa
             }
         }
         else {
-            action = strategyAction
+            //sa = strategyAction
         }
         
-        return action
+        return sa
     }
     
     static private func double(playerRuleValue value: Int) -> Int {

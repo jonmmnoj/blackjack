@@ -41,20 +41,17 @@ class BasicStrategyGameType: GameTypeStrategyPatternProtocol {
     
     func inputReceived(action: PlayerAction) {
         let correctAction = gameMaster.getPlayerAction()
-        let result = correctAction == action
+        let result = correctAction.action == action
+
+        let s = gameMaster.getStringOfPlayerAndDealerHandValue()
+        let decision = Decision(type: .basicStrategy, isCorrect: result, yourAnswer: action.rawValue.uppercased(), correctAnswer: correctAction.action.rawValue.uppercased(), decisionBasedOn: s)
+        Stats.shared.update(decision: decision)
         if Settings.shared.quickFeedback {
-            // Use System Image and Attributed String iOS15
-//            let fullString = NSMutableAttributedString(string: "")
-//            let imageName = result ? "checkmark" : "xmark"
-//            let image1Attachment = NSTextAttachment()
-//            image1Attachment.image = UIImage(systemName: imageName)
-//            let image1String = NSAttributedString(attachment: image1Attachment)
-//            fullString.append(image1String)
-//            fullString.append(NSAttributedString(string: ""))
+
             QuickFeedback.result(result, delegate: gameMaster.delegate)
             self.gameMaster.discardAllHands()
         } else {
-            gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: result, playerAction: action.rawValue.uppercased(), correctAction: correctAction.rawValue.uppercased()) {
+            gameMaster.delegate.presentBasicStrategyFeedbackView(isCorrect: result, playerAction: action.rawValue.uppercased(), correctAction: correctAction.action.rawValue.uppercased()) {
                 self.gameMaster.discardAllHands()
             }
         }

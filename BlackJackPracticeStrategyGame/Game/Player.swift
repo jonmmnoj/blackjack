@@ -12,6 +12,7 @@ import UIKit
 
 class Player: Dealable {
     
+    var dealt2Hands = false
     var activatedHand: Hand? // nil implies all hands are complete ie no action to take
     var hands: [Hand] = []
     //var isFinished: Bool = false
@@ -19,12 +20,13 @@ class Player: Dealable {
     
     var numberOfHandsToMoveForScore: Int {
         var indexOfLastHandWithNilResult = 0
-        var count = 0
-        for hand in hands {
-            count += 1
+        var index = hands.count - 1
+        for hand in hands.reversed() {
             if hand.result == nil {
-                indexOfLastHandWithNilResult = count
+                indexOfLastHandWithNilResult = index
+                break
             }
+            index -= 1
         }
         var amountToMove = 0
         if indexOfLastHandScored == nil {
@@ -32,7 +34,7 @@ class Player: Dealable {
         } else {
             amountToMove = indexOfLastHandScored! - indexOfLastHandWithNilResult
         }
-        indexOfLastHandScored = indexOfLastHandWithNilResult
+        //indexOfLastHandScored = indexOfLastHandWithNilResult
         
         return amountToMove
     }

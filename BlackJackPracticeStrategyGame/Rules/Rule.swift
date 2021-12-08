@@ -9,11 +9,11 @@ class Rule {
     var type: RuleType
     var dealerCardValue: Int
     var playerRuleValue: Int
-    var action: StrategyAction
+    var action: PlayerAction
     var deviations: [Deviation]?
     var surrender: Surrender?
     
-    init(type: RuleType, dealerCardValue: Int, playerRuleValue: Int, action: StrategyAction, deviations: [Deviation]? = nil, surrender: Surrender? = nil) {
+    init(type: RuleType, dealerCardValue: Int, playerRuleValue: Int, action: PlayerAction, deviations: [Deviation]? = nil, surrender: Surrender? = nil) {
         self.type = type
         self.dealerCardValue = dealerCardValue
         self.playerRuleValue = playerRuleValue

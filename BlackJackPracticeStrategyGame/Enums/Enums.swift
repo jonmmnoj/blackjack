@@ -101,7 +101,8 @@ enum GameState {
          moveToNextHandToScore,
          movedToHandToScore,
          showedToast,
-         askInsurance
+         askInsurance,
+        flippedOverDouble
          
 }
 
@@ -133,12 +134,20 @@ enum MoveCardsDirection {
 enum PlayerAction: String {
     case stand,
          hit,
+         
          double,
+         doubleHit,
+         doubleStand,
+         
          split,
+         doNotSplit,
+         splitIfDAS,
+         
          surrender
+    
 }
 
-enum StrategyAction: String {
+enum Action: String {
     case split,
          doNotSplit,
          splitIfDAS,
@@ -150,7 +159,7 @@ enum StrategyAction: String {
          surrender
 }
 
-enum RuleType {
+enum RuleType: String {
     case pair,
          soft,
          hard
@@ -163,7 +172,8 @@ enum GameType: String {
          trueCount,
          deviations,
          charts,
-         deckRounding
+         deckRounding,
+        runningCount_v2
     
     func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
         switch self {
@@ -173,6 +183,8 @@ enum GameType: String {
             return BasicStrategyGameType(gameMaster: gameMaster)
         case .runningCount:
             return RunningCount(gameMaster: gameMaster)
+        case .runningCount_v2:
+            return RunningCountV2GameHelper(gameMaster: gameMaster)
         case .deviations:
             return DeviationGameTypeHelper(gameMaster: gameMaster)
         case .trueCount:
@@ -181,8 +193,6 @@ enum GameType: String {
             return DeckRoundingGameHelper(gameMaster: gameMaster)
         default:
             return FreePlayGameTypeStrategy(gameMaster: gameMaster)
-//        case .trueCount:
-//            return FreePlayGameTypeStrategy(gameMaster: gameMaster)
         
         }
     }
@@ -243,17 +253,19 @@ enum NumberOfDecks: Int, CaseIterable {
 }
 
 enum TableColor: String, CaseIterable {
-    case Green, Blue, Red, Purple, Yellow, Brown, Black
+    case Green = "Green (light)", Green2 = "Green (dark)", Blue, Red, Purple, Yellow, Brown, Black, Gray
     
     var tableCode: String {
         switch self {
-        case .Green: return "#005d4b"//"#35654d"
-        case .Blue: return "#043c7d"
-        case .Red: return "#C70000"
-        case .Purple: return "#"
-        case .Yellow: return "#368776"
-        case .Brown: return "#"
-        case .Black: return "#35654d"
+        case .Green: return "#005d4b"
+        case .Green2: return "#003b30"//"#35654d"
+        case .Blue: return "#01005d"
+        case .Red: return "#5d0012"
+        case .Purple: return "#4b005d"
+        case .Yellow: return "#b27e00"//#b29000" 
+        case .Brown: return "#5d4200"
+        case .Black: return "#1a1a1a"//"#211f1a"
+        case .Gray: return "#4d4d4d"
             
         }
     }
@@ -266,13 +278,15 @@ enum TableColor: String, CaseIterable {
     
     var buttonCode: String {
         switch self {
-        case .Green: return "#00c39d"//"#009074"
-        case .Blue: return "#0660c7"
-        case .Red: return ""
-        case .Purple: return ""
-        case .Yellow: return ""
-        case .Brown: return ""
-        case .Black: return "#009074"
+        case .Green: return "#00b290"
+        case .Green2: return "#009075"//"#00b290"//"#009074"
+        case .Blue: return "#0200b2"
+        case .Red: return "#b20022"
+        case .Purple: return "#9000b2"
+        case .Yellow: return "#c19833"
+        case .Brown: return "#7d6833"
+        case .Black: return "#313131"
+        case .Gray: return "#6f6f6f"
             
         }
     }

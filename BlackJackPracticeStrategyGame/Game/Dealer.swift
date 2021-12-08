@@ -19,6 +19,7 @@ class Dealer: Dealable {
     var activatedHand: Hand?
     var table: Table
     var isDealer = true
+    var penetrationCard: Card?
     
     init(table: Table) { //, numberOfDecks: Int = 1) {
         self.table = table
@@ -27,6 +28,7 @@ class Dealer: Dealable {
     }
     
     func add(hand: Hand) {
+        self.hands.removeAll()
         self.activatedHand = hand
         self.hands.append(hand)
     }
@@ -35,12 +37,19 @@ class Dealer: Dealable {
         players.append(player)
     }
     
+    //var i = 0
     func dealCardToSelf() {
         let card = getCard()
-        //let card = Card(value: .ace, suit: .clubs) // SOFT 17 TEST
+//        var card = getCard()
+//        if i == 0 {
+//            card = Card(value: .ten, suit: .clubs)
+//            i = 1
+//        } else if i == 1 {
+//            i = 0
+//            card = Card(value: .ace, suit: .clubs)
+//        }
         if self.activatedHand!.cards.count == 0 {
             card.isFaceDown = true
-            //card.value = .ace
         }
         deal(card: card, to: self.activatedHand!)
     }
@@ -52,15 +61,27 @@ class Dealer: Dealable {
     }
     
     //let values: [CardValue] = [.ten, .five]//, .five]
-    //var i = 0
+    //var i2 = 0
     func deal(to player: Player) {
         
-        //let hands = player.hands.reversed()
-        //hands.forEach {
+        let hands = player.hands.reversed()
+        hands.forEach {
         //    let card = getCard()
-        player.hands.forEach {
-            let card = getCard()
-            //let card = Card(value: .ace, suit: .diamonds)
+        //player.hands.forEach {
+           let card = getCard()
+//            var card = getCard()
+//           if i2 == 0 {
+//                card = Card(value: .ace, suit: .diamonds)
+//                i2 += 1
+//            } else if i2 == 1 {
+//                //i2 += 1
+//                card = Card(value: .nine, suit: .diamonds)
+//                if i2 == 1 {
+//                    i2 = 0
+//                    //card = Card(value: .ten, suit: .diamonds)
+//                }
+//
+//            }
            //let card = Card(value: values[i], suit: .diamonds); i += 1; if i > 1 { i = 0 };
             deal(card: card, to: $0)
         }
@@ -77,6 +98,7 @@ class Dealer: Dealable {
     func dealtToAtLeast17() -> Void {
         while !Rules.isSoftOrHardSeventeenOrGreater(hand: self.activatedHand!) {
             let card = getCard()
+            //card = Card(value: .eight, suit: .diamonds)
             self.deal(card: card, to: self.activatedHand!)
         }
         return
@@ -86,6 +108,9 @@ class Dealer: Dealable {
         let card = getCard()
         //let card = Card(value: .two, suit: .diamonds)
         card.isDouble = isDouble
+        if Settings.shared.dealDoubleFaceDown && isDouble && hand.value() <= 11 {
+            card.isFaceDown = true
+        }
         deal(card: card, to: hand)
     }
     
@@ -95,7 +120,13 @@ class Dealer: Dealable {
     }
     
     func getCard() -> Card {
-        return shoe.takeCard()
+        var card = shoe.takeCard()
+        if card.isPenetrationCard {
+            penetrationCard = card
+            table.animateDeal(card: card, delayAnimation: true)
+            card = shoe.takeCard()
+        }
+        return card
     }
     
     func discard(hand: Hand) {
@@ -103,6 +134,12 @@ class Dealer: Dealable {
             table.animateDiscard(card: $0)
         }
         hand.clearHand()
+    }
+    
+    func discardPenetrationCard() {
+        guard penetrationCard != nil else { return }
+        table.animateDiscard(card: penetrationCard!)
+        penetrationCard = nil
     }
     
     func checkBust(player: Player) -> Bool {
@@ -157,18 +194,30 @@ class Dealer: Dealable {
     }
     
     func revealCard() {
-        let card = self.activatedHand!.cards.first!
-        card.isFaceDown = false
-        table.animateReveal(card: card)
+        let faceUpCard = self.activatedHand!.cards[1]
+        faceUpCard.dealPoint = CGPoint(x: faceUpCard.dealPoint.x + Card.width * 0.85, y: faceUpCard.dealPoint.y)
+        table.animateMove(card: faceUpCard)
+        
+        let faceDownCard = self.activatedHand!.cards.first!
+        faceDownCard.isFaceDown = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5 * Settings.dealSpeedFactor) {
+            self.table.animateReveal(card: faceDownCard)
+        }
+        
+        //faceUpCard.dealPoint = CGPoint(x: faceUpCard.dealPoint.x - Card.width * 0.8, y: faceUpCard.dealPoint.y)
+        //table.animateMove(card: faceUpCard)
+        
     }
     
     func moveCardToNewPositionOnTable() {
         let card = self.activatedHand!.cards.last!
-        self.activatedHand!.set(adjustmentX: Settings.shared.cardSize * 0.2, adjustmentY: 0) //50
+        self.activatedHand!.set(adjustmentX: Card.width * 0.28, adjustmentY: 0)//Settings.shared.cardSize * 0.2, adjustmentY: 0) //50
         self.activatedHand!.resetNextCardPoint()
         self.activatedHand!.adjustDealPoint()
         card.set(dealPoint: self.activatedHand!.nextCardPoint)
-        table.animateMove(card: card)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25 * Settings.dealSpeedFactor) {
+            self.table.animateMove(card: card, isDelay: false)
+        }
     }
     
     func moveCards(for player: Player, to direction: MoveCardsDirection) {

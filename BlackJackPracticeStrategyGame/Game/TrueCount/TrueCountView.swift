@@ -145,7 +145,7 @@ class TrueCountView: NSObject {
         let button = UIButton()
         button.addTarget(self, action: #selector(increase), for: .touchUpInside)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular, scale: .large)
-        let image = UIImage(systemName: "plus.rectangle", withConfiguration: imageConfiguration)
+        let image = UIImage(systemName: "chevron.up.square.fill", withConfiguration: imageConfiguration)
         button.setImage(image, for: .normal)
         button.contentHorizontalAlignment = .left
         
@@ -155,7 +155,7 @@ class TrueCountView: NSObject {
         let button = UIButton()
         button.addTarget(self, action: #selector(decrease), for: .touchUpInside)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular, scale: .large)
-        let image = UIImage(systemName: "minus.rectangle", withConfiguration: imageConfiguration)
+        let image = UIImage(systemName: "chevron.down.square.fill", withConfiguration: imageConfiguration)
         button.setImage(image, for: .normal)
         button.contentHorizontalAlignment = .right
         return button
@@ -168,7 +168,7 @@ class TrueCountView: NSObject {
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         button.addTarget(self, action: #selector(submit), for: .touchUpInside)
         button.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
+            make.height.equalTo(75)
         }
         
         return button
@@ -245,7 +245,16 @@ class TrueCountView: NSObject {
         self.imageView.image = image
         resizeImageView()
         
-        let randomRunningCount = runningCounts.randomElement()!
+        var randomRunningCount = runningCounts.randomElement()!
+        if Settings.shared.highRunningCountBias {
+            if randomRunningCount < 15 && Settings.shared.maxRunningCount > 15 {
+                while randomRunningCount < 15 {
+                    randomRunningCount = runningCounts.randomElement()!
+                }
+            } else {
+                randomRunningCount = Settings.shared.maxRunningCount
+            }
+        }
         self.rcValueLabel.text = String(randomRunningCount)
         
         // # of Discarded Decks

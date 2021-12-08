@@ -31,7 +31,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minValue="0.0" maxValue="10" translatesAutoresizingMaskIntoConstraints="NO" id="Vvr-wJ-Ape">
-                                <rect key="frame" x="8" y="50" width="325" height="34"/>
+                                <rect key="frame" x="48" y="50" width="245" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="33" id="7n8-j7-wut"/>
                                 </constraints>
@@ -44,9 +44,9 @@
                         <constraints>
                             <constraint firstItem="oJC-Uc-14t" firstAttribute="centerX" secondItem="wga-m8-OtO" secondAttribute="centerX" id="8CH-R0-1GG"/>
                             <constraint firstItem="Vvr-wJ-Ape" firstAttribute="centerX" secondItem="wga-m8-OtO" secondAttribute="centerX" id="AIU-Bk-R0P"/>
-                            <constraint firstItem="Vvr-wJ-Ape" firstAttribute="leading" secondItem="wga-m8-OtO" secondAttribute="leading" constant="10" id="N9a-O2-LUz"/>
+                            <constraint firstItem="Vvr-wJ-Ape" firstAttribute="leading" secondItem="wga-m8-OtO" secondAttribute="leading" constant="50" id="N9a-O2-LUz"/>
                             <constraint firstItem="Vvr-wJ-Ape" firstAttribute="top" secondItem="oJC-Uc-14t" secondAttribute="bottom" constant="10" id="cei-7u-mIk"/>
-                            <constraint firstAttribute="trailing" secondItem="Vvr-wJ-Ape" secondAttribute="trailing" constant="10" id="idk-Rc-jnv"/>
+                            <constraint firstAttribute="trailing" secondItem="Vvr-wJ-Ape" secondAttribute="trailing" constant="50" id="idk-Rc-jnv"/>
                             <constraint firstItem="oJC-Uc-14t" firstAttribute="top" secondItem="wga-m8-OtO" secondAttribute="top" constant="15" id="mfa-fR-Iac"/>
                             <constraint firstAttribute="bottom" secondItem="Vvr-wJ-Ape" secondAttribute="bottom" constant="15" id="wLr-Lp-Exd"/>
                         </constraints>

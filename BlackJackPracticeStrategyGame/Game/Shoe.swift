@@ -5,7 +5,7 @@
 //  Created by Jon on 9/2/21.
 //
 
-import Foundation
+import UIKit
 
 class Shoe {
     var table: Table
@@ -19,15 +19,28 @@ class Shoe {
     }
     
     func fill() {
+        addCardsToShoe()
+        addPenetrationCard()
+        CardCounter.shared.reset()
+        if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
+            table.discardTray.updateViews()
+        }
+    }
+    
+    private func addCardsToShoe() {
         for _ in 1...numberOfDecks {
             let deck = Deck()
             cards += deck.cards
         }
         cards.shuffle()
-        CardCounter.shared.reset()
-        if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
-            table.discardTray.updateViews()
-        }
+    }
+    
+    private func addPenetrationCard() {
+        var cardLocation = Double(numberOfDecks) * 52.0 * Settings.shared.penetration
+        cardLocation.round()
+        let card = Penetration.redCard
+        card.set(dealPoint: CGPoint(x: table.view.center.x - Card.width * 1.5, y: table.view.center.y - Card.height * 1))
+        cards.insert(card, at: Int(cardLocation) - 1)
     }
     
     func refill() {
@@ -50,17 +63,13 @@ class Shoe {
     }
     
     func isTimeToRefillShoe() -> Bool {
-        // if deck penetration... would adjust this number here
         let numberOfDecks = Settings.shared.numberOfDecks
         let totalNumberOfCards = numberOfDecks * 52
-        let penetrationPercent = Double(totalNumberOfCards - CardCounter.shared.getNumberOfCardsLeft()) / Double(totalNumberOfCards)
-        
-        let isTimeToShuffle = penetrationPercent > Settings.shared.penetration
-        //print("percent pentration: \(penetrationPercent)% \(isTimeToShuffle)")
-        
+        var penetrationPercent = Double(totalNumberOfCards - CardCounter.shared.getNumberOfCardsLeft()) / Double(totalNumberOfCards)
+        penetrationPercent = round(penetrationPercent * 100.0) / 100 // round to hundreths
+        //print("Pen %: \(penetrationPercent)")
+        let isTimeToShuffle = penetrationPercent >= Settings.shared.penetration
         let shuffleToAvoidShuffleDuringRound = CardCounter.shared.getNumberOfCardsLeft() < 17
-        //return value
-        
         return isTimeToShuffle ? isTimeToShuffle : shuffleToAvoidShuffleDuringRound
     }
 }

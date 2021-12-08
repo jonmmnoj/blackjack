@@ -40,6 +40,8 @@ class SettingsViewController: QuickTableViewController {
             return FreePlaySettings(vc: vc)
         case .runningCount:
             return RunningCountSettings(vc: vc)
+        case .runningCount_v2:
+            return RunningCountSettings_v2(vc: vc)
         case .trueCount:
             return TrueCountSettings(vc: vc)
         case .deviations:

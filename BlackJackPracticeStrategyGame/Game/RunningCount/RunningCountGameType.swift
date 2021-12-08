@@ -5,7 +5,7 @@
 //  Created by JON on 7/21/21.
 //
 
-import Foundation
+import UIKit
 
 class RunningCount: FreePlayGameTypeStrategy {
     
@@ -18,10 +18,10 @@ class RunningCount: FreePlayGameTypeStrategy {
     }
     
     override func waitForPlayerInput() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            let pAction = self.gameMaster.getPlayerAction()
-            self.gameMaster.inputReceived(type: pAction)
-        }
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.25 * Settings.dealSpeedFactor) {
+            let sAction = self.gameMaster.getPlayerAction()
+            self.gameMaster.inputReceived(type: sAction.action)
+        //}
     }
     
     override func tasksForEndOfRound() {
@@ -35,15 +35,12 @@ class RunningCount: FreePlayGameTypeStrategy {
     }
     
     override func dealCards() {
-        dealer.dealCardToPlayers()
-        dealer.dealCardToSelf()
-        dealer.dealCardToPlayers()
-        dealer.dealCardToSelf()
-        gameMaster.gameState = .dealtCards
+            dealer.dealCardToPlayers()
+            dealer.dealCardToSelf()
+            dealer.dealCardToPlayers()
+            dealer.dealCardToSelf()
+            gameMaster.gameState = .dealtCards
     }
-    
-    
-    
     
     /* Ideas/Notes for dealing cards one/two/three,etc at a time, instead of dealing liek a real game...
      

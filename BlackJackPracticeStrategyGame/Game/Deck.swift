@@ -22,6 +22,26 @@ class Deck {
         //self.stackDeck()
     }
     
+    func shuffle() {
+        cards.shuffle()
+        index = 0
+        isEmpty = false
+    }
+    
+    func nextCard() -> Card {
+        let nextCard = cards[index]
+        index += 1
+        if index == cards.count {
+            index = 0
+            isEmpty = true
+        }
+        return nextCard
+    }
+    
+    func cardsRemaining() -> Int {
+        return isEmpty ? 0 : cards.count - index
+    }
+    
     func stackDeck() {
         var card = Card(value: .ten, suit: .clubs)
         self.cards.insert(card, at: 0)
@@ -47,25 +67,5 @@ class Deck {
         self.cards.insert(card, at: 0)
         card = Card(value: .ace, suit: .clubs)
         self.cards.insert(card, at: 0)
-    }
-    
-    func shuffle() {
-        cards.shuffle()
-        index = 0
-        isEmpty = false
-    }
-    
-    func nextCard() -> Card {
-        let nextCard = cards[index]
-        index += 1
-        if index == cards.count {
-            index = 0
-            isEmpty = true
-        }
-        return nextCard
-    }
-    
-    func cardsRemaining() -> Int {
-        return isEmpty ? 0 : cards.count - index
     }
 }

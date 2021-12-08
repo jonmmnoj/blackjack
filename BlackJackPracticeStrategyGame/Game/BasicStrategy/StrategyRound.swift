@@ -10,9 +10,9 @@ import Foundation
 class StrategyRound {
     var playerCards: [Int] = []
     var dealerCards: [Int] = []
-    var correctAction: StrategyAction = .hit
+    var correctAction: PlayerAction = .hit
     
-    init(playerCards: [Int], dealerCards: [Int], action: StrategyAction) {
+    init(playerCards: [Int], dealerCards: [Int], action: PlayerAction) {
         self.playerCards = playerCards
         self.dealerCards = dealerCards
         self.correctAction = action

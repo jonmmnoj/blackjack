@@ -93,7 +93,7 @@ class DeckRoundingView: NSObject {
         let button = UIButton()
         button.addTarget(self, action: #selector(increase), for: .touchUpInside)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular, scale: .large)
-        let image = UIImage(systemName: "plus.rectangle", withConfiguration: imageConfiguration)
+        let image = UIImage(systemName: "chevron.up.square.fill", withConfiguration: imageConfiguration)
         button.setImage(image, for: .normal)
         button.contentHorizontalAlignment = .left
         
@@ -103,7 +103,7 @@ class DeckRoundingView: NSObject {
         let button = UIButton()
         button.addTarget(self, action: #selector(decrease), for: .touchUpInside)
         let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 17, weight: .regular, scale: .large)
-        let image = UIImage(systemName: "minus.rectangle", withConfiguration: imageConfiguration)
+        let image = UIImage(systemName: "chevron.down.square.fill", withConfiguration: imageConfiguration)
         button.setImage(image, for: .normal)
         button.contentHorizontalAlignment = .right
         return button
@@ -116,7 +116,7 @@ class DeckRoundingView: NSObject {
         button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         button.addTarget(self, action: #selector(submit), for: .touchUpInside)
         button.snp.makeConstraints { (make) in
-            make.height.equalTo(50)
+            make.height.equalTo(75)
         }
         
         return button
