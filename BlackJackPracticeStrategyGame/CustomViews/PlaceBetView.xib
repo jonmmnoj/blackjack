@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlaceBetView" customModule="BlackJackPracticeStrategyGame" customModuleProvider="target">
+            <connections>
+                <outlet property="bankRollAmountLabel" destination="jlZ-XV-bxO" id="X4t-O7-2Pn"/>
+                <outlet property="bankRollLabel" destination="Flh-ll-Dwr" id="8qP-xD-CLO"/>
+                <outlet property="betView" destination="DXN-Jq-0Ce" id="3nA-Xn-hUa"/>
+                <outlet property="buttonView" destination="oiZ-w5-HhF" id="V6g-6e-bFr"/>
+                <outlet property="chip100Button" destination="OeT-IE-RlK" id="fJC-5f-eLo"/>
+                <outlet property="chip25Button" destination="HEk-iW-fxn" id="qEf-Ey-M1O"/>
+                <outlet property="chip500Button" destination="juF-yO-985" id="kf3-uw-XTT"/>
+                <outlet property="chip5Button" destination="QtM-ry-YXh" id="tLw-X0-EhW"/>
+                <outlet property="chipsView" destination="Hjn-kj-coW" id="KUc-sJ-OTv"/>
+                <outlet property="clearBetButton" destination="73D-vf-9gO" id="MJL-C9-OQ4"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="tnQ-5m-CVb"/>
+                <outlet property="currentBetAmountLabel" destination="HO0-JX-aEu" id="gP8-qe-tDi"/>
+                <outlet property="dealButton" destination="VU0-dj-U6r" id="SEN-F5-ryN"/>
+                <outlet property="endGameButton" destination="s8M-oA-sZA" id="Uqe-w1-6aP"/>
+                <outlet property="oneHandButton" destination="6f2-A4-czX" id="Exj-Xo-HId"/>
+                <outlet property="stackView" destination="jUi-Y0-Ant" id="ekV-lH-EXc"/>
+                <outlet property="titleLabel" destination="Rkg-W9-xSf" id="Dtf-mZ-7dH"/>
+                <outlet property="titleView" destination="hUu-gf-59Z" id="xJl-E7-WFI"/>
+                <outlet property="twoHandsButton" destination="ioZ-3X-Mst" id="Y6E-6x-OoO"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="352" height="323"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="jUi-Y0-Ant">
+                    <rect key="frame" x="0.0" y="0.0" width="352" height="323"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hUu-gf-59Z">
+                            <rect key="frame" x="0.0" y="0.0" width="352" height="40"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place Your Bet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rkg-W9-xSf">
+                                    <rect key="frame" x="10" y="10" width="97.5" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="nKm-Wt-6FS"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s8M-oA-sZA">
+                                    <rect key="frame" x="271" y="5" width="71" height="30"/>
+                                    <state key="normal">
+                                        <attributedString key="attributedTitle">
+                                            <fragment content="End Game">
+                                                <attributes>
+                                                    <font key="NSFont" metaFont="system" size="15"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    <integer key="NSUnderline" value="1"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                    </state>
+                                    <connections>
+                                        <action selector="endGameAction:" destination="-1" eventType="touchUpInside" id="zmB-IF-v6u"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="Rkg-W9-xSf" firstAttribute="leading" secondItem="hUu-gf-59Z" secondAttribute="leading" constant="10" id="0d7-Ui-1Du"/>
+                                <constraint firstAttribute="bottom" secondItem="Rkg-W9-xSf" secondAttribute="bottom" constant="10" id="Ndc-KG-hBa"/>
+                                <constraint firstAttribute="trailing" secondItem="s8M-oA-sZA" secondAttribute="trailing" constant="10" id="Oyo-ai-T6x"/>
+                                <constraint firstItem="Rkg-W9-xSf" firstAttribute="top" secondItem="hUu-gf-59Z" secondAttribute="top" constant="10" id="fWL-FD-PZB"/>
+                                <constraint firstItem="s8M-oA-sZA" firstAttribute="centerY" secondItem="Rkg-W9-xSf" secondAttribute="centerY" id="jNe-H3-emd"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hjn-kj-coW">
+                            <rect key="frame" x="0.0" y="40" width="352" height="100"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Rp9-AH-kHR">
+                                    <rect key="frame" x="11" y="12.5" width="330" height="75"/>
+                                    <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QtM-ry-YXh">
+                                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="QtM-ry-YXh" secondAttribute="height" multiplier="1:1" id="c30-B8-h9h"/>
+                                                <constraint firstAttribute="width" constant="75" id="kI9-cm-l3L"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <state key="normal" backgroundImage="chip5"/>
+                                            <connections>
+                                                <action selector="chip5Action:" destination="-1" eventType="touchUpInside" id="Xnj-Ih-xMk"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HEk-iW-fxn">
+                                            <rect key="frame" x="85" y="0.0" width="75" height="75"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <state key="normal" backgroundImage="chip25"/>
+                                            <connections>
+                                                <action selector="chip25Action:" destination="-1" eventType="touchUpInside" id="db7-Cv-dDS"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OeT-IE-RlK">
+                                            <rect key="frame" x="170" y="0.0" width="75" height="75"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <state key="normal" backgroundImage="chip100"/>
+                                            <connections>
+                                                <action selector="chip100Action:" destination="-1" eventType="touchUpInside" id="nSk-FF-RWt"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="juF-yO-985">
+                                            <rect key="frame" x="255" y="0.0" width="75" height="75"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                            <state key="normal" backgroundImage="chip500"/>
+                                            <connections>
+                                                <action selector="chip500Action:" destination="-1" eventType="touchUpInside" id="gJv-2e-ZQp"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="Rp9-AH-kHR" firstAttribute="centerY" secondItem="Hjn-kj-coW" secondAttribute="centerY" id="4oI-cM-tNn"/>
+                                <constraint firstAttribute="height" constant="100" id="PR8-AE-lSo"/>
+                                <constraint firstItem="Rp9-AH-kHR" firstAttribute="centerX" secondItem="Hjn-kj-coW" secondAttribute="centerX" id="VLG-Y5-qSN"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DXN-Jq-0Ce">
+                            <rect key="frame" x="0.0" y="140" width="352" height="113"/>
+                            <subviews>
+                                <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="pl6-3J-8sS">
+                                    <rect key="frame" x="0.0" y="0.0" width="342" height="113"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="751" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="U4B-Y3-maG">
+                                            <rect key="frame" x="0.0" y="0.0" width="230.5" height="113"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="zci-Nc-bxH">
+                                                    <rect key="frame" x="40.5" y="8" width="149.5" height="32.5"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bankroll:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Flh-ll-Dwr">
+                                                            <rect key="frame" x="8" y="0.0" width="53" height="24.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$10,000.00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jlZ-XV-bxO">
+                                                            <rect key="frame" x="64" y="0.0" width="77.5" height="24.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="8" right="8"/>
+                                                </stackView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HO0-JX-aEu">
+                                                    <rect key="frame" x="96" y="40.5" width="38.5" height="32"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="6RF-T9-cqG"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="73D-vf-9gO">
+                                                    <rect key="frame" x="83.5" y="72.5" width="64" height="32.5"/>
+                                                    <state key="normal">
+                                                        <attributedString key="attributedTitle">
+                                                            <fragment content="Clear Bet">
+                                                                <attributes>
+                                                                    <font key="NSFont" metaFont="system" size="15"/>
+                                                                    <integer key="NSUnderline" value="1"/>
+                                                                </attributes>
+                                                            </fragment>
+                                                        </attributedString>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="clearBetAction:" destination="-1" eventType="touchUpInside" id="iOW-x5-CrK"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        </stackView>
+                                        <stackView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Fnx-c9-uXq">
+                                            <rect key="frame" x="238.5" y="0.0" width="103.5" height="113"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6f2-A4-czX">
+                                                    <rect key="frame" x="8" y="15" width="87.5" height="39"/>
+                                                    <color key="backgroundColor" systemColor="systemFillColor"/>
+                                                    <color key="tintColor" systemColor="labelColor"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="1 Hand">
+                                                        <fontDescription key="titleFontDescription" style="UICTFontTextStyleHeadline"/>
+                                                    </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="numberOfHandsHandlerWithSender:" destination="-1" eventType="touchUpInside" id="U7p-ig-nor"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ioZ-3X-Mst">
+                                                    <rect key="frame" x="8" y="59" width="87.5" height="39"/>
+                                                    <color key="tintColor" systemColor="labelColor"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="2 Hands">
+                                                        <fontDescription key="titleFontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="17"/>
+                                                    </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="numberOfHandsHandlerWithSender:" destination="-1" eventType="touchUpInside" id="OQY-G9-UvU"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <edgeInsets key="layoutMargins" top="15" left="8" bottom="15" right="8"/>
+                                        </stackView>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstItem="pl6-3J-8sS" firstAttribute="top" secondItem="DXN-Jq-0Ce" secondAttribute="top" id="SvL-fc-Pek"/>
+                                <constraint firstAttribute="trailing" secondItem="pl6-3J-8sS" secondAttribute="trailing" constant="10" id="eg9-x5-OaT"/>
+                                <constraint firstItem="pl6-3J-8sS" firstAttribute="leading" secondItem="DXN-Jq-0Ce" secondAttribute="leading" id="ehp-U5-73W"/>
+                                <constraint firstAttribute="bottom" secondItem="pl6-3J-8sS" secondAttribute="bottom" id="mrF-xe-Cpz"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oiZ-w5-HhF">
+                            <rect key="frame" x="0.0" y="253" width="352" height="70"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VU0-dj-U6r">
+                                    <rect key="frame" x="0.0" y="-5" width="352" height="75"/>
+                                    <color key="backgroundColor" name="AccentColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="75" id="yIi-QF-fVt"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <state key="normal" title="Deal">
+                                        <color key="titleColor" systemColor="systemBackgroundColor"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="dealAction:" destination="-1" eventType="touchUpInside" id="caF-l2-MaR"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="VU0-dj-U6r" secondAttribute="bottom" id="KzU-sx-H0X"/>
+                                <constraint firstItem="VU0-dj-U6r" firstAttribute="leading" secondItem="oiZ-w5-HhF" secondAttribute="leading" id="QQV-gT-Ydv"/>
+                                <constraint firstAttribute="trailing" secondItem="VU0-dj-U6r" secondAttribute="trailing" id="edR-Bw-4Cc"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="jUi-Y0-Ant" secondAttribute="bottom" id="CCf-nN-6au"/>
+                <constraint firstItem="jUi-Y0-Ant" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="eCX-Fn-hyY"/>
+                <constraint firstItem="jUi-Y0-Ant" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jAJ-tF-nRw"/>
+                <constraint firstAttribute="trailing" secondItem="jUi-Y0-Ant" secondAttribute="trailing" id="rno-ix-ck8"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-46.376811594202906" y="-96.09375"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="chip100" width="127.09999847412109" height="127.09999847412109"/>
+        <image name="chip25" width="127.09999847412109" height="127.09999847412109"/>
+        <image name="chip5" width="127.09999847412109" height="127.09999847412109"/>
+        <image name="chip500" width="127.09999847412109" height="127.09999847412109"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemFillColor">
+            <color red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
