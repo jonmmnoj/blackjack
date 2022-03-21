@@ -7,6 +7,14 @@
 
 import Foundation
 
+enum SpotAssignment: String, CaseIterable {
+    case empty = "Empty",
+         playerActive = "Player (Active)",
+         playerReserved = "Player (Reserved)",
+         computer = "Computer"
+}
+
+
 enum CardSuit: String, CaseIterable {
     case hearts = "hearts",
          diamonds = "diamonds",
@@ -165,7 +173,7 @@ enum RuleType: String {
          hard
 }
 
-enum GameType: String {
+enum GameType: String, Codable {
     case freePlay,
          basicStrategy,
          runningCount,
@@ -173,7 +181,8 @@ enum GameType: String {
          deviations,
          charts,
          deckRounding,
-        runningCount_v2
+         runningCount_v2,
+         deviations_v2
     
     func getStrategyPattern(gameMaster: GameMaster) -> GameTypeStrategyPatternProtocol {
         switch self {
@@ -187,6 +196,8 @@ enum GameType: String {
             return RunningCountV2GameHelper(gameMaster: gameMaster)
         case .deviations:
             return DeviationGameTypeHelper(gameMaster: gameMaster)
+        case .deviations_v2:
+            return DeviationsGameTypeHelper_v2(gameMaster: gameMaster)
         case .trueCount:
             return TrueCountGameHelper(gameMaster: gameMaster)
         case .deckRounding:
@@ -224,8 +235,7 @@ enum CountRounds: String, CaseIterable {
 }
 
 enum DeviationType {
-    case hard17,
-         soft17
+    case hard17, soft17, none
 }
 
 enum Colors {
@@ -253,7 +263,7 @@ enum NumberOfDecks: Int, CaseIterable {
 }
 
 enum TableColor: String, CaseIterable {
-    case Green = "Green (light)", Green2 = "Green (dark)", Blue, Red, Purple, Yellow, Brown, Black, Gray
+    case Green, Green2 = "Dark Green", Blue, Red, Purple, Yellow, /*Yellow2,*/ Brown, Black, Gray
     
     var tableCode: String {
         switch self {
@@ -262,7 +272,8 @@ enum TableColor: String, CaseIterable {
         case .Blue: return "#01005d"
         case .Red: return "#5d0012"
         case .Purple: return "#4b005d"
-        case .Yellow: return "#b27e00"//#b29000" 
+        case .Yellow: return "#b27e00"//#b29000"
+        //case .Yellow2: return "#b29000"//#b29000"
         case .Brown: return "#5d4200"
         case .Black: return "#1a1a1a"//"#211f1a"
         case .Gray: return "#4d4d4d"
@@ -284,6 +295,7 @@ enum TableColor: String, CaseIterable {
         case .Red: return "#b20022"
         case .Purple: return "#9000b2"
         case .Yellow: return "#c19833"
+        //case .Yellow2: return "#b29000"//#"
         case .Brown: return "#7d6833"
         case .Black: return "#313131"
         case .Gray: return "#6f6f6f"
@@ -296,5 +308,9 @@ enum TableColor: String, CaseIterable {
 enum CardColor: String, CaseIterable {
     case Red, Blue, Purple, Yellow, Green, Gray//, Astronaut
     
+}
+
+enum TableOrientation: String, CaseIterable {
+    case portrait = "Portrait", landscape = "Landscape"
 }
 

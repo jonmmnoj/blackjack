@@ -9,10 +9,49 @@ import Foundation
 import UIKit
 
 class Settings {
+    
+    var spotAssignments: [SpotAssignment] {
+        if Settings.shared.deviceType == .phone {
+            return [SpotAssignment(rawValue: Settings.shared.spotOneAssignment)!, SpotAssignment(rawValue: Settings.shared.spotTwoAssignment)!, SpotAssignment(rawValue: Settings.shared.spotThreeAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFourAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFiveAssignment)!]
+        }
+        
+        return [SpotAssignment(rawValue: Settings.shared.spotOneAssignment)!, SpotAssignment(rawValue: Settings.shared.spotTwoAssignment)!, SpotAssignment(rawValue: Settings.shared.spotThreeAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFourAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFiveAssignment)!, SpotAssignment(rawValue: Settings.shared.spotSixAssignment)!, SpotAssignment(rawValue: Settings.shared.spotSevenAssignment)!]
+        
+    }
+    
     static let shared = Settings()
     private init() {}
     
-    var gameType: GameType!
+    var deviceType: UIUserInterfaceIdiom {
+        return UIScreen.main.traitCollection.userInterfaceIdiom
+    }
+    
+    var landscape: Bool {
+        //let orientation = //UIDevice.current.orientation
+        let games: [GameType] = [.freePlay, .runningCount]
+        let value = UIApplication.shared.statusBarOrientation.isLandscape && games.contains(gameType)
+        return value
+    }
+    var verticalSizeClass: UIUserInterfaceSizeClass {
+        return UIScreen.main.traitCollection.verticalSizeClass
+    }
+    var horizontalSizeClass: UIUserInterfaceSizeClass {
+        return UIScreen.main.traitCollection.horizontalSizeClass
+    }
+    //var gameType: GameType!
+    var gameType: GameType {
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: "gameType")
+        }
+        get {
+            let rawValue = UserDefaults.standard.object(forKey: "gameType") as? String
+            if let rawValue = rawValue {
+                return GameType(rawValue: rawValue)!
+            } else {
+                return defaults.gameType
+            }
+        }
+    }
     var placeBets: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "placeBets")
@@ -49,20 +88,23 @@ class Settings {
             return UserDefaults.standard.object(forKey: "cardSizeFactor") as? Float ?? defaults.cardSizeFactor
         }
     }
-    var cardSize: CGFloat {
+    var cardHeight: CGFloat {
         get {
             //let size = UserDefaults.standard.object(forKey: getKey(for: "cardSize")) as? Float ?? defaults.cardSizeFactor * 2
             //print(cardSizeFactor)
             
             let size = cardSizeFactor / 5
-            let adjustmentForScreenSize = round(CGFloat(size) * (UIScreen.main.bounds.height / 6))//5.5))
+            var adjustmentForScreenSize = round(CGFloat(size) * (UIScreen.main.bounds.height / 5))//6//5.5))
+            if Settings.shared.landscape {
+                adjustmentForScreenSize = round(CGFloat(size) * (UIScreen.main.bounds.width / 7))
+            }
             return adjustmentForScreenSize
         }
     }
     
     var cardWidth: CGFloat {
         get {
-            return (cardSize * 0.708).rounded()
+            return (cardHeight * 0.708).rounded()
         }
     }
     
@@ -283,14 +325,6 @@ class Settings {
             return UserDefaults.standard.object(forKey: getKey(for:"betSpread")) as? Bool ?? defaults.betSpread
         }
     }
-//    var betSpreadNeg3: Int {
-//        set {
-//            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadNeg3"))
-//        }
-//        get {
-//            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadNeg3")) as? Int ?? defaults.betSpreadNeg3
-//        }
-//    }
     var betSpreadNeg2: Int {
         set {
             UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadNeg2"))
@@ -363,14 +397,6 @@ class Settings {
             return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos6")) as? Int ?? defaults.betSpreadPos6
         }
     }
-//    var betSpreadPos7: Int {
-//        set {
-//            UserDefaults.standard.set(newValue, forKey: getKey(for:"betSpreadPos7"))
-//        }
-//        get {
-//            return UserDefaults.standard.object(forKey: getKey(for:"betSpreadPos7")) as? Int ?? defaults.betSpreadPos7
-//        }
-//    }
     var tableColor: String {
         set {
             UserDefaults.standard.set(newValue, forKey: "tableColor")
@@ -443,6 +469,15 @@ class Settings {
             return UserDefaults.standard.object(forKey: getKey(for:"rcNumberOfCards")) as? Int ?? defaults.rcNumberOfCards
         }
     }
+    
+    var feedbackWhenWrong: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"feedbackWhenWrong"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"feedbackWhenWrong")) as? Bool ?? defaults.feedbackWhenWrong
+        }
+    }
     var highRunningCountBias: Bool {
         set {
             UserDefaults.standard.set(newValue, forKey: "highRunningCountBias")
@@ -491,13 +526,111 @@ class Settings {
             return UserDefaults.standard.object(forKey: "dealDoubleFaceDown") as? Bool ?? defaults.dealDoubleFaceDown
         }
     }
+    var countBias: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "countBias")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "countBias") as? Bool ?? defaults.countBias
+        }
+    }
+    var soundOn: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "soundOn")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "soundOn") as? Bool ?? defaults.soundOn
+        }
+    }
+    var spotOneAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotOneAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotOneAssignment")) as? String ?? defaults.spotOneAssignment
+        }
+    }
+    var spotTwoAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotTwoAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotTwoAssignment")) as? String ?? defaults.spotTwoAssignment
+        }
+    }
+    var spotThreeAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotThreeAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotThreeAssignment")) as? String ?? defaults.spotThreeAssignment
+        }
+    }
+    var spotFourAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotFourAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotFourAssignment")) as? String ?? defaults.spotFourAssignment
+        }
+    }
+    var spotFiveAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotFiveAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotFiveAssignment")) as? String ?? defaults.spotFiveAssignment
+        }
+    }
+    var spotSixAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotSixAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotSixAssignment")) as? String ?? defaults.spotSixAssignment
+        }
+    }
+    var spotSevenAssignment: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"spotSevenAssignment"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"spotSevenAssignment")) as? String ?? defaults.spotSevenAssignment
+        }
+    }
+    var rcNumberOfSpots: Int {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "rcNumberOfSpots")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "rcNumberOfSpots") as? Int ?? defaults.rcNumberOfSpots
+        }
+    }
+    var tableOrientation: String {
+        set {
+            UserDefaults.standard.set(newValue, forKey: getKey(for:"tableOrientation"))
+        }
+        get {
+            return UserDefaults.standard.object(forKey: getKey(for:"tableOrientation")) as? String ?? defaults.tableOrientation
+        }
+    }
+    var showGestureView: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "showGestureView")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "showGestureView") as? Bool ?? defaults.showGestureView
+        }
+    }
+    
     
     struct Defaults {
+        var showGestureView = true
         var dealSpeed: Float = 6.5
         var ENHC: Bool = false
         var numberOfDecks = 6
         var dealerHitsSoft17 = true
-        var surrender = true
+        var surrender = false
         var resplitAces = false
         var doubleAfterSplit = true
         var notifyMistakes = true
@@ -515,7 +648,7 @@ class Settings {
         //var buttonColor = TableColor.green.buttonCode//#colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
         //var tc = #colorLiteral(red: 0.1647058824, green: 0.3176470588, blue: 0.2431372549, alpha: 1) //https://encycolorpedia.com/35654d
         //var bc = #colorLiteral(red: 0, green: 0.5655595064, blue: 0.457355082, alpha: 1)
-        var cardSizeFactor: Float = 5.5//150.0 0 to 10
+        var cardSizeFactor: Float = UIDevice.current.userInterfaceIdiom == .pad ? 5.5 : 5 //4.5 (-5) to 5.5 (+5)
         
         var deckFraction: String = DeckFraction.quarters.rawValue
         var deckRoundedTo: String = DeckRoundedTo.whole.rawValue
@@ -526,7 +659,7 @@ class Settings {
         var placeBets = false
         
         var twoCardHands = true
-        var threeCardHands = true
+        var threeCardHands = false
         var fourCardHands = false
         
         var quickFeedback = false
@@ -547,12 +680,12 @@ class Settings {
         
         var tableColor = TableColor.Green
         var buttonColor = TableColor.Green2
-        var cardColor = CardColor.Gray
+        var cardColor = CardColor.Red
         
         var maxRunningCount: Int = 30
         
-        var useGestures = false
-        var useButtons = true
+        var useGestures = true
+        var useButtons = false
         var buttonsOnLeft = false
         var rcNumberOfPiles = 1
         var rcNumberOfCards = 52
@@ -563,6 +696,20 @@ class Settings {
         var cardsAskew = false
         var ghostHand = false
         var dealDoubleFaceDown = false
+        var gameType = GameType.freePlay
+        var countBias = false
+        var soundOn = true
+        var feedbackWhenWrong = false
+        
+        var spotOneAssignment = SpotAssignment.empty.rawValue
+        var spotTwoAssignment = SpotAssignment.empty.rawValue
+        var spotThreeAssignment = SpotAssignment.empty.rawValue
+        var spotFourAssignment = SpotAssignment.playerActive.rawValue
+        var spotFiveAssignment = SpotAssignment.empty.rawValue
+        var spotSixAssignment = SpotAssignment.empty.rawValue
+        var spotSevenAssignment = SpotAssignment.empty.rawValue
+        var rcNumberOfSpots = 1
+        var tableOrientation = TableOrientation.portrait.rawValue
     }
     
     private func getKey(for setting: String) -> String {

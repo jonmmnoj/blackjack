@@ -24,7 +24,7 @@ class Penetration {
         return value
     }
     
-    static var redCard: Card {
+    static var card: Card {
         let card = Card(value: .ace, suit: .diamonds)
         card.isPenetrationCard = true
         card.isFaceDown = true

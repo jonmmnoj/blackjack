@@ -10,12 +10,13 @@ import UIKit
 
 class Card {
     static var height: CGFloat {
-        return Settings.shared.cardSize
+        return Settings.shared.cardHeight
     }
     static var width: CGFloat {
         return (self.height * 0.708).rounded() //0.708
     }
     var rotateAnimation: Bool {
+        guard Settings.shared.landscape == false else { return false }
         return isDouble || rotateForSplitAce || customRotation
     }
     var hasAdjustedForRotatedMoveLeft = false
@@ -47,10 +48,35 @@ class Card {
         self.dealPoint = dealPoint
     }
     
+    // So that card is dealt away from edge of screen
+    private func updateFrameForDealer() {
+        let previousCard = hand!.cards[hand!.cards.count - 2]
+        let newDealPointX = previousCard.dealPoint.x
+        let newDealPointY = previousCard.dealPoint.y + Card.height * 0.5 //Hand.dealerHandAdjustmentY + Card.height * 0.5
+        let newDealPoint = CGPoint(x: newDealPointX, y: newDealPointY)
+        self.dealPoint = newDealPoint
+        self.hand?.nextCardPoint = CGPoint(x: newDealPoint.x, y: newDealPoint.y)
+        let newAdjustmentX = Hand.dealerHandAdjustmentXAfterReveal * -1
+        self.hand?.adjustmentX = newAdjustmentX
+    }
+    
+    func setNewDealPoint(_ newDealPoint: CGPoint) {
+        
+    }
+    
     func updateFrame() {
         guard self.dealPoint != nil else { return }
+        
+        if let hand = self.hand {
+            // if card is close to discard tray or edge of screen, and isn't being discarded
+            if hand.owner.isDealer && Settings.shared.landscape && dealPoint.x < Card.width + 3 && dealPoint.x > 0 {
+                updateFrameForDealer()
+            }
+        }
+        
         let frame = CGRect(x: self.dealPoint.x, y: self.dealPoint.y, width: Card.width, height: Card.height)
         self.view!.frame = frame
+        
     }
     
     func adjustSizeForScaleChange() {
@@ -119,8 +145,8 @@ class Card {
     
     func backImageName() -> String {
         var str: String = Settings.shared.cardColor.lowercased()
-        str += "_back"
-        return str
+        str += "_back2"
+        return str//"fish"//str
     }
     
     func imageName() -> String {

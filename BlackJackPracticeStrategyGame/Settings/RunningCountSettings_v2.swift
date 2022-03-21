@@ -65,7 +65,7 @@ class RunningCountSettings_v2: GameTypeSettings {
                     action: { _ in
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
+                        gvc.gameType = Settings.shared.gameType
                         //gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen

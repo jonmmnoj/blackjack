@@ -24,6 +24,7 @@ class TableSettingsViewController: QuickTableViewController {
     var handTotalsCell: UITableViewCell!
     var cardsAskewCell: UITableViewCell!
     var dealDoubleFaceDownCell: UITableViewCell!
+    var soundCell: UITableViewCell!
     var dealSpeedCell: SliderTableViewCell!
     var tableColorData: [String] {
         var data = [String]()
@@ -76,6 +77,7 @@ class TableSettingsViewController: QuickTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Settings"
         cardSizeFactorOnLoad = Settings.shared.cardSizeFactor
         cardColorOnLoad = Settings.shared.cardColor
         showHandValueOnLoad = Settings.shared.showHandTotal
@@ -123,10 +125,11 @@ class TableSettingsViewController: QuickTableViewController {
                 SwitchRow(
                     text: "Use Gestures",
                     switchValue: Settings.shared.useGestures,
-                      customization: { cell, row in
+                    //icon: .named("gear"),
+                    customization: { cell, row in
                         self.useGesturesCell = cell
                       },
-                      action: { _ in
+                    action: { _ in
                         Settings.shared.useGestures = !Settings.shared.useGestures
                       }),
                 
@@ -150,6 +153,10 @@ class TableSettingsViewController: QuickTableViewController {
                         Settings.shared.buttonsOnLeft = !Settings.shared.buttonsOnLeft
                       }),
                 
+                
+            ]),
+            
+            Section(title: "Miscellaneous", rows: [
                 SwitchRow(
                     text: "Show Hand Totals",
                     switchValue: Settings.shared.showHandTotal,
@@ -159,9 +166,15 @@ class TableSettingsViewController: QuickTableViewController {
                       action: { _ in
                         Settings.shared.showHandTotal = !Settings.shared.showHandTotal
                       }),
-            ]),
-            
-            Section(title: "Miscellaneous", rows: [
+                SwitchRow(
+                    text: "Sound Effects",
+                    switchValue: Settings.shared.soundOn,
+                      customization: { cell, row in
+                        self.soundCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.soundOn = !Settings.shared.soundOn
+                      }),
                 SwitchRow(
                     text: "Cards Dealt Askew",
                     switchValue: Settings.shared.cardsAskew,
@@ -192,7 +205,7 @@ class TableSettingsViewController: QuickTableViewController {
                     self.sliderView.initHandler = { slider in
                         slider.maximumValue = 5.5
                         slider.minimumValue = 4.5
-                        print(Settings.shared.cardSizeFactor)
+                      //  print(Settings.shared.cardSizeFactor)
                         return Settings.shared.cardSizeFactor
                     }
                     self.sliderView.setTextHandler = { value in
@@ -244,49 +257,6 @@ class TableSettingsViewController: QuickTableViewController {
                     }
                 ),
             ])
-            
-            
-            
-            
-      
-            
-            
-            
-//            SwitchRow(
-//                text: "UI Gestures",
-//                switchValue: Settings.shared.placeBets,
-//                  customization: { cell, row in
-//                    self.placeBetsCell = cell
-//                    (self.placeBetsCell.accessoryView as! UISwitch).setOn(self.settings.placeBets, animated: false)
-//                  },
-//                  action: { _ in
-//                    Settings.shared.placeBets = !Settings.shared.placeBets
-//                  }),
-//
-//
-//            SwitchRow(
-//                text: "Use Buttons",
-//                switchValue: Settings.shared.placeBets,
-//                  customization: { cell, row in
-//                    self.placeBetsCell = cell
-//                    (self.placeBetsCell.accessoryView as! UISwitch).setOn(self.settings.placeBets, animated: false)
-//                  },
-//                  action: { _ in
-//                      Settings.shared.placeBets = !Settings.shared.placeBets
-//                  }),
-//
-//
-//            SwitchRow(
-//                text: "Buttons on left side",
-//                switchValue: Settings.shared.placeBets,
-//                  customization: { cell, row in
-//                    self.placeBetsCell = cell
-//                    (self.placeBetsCell.accessoryView as! UISwitch).setOn(self.settings.placeBets, animated: false)
-//                  },
-//                  action: { _ in
-//                      Settings.shared.placeBets = !Settings.shared.placeBets
-//                  }),
-            
         ]
       }
 

@@ -11,20 +11,30 @@ class Shoe {
     var table: Table
     var cards: [Card] = []
     var numberOfDecks = Settings.shared.numberOfDecks
-    var cardIndex: Int = 0
+    var nextCardIndex: Int = 0
+    var penCardDealt = false
     
     init(table: Table) {
         self.table = table
         fill()
     }
     
-    func fill() {
+    func nextCardIsPenetrationCard() -> Bool {
+        for (i, card) in cards.enumerated() {
+            if card.isPenetrationCard {
+                if i == nextCardIndex { return true }
+            }
+        }
+        return false
+    }
+    
+    private func fill() {
         addCardsToShoe()
         addPenetrationCard()
         CardCounter.shared.reset()
-        if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
-            table.discardTray.updateViews()
-        }
+//        if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
+//            table.discardTray.updateViews()
+//        }
     }
     
     private func addCardsToShoe() {
@@ -35,31 +45,99 @@ class Shoe {
         cards.shuffle()
     }
     
+    var penetrationCardIndex: Int!
     private func addPenetrationCard() {
+        guard Settings.shared.gameType == .freePlay else { return }
         var cardLocation = Double(numberOfDecks) * 52.0 * Settings.shared.penetration
         cardLocation.round()
-        let card = Penetration.redCard
-        card.set(dealPoint: CGPoint(x: table.view.center.x - Card.width * 1.5, y: table.view.center.y - Card.height * 1))
-        cards.insert(card, at: Int(cardLocation) - 1)
+        let card = Penetration.card
+        //card.set(dealPoint: CGPoint(x: table.view.center.x - Card.width * 1.5, y: table.view.center.y - Card.height * 1))
+        if Settings.shared.landscape {
+            let x = Hand.dealerHandDealPoint.x + Card.width * 2.2
+            var y = Hand.dealerHandDealPoint.y - Card.height * 0.2
+            if Settings.shared.verticalSizeClass == .compact {
+                y = Hand.dealerHandDealPoint.y - Card.height * 0
+            }
+            card.set(dealPoint: CGPoint(x: x, y: y))
+        } else {
+            card.set(dealPoint: CGPoint(x: 0 + Card.width * 1.5, y: 0 + Card.height * 1.5))
+        }
+        penetrationCardIndex = Int(cardLocation) - 1
+        cards.insert(card, at: penetrationCardIndex)
+        //print("pen card index \(penetrationCardIndex)")
+        penCardDealt = false
     }
     
     func refill() {
-        empty()
+        emptyShoe()
         fill()
+        updateDiscardTray()
     }
     
-    func empty() {
+    private func updateDiscardTray() {
+        if Settings.shared.showDiscardTray && table.discardTray.imageView != nil {
+            table.discardTray.updateViews()
+        }
+    }
+    
+    private func emptyShoe() {
         cards.removeAll()
-        cardIndex = 0
+        nextCardIndex = 0
     }
     
     func takeCard() -> Card {
-        let card = cards[cardIndex]
-        cardIndex += 1
-        if cardIndex > cards.count - 1 {
+        let trueCountThreshold = 6
+        if Settings.shared.gameType == .freePlay && Settings.shared.countBias && !cards[nextCardIndex].isPenetrationCard && CardCounter.shared.getTrueCount() < trueCountThreshold {
+            countBias()
+        }
+        
+        let card = cards[nextCardIndex]
+        nextCardIndex += 1
+        if nextCardIndex > cards.count - 1 {
            refill()
         }
+        if card.isPenetrationCard { penCardDealt = true }
         return card
+    }
+    
+    func countBias() {
+        let num = Int.random(in: 1...10)
+        if num > 5 { // higher number will reduce speed to reach bias level
+          let lowCardValues: [CardValue] = [.two, .three, .four, .five, .six]
+          while (true) {
+              if !cards.contains(where: { lowCardValues.contains($0.value) }) {
+                  break
+              }
+              let randomIndex = Int.random(in: nextCardIndex...cards.count - 1)
+              let card = cards[randomIndex]
+              if [.two, .three, .four, .five, .six].contains(card.value) {
+                  cards.remove(at: randomIndex)
+                  cards.insert(card, at: nextCardIndex)
+                  if randomIndex > penetrationCardIndex {
+                      adjustmentForPenetrationCard()
+                  }
+                  break
+              }
+          }
+        }
+    }
+    
+    
+//    func whereIsPenCard() {
+//        for (i, card) in cards.enumerated() {
+//            if card.isPenetrationCard {
+//                //print("pen card is at this index \(i)")
+//            }
+//        }
+//    }
+    
+    func adjustmentForPenetrationCard() {
+        for (i, card) in cards.enumerated() {
+            if card.isPenetrationCard {
+                let removedCard = cards.remove(at: i)
+                cards.insert(removedCard, at: penetrationCardIndex)
+            }
+        }
     }
     
     func isTimeToRefillShoe() -> Bool {
@@ -70,6 +148,6 @@ class Shoe {
         //print("Pen %: \(penetrationPercent)")
         let isTimeToShuffle = penetrationPercent >= Settings.shared.penetration
         let shuffleToAvoidShuffleDuringRound = CardCounter.shared.getNumberOfCardsLeft() < 17
-        return isTimeToShuffle ? isTimeToShuffle : shuffleToAvoidShuffleDuringRound
+        return penCardDealt //|| isTimeToShuffle ? isTimeToShuffle : shuffleToAvoidShuffleDuringRound
     }
 }

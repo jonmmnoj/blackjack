@@ -31,13 +31,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="9YM-CR-apd">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="286"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="250"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qbQ-RD-WgX">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="57"/>
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="twu-AX-lRM">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="57"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -45,10 +45,10 @@
                             </subviews>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="sBb-KP-fqg">
-                            <rect key="frame" x="0.0" y="57" width="414" height="57.5"/>
+                            <rect key="frame" x="0.0" y="50" width="414" height="50"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rhM-6m-L4U">
-                                    <rect key="frame" x="8" y="8" width="398" height="42.5"/>
+                                    <rect key="frame" x="8" y="8" width="398" height="35"/>
                                     <segments>
                                         <segment title="HIT"/>
                                         <segment title="STD"/>
@@ -64,10 +64,10 @@
                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="3bf-ii-pMI">
-                            <rect key="frame" x="0.0" y="114.5" width="414" height="57"/>
+                            <rect key="frame" x="0.0" y="100" width="414" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iqe-0J-0GG">
-                                    <rect key="frame" x="8" y="8" width="119.5" height="41"/>
+                                    <rect key="frame" x="8" y="8" width="119.5" height="34"/>
                                     <state key="normal" image="chevron.down.square.fill" catalog="system">
                                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
                                     </state>
@@ -76,7 +76,7 @@
                                     </connections>
                                 </button>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0" borderStyle="roundedRect" placeholder="0" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wdf-ZG-91y">
-                                    <rect key="frame" x="147.5" y="8" width="119" height="41"/>
+                                    <rect key="frame" x="147.5" y="8" width="119" height="34"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                     <textInputTraits key="textInputTraits"/>
                                     <connections>
@@ -85,7 +85,7 @@
                                     </connections>
                                 </textField>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9fy-sn-gx6">
-                                    <rect key="frame" x="286.5" y="8" width="119.5" height="41"/>
+                                    <rect key="frame" x="286.5" y="8" width="119.5" height="34"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                     <state key="normal" image="chevron.up.square.fill" catalog="system">
                                         <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="regular"/>
@@ -98,10 +98,10 @@
                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="N4k-BQ-96R">
-                            <rect key="frame" x="0.0" y="171.5" width="414" height="57.5"/>
+                            <rect key="frame" x="0.0" y="150" width="414" height="50"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="unD-Vr-I5U">
-                                    <rect key="frame" x="8" y="8" width="398" height="42.5"/>
+                                    <rect key="frame" x="8" y="8" width="398" height="35"/>
                                     <segments>
                                         <segment title="and less than"/>
                                         <segment title="and greater than"/>
@@ -114,10 +114,10 @@
                             <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                         </stackView>
                         <stackView opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="hlh-Hz-PPV">
-                            <rect key="frame" x="0.0" y="229" width="414" height="57"/>
+                            <rect key="frame" x="0.0" y="200" width="414" height="50"/>
                             <subviews>
                                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="640-Ud-Fo1">
-                                    <rect key="frame" x="8" y="8" width="398" height="42"/>
+                                    <rect key="frame" x="8" y="8" width="398" height="35"/>
                                     <segments>
                                         <segment title="negative running count"/>
                                         <segment title="positive running count"/>
@@ -132,10 +132,7 @@
                     </subviews>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rFv-z4-kPO">
-                    <rect key="frame" x="0.0" y="301" width="414" height="75"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="75" id="fdQ-WH-6Xc"/>
-                    </constraints>
+                    <rect key="frame" x="0.0" y="265" width="414" height="111"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <state key="normal" title="Submit"/>
                     <connections>

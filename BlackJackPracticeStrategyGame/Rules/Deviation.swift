@@ -38,6 +38,13 @@ class Deviation {
                 return .double
             }
         }
+        if self.action == .doubleHit {
+            if num > 2 {
+                return .hit
+            } else {
+                return .double
+            }
+        }
         return self.action
     }
     

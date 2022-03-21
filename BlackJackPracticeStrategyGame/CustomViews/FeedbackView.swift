@@ -55,7 +55,12 @@ class FeedbackView: UIView {
         
         let myMutableString = NSMutableAttributedString(string: "Your answer: \(playerAction)", attributes: [NSAttributedString.Key.font: yourAnswerLabel.font! ])
         
-        let color: UIColor = isCorrect ? .systemGreen : .systemRed
+        
+        
+        var color: UIColor = isCorrect ? .systemGreen : .systemRed
+        if playerAction.contains("±") {
+            color = .orange
+        }
         myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(location: 13, length: playerAction.count))
         
         yourAnswerLabel.attributedText = myMutableString

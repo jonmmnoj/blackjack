@@ -8,20 +8,34 @@
 import UIKit
 
 class MainMenuViewController: UITableViewController {
+    var delegate: SplitViewDelegate?
     var cellContents = MainMenuContent().contents
+    var color: UIColor {
+        return UIColor(hex: TableColor(rawValue: Settings.shared.tableColor)!.tableCode)!
+    }
+    
+    override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
+        tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: TableColor.Green.tableCode)
-        tableView.rowHeight = UITableView.automaticDimension;
-        tableView.estimatedRowHeight = 44.0;
         
-        //self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        if Settings.shared.deviceType == .phone {
+        AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        }
+        
+        view.backgroundColor = color
+        tableView.backgroundColor = color
+        tableView.rowHeight = UITableView.automaticDimension;
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
+        tableView.reloadData() // color might have changed
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -40,8 +54,12 @@ class MainMenuViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Logo", for: indexPath)
-            cell.backgroundColor = UIColor(hex: TableColor.Green.tableCode)
+            cell.backgroundColor = color
+            cell.contentView.backgroundColor = color
+            cell.superview?.backgroundColor = color
+            cell.selectedBackgroundView?.backgroundColor = color
             cell.isUserInteractionEnabled = false
+            
             return cell
         }
         
@@ -51,15 +69,28 @@ class MainMenuViewController: UITableViewController {
         cell.label.text = content.title
         cell.detail.attributedText = content.detail
         cell.detail.sizeToFit()
+        
+        cell.backgroundColor = color
+        cell.contentView.backgroundColor = color
+        cell.superview?.backgroundColor = color
+        cell.selectedBackgroundView?.backgroundColor = color
+        
+        cell.layoutIfNeeded()
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let gameType = cellContents[indexPath.row].gameType
-        let vc = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
-        vc.gameType = gameType
-        self.navigationController!.pushViewController(vc, animated: true)
+        Settings.shared.gameType = gameType
+        
+        if let delegate = self.delegate {
+            delegate.gameTypeSelected(gameType)
+        } else {
+            let vc = self.storyboard!.instantiateViewController(withIdentifier: "SettingsViewController") as! SettingsViewController
+            //vc.gameType = gameType
+            self.navigationController!.pushViewController(vc, animated: true)
+        }
     }
 }
 

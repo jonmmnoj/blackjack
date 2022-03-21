@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class Table {
-
+    
     var movementsForScaleChange = 0
     var movements = 0
     var currentAnimator: UIViewPropertyAnimator!
@@ -31,7 +31,7 @@ class Table {
     }
     
     var offScreenDiscardPoint: CGPoint {
-        return CGPoint(x: 0 - Card.width, y: discardTray.frame.minY)
+        return CGPoint(x: 0 - Card.width, y: discardTray.topOffSet)//discardTray.frame.minY)
     }
     
     init(view table: UIView, gameMaster: GameMaster) {
@@ -40,35 +40,33 @@ class Table {
         self.gameMaster = gameMaster
         
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 1.0, weight: .bold, scale: .large)
-        let image = UIImage(systemName: "arrowtriangle.down.fill", withConfiguration: imageConfig)!
-        let imageView = UIImageView(image: image)//UIImage(named: "down_arrow"))
-        imageView.tintColor = .red
+        let image = UIImage(systemName: "arrowtriangle.down.fill", withConfiguration: imageConfig)
+        let imageView = UIImageView(image: image)
         self.arrowView = imageView
-        
         
         self.view.addSubview(discardTray)
         if !Settings.shared.showDiscardTray || Settings.shared.gameType != .freePlay {
             discardTray.isHidden = true
         }
         gradient.frame = view.bounds
+        setGradientColors()
         view.layer.insertSublayer(gradient, at: 0)
         
-        
-        let gt = Settings.shared.gameType!
+        let gt = Settings.shared.gameType
         let games: [GameType] = [.freePlay, .runningCount, .runningCount_v2, .basicStrategy, .deviations]
         if games.contains(gt) {
-            SoundPlayer.shared.playSound(type: .shuffle)
+            SoundPlayer.shared.playSounds([.shuffle])
         }
     }
     
     func showIndicator(on hand: Hand) {
         let point = hand.nextCardPoint
         let dimension = Settings.shared.cardWidth / 6
-        let frame = CGRect(x: point.x + (Settings.shared.cardWidth/5), y: point.y - dimension * 2, width: dimension, height: dimension)
+        let frame = CGRect(x: point.x + (Settings.shared.cardWidth/5), y: point.y - dimension * 2.5, width: dimension, height: dimension)
         arrowView.frame = frame
         self.view.addSubview(arrowView)
         arrowView.alpha = 1
-        
+        arrowView.tintColor = .red
         UIView.animate(withDuration: 0.5, delay: 0,   options: [.curveEaseInOut, .repeat, .autoreverse], animations: {
             self.arrowView.frame = frame.offsetBy(dx: 0, dy: 5)
         })
@@ -76,6 +74,15 @@ class Table {
     
     func stopIndicator() {
         self.arrowView.removeFromSuperview()
+    }
+    
+    private var firstCard: Bool = true
+    private var dealSpeed: Double {
+        if firstCard {
+            firstCard = false
+            return Double(self.totalAnimationsNotComplete)
+        }
+        return Double(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor
     }
     
     func animateDeal(card: Card, delayAnimation isDelay: Bool = true) {
@@ -94,19 +101,6 @@ class Table {
         animate(card, delayAnimation: isDelay, move: true, soundType: nil)
     }
     
-    private var firstCard: Bool = true
-    private var dealSpeed: Double {
-        if firstCard {
-            firstCard = false
-            return Double(self.totalAnimationsNotComplete)
-        }
-        let speed = (Double(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor) - (Settings.dealSpeedFactor - 1.0)
-        //return speed
-        
-        return Double(self.totalAnimationsNotComplete) * Settings.dealSpeedFactor
-        
-    }
-    
     private func animate(_ card: Card, delayAnimation: Bool = true, move: Bool = false, rotate: Bool = false, soundType: SoundType? = .deal) {
         self.isBusy = true
         self.view.bringSubviewToFront(card.view!)
@@ -115,31 +109,34 @@ class Table {
         currentAnimator = UIViewPropertyAnimator(duration: 0.70 * Settings.dealSpeedFactor, curve: .linear, animations: {
             guard card != nil else { return }
             card.updateFrame()
-            if card.rotateAnimation {
-                var degrees = card.rotationDegrees
-                if Settings.shared.cardsAskew {
-                    degrees += self.askewedCardDegrees()
-                }
-                card.view!.setTransformRotation(toDegrees: degrees)
-                card.wasTransformed = true
-            } else if Settings.shared.cardsAskew {
-                card.view!.setTransformRotation(toDegrees: self.askewedCardDegrees())
-                card.wasTransformed = true
-            }
-          })
-        
+            self.rotate(card)
+        })
         currentAnimator.startAnimation(afterDelay: card.customDealDelay != nil ? card.customDealDelay! : delay)
-       
         currentAnimator.addCompletion({ finished in
             guard card != nil else { return }
             if soundType != nil {
-                SoundPlayer.shared.playSound(type: soundType!)
+                SoundPlayer.shared.playSound(soundType!)
             }
-            self.animationComplete()
             if !move {
                 self.updateCount(card: card)
             }
+            self.animationComplete()
+            
         })
+    }
+    
+    private func rotate(_ card: Card) {
+        if card.rotateAnimation {
+            var degrees = card.rotationDegrees
+            if Settings.shared.cardsAskew {
+                degrees += self.askewedCardDegrees()
+            }
+            card.view!.setTransformRotation(toDegrees: degrees)
+            card.wasTransformed = true
+        } else if Settings.shared.cardsAskew {
+            card.view!.setTransformRotation(toDegrees: self.askewedCardDegrees())
+            card.wasTransformed = true
+        }
     }
     
     private func askewedCardDegrees() -> CGFloat {
@@ -155,12 +152,10 @@ class Table {
             if let label = card.hand?.valueLabelView {
                 label.removeFromSuperview()
             }
-            //self.playSound(type: .discard)
-            SoundPlayer.shared.playSound(type: .discard)
           }, completion: { finished in
               self.animationComplete()
               card.destroyViews()
-              CardCounter.shared.discard()
+              CardCounter.shared.discard(card)
               self.discardTray.updateViews()
           })
     }
@@ -169,15 +164,18 @@ class Table {
         card.backView!.isHidden = true
         card.faceView!.isHidden = false
         self.totalAnimationsNotComplete += 1
-        let options = card.isDouble ? UIView.AnimationOptions.transitionFlipFromBottom : UIView.AnimationOptions.transitionFlipFromRight
+        var options: UIView.AnimationOptions = card.isDouble ? .transitionFlipFromBottom : .transitionFlipFromRight
+        if card.isDouble && Settings.shared.landscape {
+            options = .transitionFlipFromRight
+        }
         
         //self.playSound(type: .flip)
-        SoundPlayer.shared.playSound(type: .flip)
+        SoundPlayer.shared.playSound(.flip)
         
         UIView.transition(from: card.backView!, to: card.faceView!, duration: 0.5 * Settings.dealSpeedFactor, options: options, completion: { finished in
             card.isFaceDown = false
-            self.animationComplete()
             self.updateCount(card: card)
+            self.animationComplete()
         })
     }
     
@@ -192,8 +190,6 @@ class Table {
             card.hand?.updateViewValueOfHand(for: self)
         }
     }
-    
-    
     
     private func animationComplete() {
         self.totalAnimationsNotComplete -= 1
@@ -214,13 +210,15 @@ class Table {
         card.faceView!.frame = card.view!.bounds
     }
     
-    func moveAllCards(for player: Player, to direction: MoveCardsDirection, startIndex: Int? = nil) {
+    func moveAllCards(for player: Player, to direction: MoveCardsDirection, stopIndex: Int? = nil) {
+        guard Settings.shared.landscape == false else { return }
+        
         movements += direction == .right ? 1 : -1
-        var adjustmentX: CGFloat = Settings.shared.cardSize * 1.15//+ 31
+        var adjustmentX: CGFloat = Card.width * 1.2 + Hand.playerAdjustmentX//Card.height * 1.15//+ 31
         adjustmentX *= direction == .right ? -1 : 1
         for (i, hand) in player.hands.enumerated() {
-            if startIndex != nil {
-                if i < startIndex! { continue }
+            if stopIndex != nil {
+                if i > stopIndex! { continue }
             }
             var newPoint = hand.nextCardPoint
             newPoint.x += adjustmentX
@@ -241,24 +239,24 @@ class Table {
                         if card.hasAdjustedForRotatedMoveRight {
                         } else {
                             card.hasAdjustedForRotatedMoveLeft = true
-                            newPoint.x += Settings.shared.cardSize * 0.15//0.15
-                            newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                            newPoint.x += Card.height * 0.15//0.15
+                            newPoint.y += Card.height * 0.15//0.15
                         }
                     }
                     if card.rotateAnimation && card.rotateForSplitAce && direction == .right && !card.hasAdjustedForRotatedMoveRight {
                         card.hasAdjustedForRotatedMoveRight = true
                         
-                        newPoint.x += Settings.shared.cardSize * 0.15//0.15
-                        newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                        //newPoint.x += Card.height * 0.15//0.15
+                        //newPoint.y += Card.height * 0.15//0.15
                     }
                     if card.rotateAnimation && card.hand!.isFirstHand && direction == .right {
                         card.hasAdjustedForRotatedMoveRight = true
-                        newPoint.x += Settings.shared.cardSize * 0.15//0.15
-                        newPoint.y += Settings.shared.cardSize * 0.15//0.15
+                        //newPoint.x += Card.height * 0.15//0.15
+                        //newPoint.y += Card.height * 0.15//0.15
                     }
                     if card.hand!.isFirstHand && card.rotateForSplitAce && direction == .right {
-                        newPoint.x -= Settings.shared.cardSize * 0.15//0.15
-                        newPoint.y -= Settings.shared.cardSize * 0.15//0.15
+                        //newPoint.x -= Card.height * 0.15//0.15
+                        //newPoint.y -= Card.height * 0.15//0.15
                     }
                     card.set(dealPoint: newPoint)
                     card.updateFrame()
@@ -274,31 +272,40 @@ class Table {
         }
     }
     
-//    func show(view inputView: DeviationInputView) {
-//        self.view.addSubview(inputView)
-//        inputView.snp.makeConstraints { make in
-//            make.center.equalTo(self.view)
-//            make.width.greaterThanOrEqualTo(self.view.snp.width).offset(-50)
-//            //make.left.equalTo(table)(50)
-//           // make.right.equalTo(table).offset(-50)
-//            make.height.lessThanOrEqualTo(250)
-//        }
-//    }
-    
-    lazy var gradient: CAGradientLayer = {
-        let gradient = CAGradientLayer()
-        gradient.type = .radial
+    func setGradientColors() {
+        var alpha = 0.3
+        if Settings.shared.tableColor == TableColor.Black.rawValue {
+            alpha = 0.7
+        }
         gradient.colors = [
             UIColor.clear.cgColor,
             //Settings.shared.defaults.tableColor
-            UIColor.black.withAlphaComponent(0.3).cgColor,
+            UIColor.black.withAlphaComponent(alpha).cgColor,
 //            UIColor.green.cgColor,
 //            UIColor.yellow.cgColor,
 //            UIColor.orange.cgColor,
 //            UIColor.red.cgColor
         ]
+    }
+    
+    lazy var gradient: CAGradientLayer = {
+//        var alpha = 0.3
+//        if Settings.shared.tableColor == TableColor.Black.rawValue {
+//            alpha = 0.9
+//        }
+        let gradient = CAGradientLayer()
+        gradient.type = .radial
+//        gradient.colors = [
+//            UIColor.clear.cgColor,
+//            //Settings.shared.defaults.tableColor
+//            UIColor.black.withAlphaComponent(alpha).cgColor,
+////            UIColor.green.cgColor,
+////            UIColor.yellow.cgColor,
+////            UIColor.orange.cgColor,
+////            UIColor.red.cgColor
+//        ]
         gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
-        let endY = 0.5 + view.frame.size.width / view.frame.size.height / 2
+        let endY = 0.5 + view.frame.size.width / view.frame.size.height / 1.8
         gradient.endPoint = CGPoint(x: 1, y: endY)
         return gradient
     }()

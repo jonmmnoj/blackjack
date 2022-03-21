@@ -7,25 +7,73 @@
 
 import UIKit
 
+class DecisionData: Codable {
+    var type: DecisionType!
+    var isCorrect: Bool!
+    var yourAnswer: String!
+    var correctAnswer: String!
+    var decisionBasedOn: String?
+}
+
+class SessionData: Codable {
+    var gameType: GameType = .freePlay
+    var decisions: [DecisionData] = []
+    var decisionCount: Int = 0
+    var decisionCorrect: Int = 0
+    var bankRollAtStart: Double = 0
+    var numberOfMistakes: Int {
+        return countingsMistake + basicStrategyMistake + deviationMistake + betSpreadMistake + insuranceMistake
+    }
+    var countingsMistake: Int = 0
+    var basicStrategyMistake: Int = 0
+    var deviationMistake: Int = 0
+    var insuranceMistake: Int = 0
+    var betSpreadMistake: Int = 0
+    var startTime: TimeInterval!
+    var endTime: TimeInterval!
+    var sessionDuration: Date {
+        let startTime = TimeInterval(startTime)
+        let endTime = TimeInterval(endTime)
+        let time = Date(timeIntervalSince1970: TimeInterval(endTime - startTime))
+        return time
+    }
+}
+
 class Session {
     var gameType: GameType
     var decisions: [Decision] = []
-    var decisionCount = 0
-    var decisionCorrect = 0
+    var decisionCount: Int = 0
+    var decisionCorrect: Int = 0
     var bankRollAtStart: Double
     var numberOfMistakes: Int {
         return countingsMistake + basicStrategyMistake + deviationMistake + betSpreadMistake + insuranceMistake
     }
-    var countingsMistake = 0
-    var basicStrategyMistake = 0
-    var deviationMistake = 0
-    var insuranceMistake = 0
-    var betSpreadMistake = 0
+    var countingsMistake: Int = 0
+    var basicStrategyMistake: Int = 0
+    var deviationMistake: Int = 0
+    var insuranceMistake: Int = 0
+    var betSpreadMistake: Int = 0
+    var startTime: TimeInterval!
+    var endTime: TimeInterval!
+    var sessionDuration: Date {
+        let startTime = TimeInterval(startTime)
+        let endTime = TimeInterval(endTime)
+        let time = Date(timeIntervalSince1970: TimeInterval(endTime - startTime))
+        return time
+    }
     
     init(gameType: GameType) {
         self.gameType = gameType
         self.bankRollAtStart = Settings.shared.bankRollAmount
     }
+    
+    func start() {
+        startTime = NSDate().timeIntervalSince1970
+    }
+    func end() {
+        endTime = NSDate().timeIntervalSince1970
+    }
+
     
     func add(decision: Decision) {
         decisionCount += 1
@@ -74,22 +122,24 @@ class Session {
     
     func printSessionStats() {
         
-        print("Summary")
+      //  print("Summary")
         let bankRollChange = Settings.shared.bankRollAmount - bankRollAtStart
-        print("\nbankroll change: \(bankRollChange)")
-        print("\ndecisions: \(decisionCount), decision correct: \(decisionCorrect), % correct: \(Double(decisionCorrect)/Double(decisionCount))%")
-        print("\nMistakes: \(numberOfMistakes)")
-        print("\nCounting mistakes: \(countingsMistake)")
-        print("\nBasic strategy mistakes: \(basicStrategyMistake)")
-        print("\nDeviation mistakes: \(deviationMistake)")
-        print("\nBetting mistakes: \(betSpreadMistake)")
-        print("\nInsurance mistakes: \(insuranceMistake)")
-        print("\nDecisions")
+//        print("\nbankroll change: \(bankRollChange)")
+//        print("\ndecisions: \(decisionCount), decision correct: \(decisionCorrect), % correct: \(Double(decisionCorrect)/Double(decisionCount))%")
+//        print("\nMistakes: \(numberOfMistakes)")
+//        print("\nCounting mistakes: \(countingsMistake)")
+//        print("\nBasic strategy mistakes: \(basicStrategyMistake)")
+//        print("\nDeviation mistakes: \(deviationMistake)")
+//        print("\nBetting mistakes: \(betSpreadMistake)")
+//        print("\nInsurance mistakes: \(insuranceMistake)")
+//        print("\nDecisions")
         for d in decisions {
             d.info()
         }
     }
 }
+
+
 
 class Decision {
     var type: DecisionType
@@ -106,7 +156,7 @@ class Decision {
     }
     
     func info() {
-        print("\ntype: \(type), \(isCorrect) \(decisionBasedOn ?? ""), your answer: \(yourAnswer) correct answer: \(correctAnswer)")
+   //     print("\ntype: \(type), \(isCorrect) \(decisionBasedOn ?? ""), your answer: \(yourAnswer) correct answer: \(correctAnswer)")
     }
     
     func getLabelString() -> String {
@@ -120,23 +170,36 @@ class Stats {
     var session: Session?
     var statsData = StatsData.shared
     
-    func update(decision: Decision) {
+    func startSession() {
         if session == nil {
             session = Session(gameType: Settings.shared.gameType)
         }
-        session!.add(decision: decision)
-        statsData.decisions.append(decision)
+        session!.start()
     }
+    
+    func endSession() {
+        session!.end()
+       // print(session!.sessionDuration)
+        session = nil
+
+    }
+    
+//    func update(decision: Decision) {
+////        if session == nil {
+////            session = Session(gameType: Settings.shared.gameType)
+////        }
+//        session!.add(decision: decision)
+//        //statsData.decisions.append(decision)
+//    }
     
     func printSessionStats() {
         session?.printSessionStats()
-        session = nil
     }
     
     func printStatsData() {
-        for d in statsData.decisions {
-            d.info()
-        }
+        //for d in statsData.decisions {
+        //    d.info()
+        //}
     }
     
     
@@ -160,13 +223,24 @@ class Stats {
 class StatsData {
     static let shared = StatsData()
     private init() {}
-    var decisions: [Decision] = []
+    //var decisions: [Decision] = []
+    var sessions: [Session] = []
     
-    class DataContainer {
+    func getSessions() {
         
+    }
+    
+    func save(sessionData: SessionData) {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(sessionData)
+            UserDefaults.standard.set(data, forKey: "session")
+        } catch {
+            print("Unable to Encode Session (\(error))")
+        }
     }
 }
 
-enum DecisionType {
+enum DecisionType: String, Codable {
     case basicStrategy, deviation, betSpread, runningCount, trueCount, insurance
 }

@@ -11,6 +11,6 @@ class QuickFeedback {
         if moreMessage != nil && result == false {
             message += " Correct answer: " + moreMessage!
         }
-        delegate.showToast(message: message)
+        delegate.showToast(message: message, for: nil)
     }
 }

@@ -25,42 +25,85 @@ class ChartsSettings: GameTypeSettings {
                     text: "Basic Strategy",
                     detailText: .none,
                     action: { _ in
-                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-
-                    let sb = UIStoryboard(name: "Chart", bundle: nil)
-                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
-                    tbc.deviationType = .standard
-                    self.vc.present(tbc, animated: false)
-                }),
+                        self.actionHandler(deviationType: .none)
+                    }
+                ),
             ]),
-            
             Section(title: "", rows: [
                 NavigationRow(
                     text: "Hard 17 Deviations",
                     detailText: .none,
                     action: { _ in
-                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-
-                    let sb = UIStoryboard(name: "Chart", bundle: nil)
-                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
-                    tbc.deviationType = .hard17
-                    self.vc.present(tbc, animated: false)
-                }),
+                        self.actionHandler(deviationType: .hard17)
+                    }
+                ),
             ]),
-            
             Section(title: "", rows: [
                 NavigationRow(
                     text: "Soft 17 Deviations",
                     detailText: .none,
                     action: { _ in
-                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeRight, andRotateTo: UIInterfaceOrientation.landscapeRight)
-
-                    let sb = UIStoryboard(name: "Chart", bundle: nil)
-                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
-                    tbc.deviationType = .soft17
-                    self.vc.present(tbc, animated: false)
-                }),
+                        self.actionHandler(deviationType: .soft17)
+                    }
+                ),
             ]),
+            
+//            Section(title: "", rows: [
+//                NavigationRow(
+//                    text: "Basic Strategy",
+//                    detailText: .none,
+//                    action: { _ in
+//                        if Settings.shared.deviceType == .phone {
+//                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+//                        }
+//
+//                    let sb = UIStoryboard(name: "Chart", bundle: nil)
+//                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
+//                    tbc.deviationType = .standard
+//                        tbc.modalPresentationStyle = .fullScreen
+//                    self.vc.present(tbc, animated: false)
+//                }),
+//            ]),
+//
+//            Section(title: "", rows: [
+//                NavigationRow(
+//                    text: "Hard 17 Deviations",
+//                    detailText: .none,
+//                    action: { _ in
+//                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+//
+//                    let sb = UIStoryboard(name: "Chart", bundle: nil)
+//                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
+//                    tbc.deviationType = .hard17
+//                        tbc.modalPresentationStyle = .fullScreen
+//                    self.vc.present(tbc, animated: false)
+//                }),
+//            ]),
+//
+//            Section(title: "", rows: [
+//                NavigationRow(
+//                    text: "Soft 17 Deviations",
+//                    detailText: .none,
+//                    action: { _ in
+//                    AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+//
+//                    let sb = UIStoryboard(name: "Chart", bundle: nil)
+//                    let tbc = sb.instantiateViewController(identifier: "TabBarController") as! TabBarController
+//                    tbc.deviationType = .soft17
+//                        tbc.modalPresentationStyle = .fullScreen
+//                    self.vc.present(tbc, animated: false)
+//                }),
+//            ]),
         ]
+    }
+    
+    func actionHandler(deviationType: DeviationType) {
+        if Settings.shared.deviceType == .phone {
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+        }
+        let vc = TabBarController_v2()
+        vc.deviationType = deviationType
+        vc.modalPresentationStyle = .fullScreen
+        self.vc.present(vc, animated: false)
     }
 }

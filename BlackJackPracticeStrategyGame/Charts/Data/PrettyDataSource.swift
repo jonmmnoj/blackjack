@@ -37,12 +37,13 @@ class PrettyDataSource : SwiftGridViewDataSource {
     
     func dataGridView(_ dataGridView: SwiftGridView, cellAtIndexPath indexPath: IndexPath) -> SwiftGridCell {
         let cell = dataGridView.dequeueReusableCellWithReuseIdentifier(PrettyRowCell.reuseIdentifier(), forIndexPath: indexPath) as! PrettyRowCell
-        let row = self.self.delegate.chart.data[indexPath.sgRow]
+        let data = !delegate.chart.isQuiz ? self.delegate.chart.data : self.delegate.chart.quizArray
+        let row = data[indexPath.sgRow]
         let column = row[indexPath.sgColumn]
         
         cell.indexPath = indexPath
         cell.addObserver(delegate.chart)
-        cell.setup(text: column, cellConfig: delegate.chart.cellConfig)
+        cell.setup(text: column, chart: delegate.chart)//cellConfig: delegate.chart.cellConfig)
         
         if (delegate.chart.isQuiz) {
             cell.button.isUserInteractionEnabled = true

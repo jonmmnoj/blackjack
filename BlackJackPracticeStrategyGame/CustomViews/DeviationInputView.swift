@@ -51,6 +51,8 @@ class DeviationInputView: UIView {
         commonInit()
         if gameType == .freePlay {
             initTrueCount()
+        } else if gameType == .deviations_v2 {
+            initDeviationsV2()
         } else {
             initRunningCount()
         }
@@ -76,9 +78,17 @@ class DeviationInputView: UIView {
         submitButton.backgroundColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         submitButton.setTitleColor(.white, for: .normal)
         
+        increase.tintColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
+        decrease.tintColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
+        
         textField.keyboardType = UIKeyboardType.numberPad
         textField.returnKeyType = UIReturnKeyType.done
         textField.addNumericAccessory(addPlusMinus: true)
+        
+        submitButton.snp.removeConstraints()
+        submitButton.snp.makeConstraints { make in
+            make.height.equalTo(75)
+        }
     }
     
     private func initRunningCount() {
@@ -87,6 +97,25 @@ class DeviationInputView: UIView {
         //textFieldStackView.isHidden = true
         lessGreaterThanStackView.isHidden = true
         runningCountStackView.isHidden = true
+    }
+    
+    private func initDeviationsV2() {
+        titleLabel.text = "True Count"
+        actionStackView.isHidden = true
+        //textFieldStackView.isHidden = true
+        lessGreaterThanStackView.isHidden = true
+        runningCountStackView.isHidden = true
+        increase.isHidden = true
+        //increase.isEnabled = false
+        decrease.isHidden = true
+        //decrease.isEnabled = false
+        //textField.content
+        submitButton.isHidden = true
+        submitButton.isEnabled = false
+        submitButton.snp.removeConstraints()
+        submitButton.snp.makeConstraints { make in
+            make.height.equalTo(0)
+        }
     }
     
     private func initTrueCount() {

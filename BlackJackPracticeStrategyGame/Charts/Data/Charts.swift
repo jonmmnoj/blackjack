@@ -9,6 +9,8 @@ import UIKit
 import OrderedCollections
 
 class PairSplittingChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["A,A","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],
                 ["10,10","N","N","N","N","N","N","N","N","N","N"],
                 ["9,9","Y","Y","Y","Y","Y","N","Y","Y","N","N"],
@@ -25,6 +27,7 @@ class PairSplittingChart: ChartProtocol {
                                                           "N": UIColor.white,
                                                           "Y/N": UIColor.blue.withAlphaComponent(0.6)]
     
+   
     func copy() -> ChartProtocol {
         let copy = PairSplittingChart()
         return copy
@@ -42,11 +45,27 @@ class H17PairSplittingChart: ChartProtocol {
                 ["4,4","N","N","N","Y/N","Y/N","N","N","N","N","N"],
                 ["3,3","Y/N","Y/N","Y","Y","Y","Y","N","N","N","N"],
                 ["2,2","Y/N","Y/N","Y","Y","Y","Y","N","N","N","N"]]
+    var isQuiz = false
+    var quizArray = [["A,A","","","","","","","","","",""],
+                ["10,10","","","","","","","","","",""],
+                ["9,9","","","","","","","","","",""],
+                ["8,8","","","","","","","","","",""],
+                ["7,7","","","","","","","","","",""],
+                ["6,6","","","","","","","","","",""],
+                ["5,5","","","","","","","","","",""],
+                ["4,4", "","","","","","","","","",""],
+                ["3,3","","","","","","","","","",""],
+                ["2,2","","","","","","","","","",""]]
     
     var cellConfig: OrderedDictionary<String, UIColor> = ["": UIColor.white,
                                                           "Y": UIColor.green.withAlphaComponent(0.7),
                                                           "N": UIColor.white,
                                                           "Y/N": UIColor.blue.withAlphaComponent(0.6)]
+    
+    var deviationConfig: OrderedDictionary<String, UIColor> = ["":UIColor.white,
+                                                                "6+": UIColor.white,
+                                                               "5+": UIColor.white,
+                                                               "4+": UIColor.white]
     
     func copy() -> ChartProtocol {
         let copy = H17PairSplittingChart()
@@ -55,6 +74,8 @@ class H17PairSplittingChart: ChartProtocol {
 }
 
 class S17PairSplittingChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["A,A","Y","Y","Y","Y","Y","Y","Y","Y","Y","Y"],
                 ["10,10","N","N","N6+","N5+","N4+","N","N","N","N","N"],
                 ["9,9","Y","Y","Y","Y","Y","N","Y","Y","N","N"],
@@ -78,6 +99,8 @@ class S17PairSplittingChart: ChartProtocol {
 }
 
 class SoftTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["A,9","S","S","S","S","S","S","S","S","S","S"],
                 ["A,8","S","S","S","S","Ds","S","S","S","S","S"],
                 ["A,7","Ds","Ds","Ds","Ds","Ds","S","S","H","H","H"],
@@ -86,6 +109,7 @@ class SoftTotalsChart: ChartProtocol {
                 ["A,4","H","H","D","D","D","H","H","H","H","H"],
                 ["A,3","H","H","H","D","D","H","H","H","H","H"],
                 ["A,2","H","H","H","D","D","H","H","H","H","H"]]
+    
     
     var cellConfig: OrderedDictionary<String, UIColor> = ["": UIColor.white,
                                                           "H": UIColor.white,
@@ -100,6 +124,8 @@ class SoftTotalsChart: ChartProtocol {
 }
 
 class H17SoftTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["A,9","S","S","S","S","S","S","S","S","S","S"],
                 ["A,8","S","S","S3+","S1+","Ds0-","S","S","S","S","S"],
                 ["A,7","Ds","Ds","Ds","Ds","Ds","S","S","H","H","H"],
@@ -122,6 +148,8 @@ class H17SoftTotalsChart: ChartProtocol {
 }
 
 class S17SoftTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["A,9","S","S","S","S","S","S","S","S","S","S"],
                 ["A,8","S","S","S3+","S1+","S1+","S","S","S","S","S"],
                 ["A,7","Ds","Ds","Ds","Ds","Ds","S","S","H","H","H"],
@@ -144,6 +172,8 @@ class S17SoftTotalsChart: ChartProtocol {
 }
 
 class HardTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["17","S","S","S","S","S","S","S","S","S","S"],
                 ["16","S","S","S","S","S","H","H","H","H","H"],
                 ["15","S","S","S","S","S","H","H","H","H","H"],
@@ -167,6 +197,8 @@ class HardTotalsChart: ChartProtocol {
 }
 
 class H17HardTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["17","S","S","S","S","S","S","S","S","S","S"],
                 ["16","S","S","S","S","S","H","H","H4+","H0+","H3+"],
                 ["15","S","S","S","S","S","H","H","H","H4+","H5+"],
@@ -190,6 +222,8 @@ class H17HardTotalsChart: ChartProtocol {
 }
 
 class S17HardTotalsChart: ChartProtocol {
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["17","S","S","S","S","S","S","S","S","S","S"],
                 ["16","S","S","S","S","S","H","H","H4+","H0+","H"],
                 ["15","S","S","S","S","S","H","H","H","H4+","H"],
@@ -214,7 +248,8 @@ class S17HardTotalsChart: ChartProtocol {
 
 
 class SurrenderChart: ChartProtocol {
-    
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["16","","","","","","","","SUR","SUR","SUR"],
                 ["15","","","","","","","","","SUR",""],
                 ["14","","","","","" ,"","","","",""]]
@@ -229,7 +264,8 @@ class SurrenderChart: ChartProtocol {
 }
 
 class H17SurrenderChart: ChartProtocol {
-    
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["17","","","","","","","","","","SUR"],
                 ["16","","","","","","","4+","SUR-1-","SUR","SUR"],
                 ["15","","","","","","","","2+","SUR0-","-1+"],
@@ -245,7 +281,8 @@ class H17SurrenderChart: ChartProtocol {
 }
 
 class S17SurrenderChart: ChartProtocol {
-    
+    var quizArray: [[String]] = [[]]
+    var isQuiz = false
     var data = [["16","","","","","","","4+","SUR-1-","SUR","SUR"],
                 ["15","","","","","","","","2+","SUR0-","2+"],
                 ["14","","","","","" ,"","","","",""]]

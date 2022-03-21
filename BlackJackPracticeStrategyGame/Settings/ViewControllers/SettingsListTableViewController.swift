@@ -71,7 +71,7 @@ class SettingsListTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        if isBetSpreadTable { return "Enter the dollar amount" }
+        //if isBetSpreadTable { return "Enter the dollar amount" }
         return nil
     }
     

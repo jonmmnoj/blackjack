@@ -10,13 +10,76 @@ import Foundation
 import UIKit
 
 class GameMaster {
-
+    var c = 0
+    private func addReservedHands() {
+        var insertAt: Int = -1
+        for i in 0...Settings.shared.spotAssignments.count - 1 {
+            let assignment: SpotAssignment = Settings.shared.spotAssignments[i]
+            if assignment != .empty { insertAt += 1 }
+            if assignment == .playerReserved {
+                let hand = Hand.getHand(for: i, player: player)
+                player.add(hand: hand, at: insertAt)
+            }
+        }
+    }
+    
+    private func spotAssignmentsForRunningCount() {
+        let numberOfSpots = Settings.shared.rcNumberOfSpots
+        var array: [Int] = []
+        switch numberOfSpots {
+        case 1: array = [3]
+        case 2: array = [2,3]
+        case 3: array = [2,3,4]
+        case 4: array = [1,2,3,4]
+        case 5: array = [1,2,3,4,5]
+        case 6: array = [0,1,2,3,4,5]
+        case 7: array = [0,1,2,3,4,5,6]
+        default: break
+        }
+        // if iphone and landscape
+        if Settings.shared.verticalSizeClass == .compact {
+            array = array.map{ $0 - 1 }
+        }
+        
+        for spotIndex in array {
+            let hand = Hand.getHand(for: spotIndex, player: player)
+            hand.isGhostHand = true
+            player.add(hand: hand)
+        }
+        dealer.add(hand: Hand.getHand(for: dealer))
+    }
+    
+    
+    private func spotAssignments() {
+        guard gameType != .runningCount else { spotAssignmentsForRunningCount(); return }
+        
+        for i in 0...Settings.shared.spotAssignments.count - 1 {
+            let assignment: SpotAssignment = Settings.shared.spotAssignments[i]
+            var hand: Hand? = Hand.getHand(for: i, player: player)
+            switch (assignment) {
+                case .playerActive: break
+                case .playerReserved:
+                    //if !player.dealt2Hands {
+                        hand = nil
+                    //}
+                case .computer: hand!.isGhostHand = true
+                case .empty: hand = nil
+            }
+            if let hand = hand {
+                player.add(hand: hand)
+            }
+        }
+        dealer.add(hand: Hand.getHand(for: dealer))
+    }
+    
     var gameType: GameType
     lazy var gameStrategyPattern: GameTypeStrategyPatternProtocol = {
         return gameType.getStrategyPattern(gameMaster: self)
     }()
     var playerBets: Bool {
-        return gameType == .freePlay && Settings.shared.placeBets
+        let spots = Settings.shared.spotAssignments
+        let hasPlayerSpots = spots.contains(.playerActive) || spots.contains(.playerReserved)
+        return gameType == .freePlay && Settings.shared.placeBets && hasPlayerSpots
     }
     var showDiscardTray: Bool {
         return Settings.shared.showDiscardTray && gameType == .freePlay
@@ -29,53 +92,21 @@ class GameMaster {
     var tableView: UIView
     var gameState: GameState!
     var navBarHeight: CGFloat = 0
-    var dealerHandDealPoint: CGPoint {
-        var x = tableView.center.x - Settings.shared.cardWidth * 0.6
-        if showDiscardTray {
-            if UIScreen.main.bounds.width / 2 < Settings.shared.cardWidth * 2 {
-                x = Settings.shared.cardWidth + 3
-            }
-        }
-        return CGPoint(x: x , y: 50)
-    }
-    var dealerHandAdjustmentX: CGFloat {
-        return Card.width * 0.15//Card.width + 2
-    }
-    var dealerHandAdjustmentY: CGFloat {
-        return 0
-    }
-    var dealerHand: Hand {
-        return Hand(dealToPoint: dealerHandDealPoint, adjustmentX: dealerHandAdjustmentX , adjustmentY: dealerHandAdjustmentY, owner: self.dealer)
-    }
-    func getPlayerHandDealPoint(numberOfHandsToAdjustBy: Int) -> CGPoint {
-        var numberOfHandsAdjustment: CGFloat = 0
-        numberOfHandsAdjustment += CGFloat(numberOfHandsToAdjustBy) * (Settings.shared.cardWidth * 1.85)
-        return  CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7 + numberOfHandsAdjustment, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30)
-    }
-    
-    var playerHandDealPoint: CGPoint {
-        var numberOfHandsAdjustment: CGFloat = 0
-        numberOfHandsAdjustment += CGFloat(player.hands.count) * (Settings.shared.cardWidth * 1.85)
-        return  CGPoint(x: tableView.center.x - Settings.shared.cardWidth * 0.7 + numberOfHandsAdjustment, y: tableView.frame.height - Settings.shared.cardSize - Settings.shared.cardSize * 0.30)
-    }
-    var playerAdjustmentXorY: CGFloat {
-        return Settings.shared.cardSize * 0.2
-    }
-    var playerHand: Hand {
-        return Hand(dealToPoint: playerHandDealPoint, adjustmentX: playerAdjustmentXorY, adjustmentY: playerAdjustmentXorY, owner: player)
-    }
+    var killGame = false
     
     init(gameType: GameType, table: UIView) {
         self.gameType = gameType
         self.tableView = table
+        setupTable()
     }
     
     func startGame() {
-        //CardCounter.shared.reset()
+        //self.delegate.showGestureView()
+        //Stats.shared.startSession()
         setupDealer()
         setupPlayer()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1.0)) {//1.0) {
             if self.playerBets {
                 self.getBet()
             } else {
@@ -89,15 +120,27 @@ class GameMaster {
     }
     
     func playerBet(amount: Int) {
-        SoundPlayer.shared.playSound(type: .chips)
         if player.dealt2Hands {
-            player.add(hand: playerHand)
-            if Settings.shared.ghostHand {
-                dealer.table.moveAllCards(for: player, to: .right, startIndex: player.hands.count - 1)
+            SoundPlayer.shared.playSounds([.chips, .chips])
+        } else {
+            SoundPlayer.shared.playSound(.chips)
+        }
+        
+        if player.dealt2Hands {
+            if Settings.shared.landscape {
+                addReservedHands()
             } else {
-                
+                player.clearHands() // did it this way to get the right deal points
+                var hand = Hand.getHand(for: player)
+                player.add(hand: hand)// playerHand)
+                hand = Hand.getHand(for: player)
+                player.add(hand: hand)// playerHand)
+                if Settings.shared.ghostHand {
+                    hand = Hand.getHand(for: player)
+                    hand.isGhostHand = true
+                    player.add(hand: hand)
+                }
             }
-            dealer.moveCards(for: player, to: .right)
         }
         
         for hand in player.hands {
@@ -110,11 +153,14 @@ class GameMaster {
     func dealCards() {
         gameStrategyPattern.dealCards()
     }
-    
+    func setupTable() {
+        table = Table(view: tableView, gameMaster: self)
+    }
+    var table: Table!
     func setupDealer() {
-        let table = Table(view: tableView, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
+        //let table = Table(view: tableView, gameMaster: self) // table tells GM when animations are complete so GM can sync game flow with player input and player UI visuals
         self.dealer = Dealer(table: table)//, numberOfDecks: Settings.shared.numberOfDecks)
-        let hand = dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
+        let hand = Hand.getHand(for: dealer) // dealerHand//Hand(dealToPoint: CGPoint(x: 20 + navBarHeight, y: 50), adjustmentX: Card.width + 3, adjustmentY: 0, owner: self.dealer)
         self.dealer.add(hand: hand)
     }
     
@@ -125,18 +171,22 @@ class GameMaster {
         self.players.forEach {
             self.dealer.access(to: $0)
         }
-        
-        if Settings.shared.ghostHand {
-            let gHand = playerHand
-            gHand.isGhostHand = true
-            player.add(hand: gHand)
-        }
-        
-        let hand = playerHand
-        player.add(hand: hand)
-       
-        if Settings.shared.ghostHand {
-            dealer.moveCards(for: player, to: .right)
+        if Settings.shared.landscape {
+            //createHandsForLandscapeTable()
+            spotAssignments()
+        } else {
+            let hand = Hand.getHand(for: player)//playerHand
+            player.add(hand: hand)
+            
+            if Settings.shared.ghostHand {
+                let gHand = Hand.getHand(for: player)//playerHand
+                gHand.isGhostHand = true
+                player.add(hand: gHand)
+            }
+            
+            if Settings.shared.ghostHand {
+                //dealer.moveCards(for: player, to: .right)
+            }
         }
     }
     
@@ -145,27 +195,29 @@ class GameMaster {
     }
     
     func prepareForNewRound() {
-        if Settings.shared.ghostHand {
-            let gHand = playerHand
-            gHand.isGhostHand = true
-            player.add(hand: gHand)
+        if Settings.shared.landscape {
+            //createHandsForLandscapeTable()
+            spotAssignments()
+        } else {
+            var hand = Hand.getHand(for: player)//playerHand
+            player.add(hand: hand)
+            
+            if Settings.shared.ghostHand {
+                let gHand = Hand.getHand(for: player)//playerHand
+                gHand.isGhostHand = true
+                player.add(hand: gHand)
+            }
+           
+            hand = Hand.getHand(for: dealer)//dealerHand
+            self.dealer.add(hand: hand)
+            if Settings.shared.ghostHand {
+                //dealer.moveCards(for: player, to: .left)
+            }
         }
-        
-        var hand = playerHand
-        player.add(hand: hand)
-        hand = dealerHand
-        self.dealer.add(hand: hand)
-        
-       
-        
-        if Settings.shared.ghostHand {
-            dealer.moveCards(for: player, to: .right)
-        }
-        
         
         let result = checkShoeForTimeToRefill()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + (result ? 2.5 : 0)) {
+        let time = result ? 2.5 : 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(time)) {//time) {
             if self.playerBets {
                 self.getBet()
             } else {
@@ -175,11 +227,11 @@ class GameMaster {
     }
 }
 
-// Player Inputs - Hit, Double, Split, Stand
-
 extension GameMaster {
     func inputReceived(type: PlayerAction) {
-        self.dealer.stopIndicator()
+        //if !player.activatedHand!.isGhostHand {
+            self.dealer.stopIndicator()
+       // }
         self.delegate.playerInput(enabled: false)
         gameStrategyPattern.inputReceived(action: type)
     }
@@ -192,14 +244,17 @@ extension GameMaster {
     }
     
     func playerDoubles() {
-        let player = self.players.first!
+        //let player = self.players.first!
         let hand = player.activatedHand!
+        if hand.betAmount != 0 {
+            SoundPlayer.shared.playSound(.chips)
+        }
         //Settings.shared.bankRollAmount -= Double(hand.betAmount)
         Bankroll.shared.add(-Double(hand.betAmount))
         hand.betAmount += hand.betAmount
     
         if hand.isSplitHand && !Settings.shared.doubleAfterSplit {
-            print("alert: no DAS")
+            //print("alert: no DAS")
             waitForPlayerInput()
             return
         }
@@ -215,14 +270,22 @@ extension GameMaster {
     var canSurrender: Bool {
         return Settings.shared.surrender && !(player.activatedHand!.cards.count > 2) && !player.activatedHand!.isSplitHand
     }
+    
     var canSplit: Bool {
         let hand = player.activatedHand!
+            if player.howManyTimesHasOriginalHandBeenSplit(hand) == 4 {
+                return false
+            }
+       
         return !(hand.cards.count > 2) && hand.cards[0].value.rawValue == hand.cards[1].value.rawValue
         //return true
     }
     
     func playerSplits() {
         let hand = player.activatedHand!
+        if hand.betAmount != 0 {
+            SoundPlayer.shared.playSound(.chips)
+        }
         self.dealer.splitHand(for: hand)
         self.gameState = .dealtSplit
     }
@@ -230,11 +293,15 @@ extension GameMaster {
     func playerStands() {
         let hand = player.activatedHand!
         hand.set(state: .stand)
-        if !hand.isFirstHand {
+        //if Settings.shared.landscape {
+        //    playerHasMoreHandsOrDealersTurn()
+        //} else {
+        if !hand.isLastHand && Settings.shared.tableOrientation != TableOrientation.landscape.rawValue {//!hand.isFirstHand && player.hands.count > 1 {
             moveCards(to: .left)
         } else {
             playerHasMoreHandsOrDealersTurn()
         }
+        //}
     }
     
     func playerSurrenders() {
@@ -249,15 +316,23 @@ extension GameMaster {
         }
         if dealer.shoe.isTimeToRefillShoe() {
             result = true
-            delegate.showToast(message: "Shuffle")
             dealer.shoe.refill()
+            delegate.showToast(message: "Shuffle", for: nil)
+           //SoundPlayer.shared.playSound(.shuffle)
+            SoundPlayer.shared.playSounds([.shuffle])
+           
         }
         return result
     }
+    
+   
 }
 
 extension GameMaster {
     func resume() {
+        if killGame {
+            return
+        }
         switch gameState {
         case .askInsurance:
             askInsurance()
@@ -292,20 +367,27 @@ extension GameMaster {
                 handleBust(hand: hand)
             } else {
                 hand.set(state: .double)
-                if !hand.isFirstHand {
+                if !hand.isLastHand && Settings.shared.tableOrientation != TableOrientation.landscape.rawValue {//hand.isFirstHand && player.hands.count > 1 {//if !hand.isFirstHand {
                     moveCards(to: .left)
                 } else {
                     playerHasMoreHandsOrDealersTurn()
                 }
             }
         case .dealtSplit:
-            moveCards(to: .right)
+            
+            //if Settings.shared.landscape {
+            //    gameState = .movedAllCards
+            //    resume()
+            //} else {
+                //moveCards(to: .right)
+            gameState = .movedAllCards
+            resume()
+            //}
         case .movedAllCards:
+            //player.movedToHand(player.activatedHand!)
             if playerHasBlackjack && player.activatedHand!.state == .incomplete {
                 player.activatedHand!.set(state: .blackjack)
-
                 handleWon(for: player.activatedHand!)
-                //DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1)) {
                     self.discard(hand: self.player.activatedHand!)
                 }
@@ -314,18 +396,18 @@ extension GameMaster {
                 playerHasMoreHandsOrDealersTurn()
             }
         case .discardedHand, .busted, .surrendered:
-            if player.activatedHand!.isSplitHand && !player.activatedHand!.isFirstHand || (player.dealt2Hands && !player.activatedHand!.isFirstHand) || (!player.activatedHand!.isFirstHand) {
-                moveCards(to: .left)
-            } else {
-                playerHasMoreHandsOrDealersTurn()
-            }
+            //if Settings.shared.landscape {
+            //    playerHasMoreHandsOrDealersTurn()
+            //} else {
+                if player.activatedHand!.isSplitHand && !player.activatedHand!.isLastHand || (player.dealt2Hands && !player.activatedHand!.isLastHand) || (!player.activatedHand!.isLastHand) && Settings.shared.tableOrientation != TableOrientation.landscape.rawValue {
+//                if player.activatedHand!.isSplitHand && !player.activatedHand!.isFirstHand || (player.dealt2Hands && !player.activatedHand!.isFirstHand) || (!player.activatedHand!.isFirstHand) {
+                    moveCards(to: .left)
+                } else {
+                    playerHasMoreHandsOrDealersTurn()
+                }
+            //}
         case .revealedFaceDownCard:
             if Rules.isSoftOrHardSeventeenOrGreater(hand: dealer.activatedHand!) || dealerHasBlackjack || player.allHandsBustSurrenderOrBlackjack() {
-                
-//                if dealerHasBlackjack && player.dealt2Hands {
-//
-//                }
-
                 if player.nextHandToScore != nil {
                     gameState = .moveToRightMostHandToScore
                     resume()
@@ -333,37 +415,41 @@ extension GameMaster {
                     discardAllHands()
                 }
             } else {
-                //DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                //DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(0)) {
-                    self.dealer.moveCardToNewPositionOnTable()
-                //}
                 gameState = .movedRevealCard
+                self.dealer.moveCardToNewPositionOnTable()
+                //gameState = .movedRevealCard
             }
         case .movedRevealCard:
             dealer.dealtToAtLeast17()
             gameState = .dealtToAtLeast17
         case .dealtToAtLeast17:
-
             if gameType == .runningCount {
                 discardAllHands()
                 return
             }
-
-            // at this point, before discarding all hands, the dealer needs to compare his hand to the player's hands to determine what hands won, lost, or pushed.
-            // Need to move to the had that has not been scored, then show a toast for the result
-            // Then move to the next hand, until there are no more hands
-            // After all that, the hands can be discarded
-
             gameState = .moveToRightMostHandToScore
             resume()
 
-
-
         case .moveToRightMostHandToScore:
+            // move to Left Most Hand to score first, then work to right
+            
             if dealerHasBlackjack || (player.dealt2Hands && player.hands.count == 2 && player.allHandsBustSurrenderOrBlackjack())  {//&& player.activatedHand != nil && player.hands[1] === player.activatedHand! {
+            } else {
+                
+                
+                for _ in 0..<player.numberOfHandsToMoveForScore {
+                    dealer.table.moveAllCards(for: player, to: .right)//.right)
+                }
+            }
+            gameState = .movedToHandToScore
+            DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(0.5)) {
+                self.resume()
+            }
+
+        case .moveToNextHandToScore:
+            if Settings.shared.landscape {
                 
             } else {
-            
                 for _ in 0..<player.numberOfHandsToMoveForScore {
                     dealer.table.moveAllCards(for: player, to: .right)
                 }
@@ -373,22 +459,18 @@ extension GameMaster {
                 self.resume()
             }
 
-        case .moveToNextHandToScore:
-            for _ in 1...player.numberOfHandsToMoveForScore {
-                dealer.table.moveAllCards(for: player, to: .left)
-            }
-            gameState = .movedToHandToScore
-            DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(0.5)) {
-                self.resume()
-            }
-
         case .movedToHandToScore:
+            if player.nextHandToScore == nil {
+                discardAllHands()
+                return
+            }
             let hand = player.nextHandToScore!
+            player.movedToHand(hand)
             if Settings.shared.dealDoubleFaceDown && hand.cards.last!.isDouble && hand.cards.last!.isFaceDown {
                 flipOver(card: hand.cards.last!)
                 return
             }
-            player.indexOfLastHandScored = player.hands.firstIndex(where: { $0 === hand })
+            //player.indexOfLastHandScored = player.hands.firstIndex(where: { $0 === hand })
             let dealerHandValue = Rules.value(of: dealer.activatedHand!)
             let playerHandValue = Rules.value(of: hand)
             var isWin: Bool?
@@ -457,6 +539,14 @@ extension GameMaster {
     }
 
     private func moveCards(to direction: MoveCardsDirection) {
+        guard !Settings.shared.landscape else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + self.adjustWaitTime(0.5)) {
+                self.gameState = .movedAllCards
+                self.resume()
+            }
+            return
+        }
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1.5)) {
             self.dealer.moveCards(for: self.player, to: direction)
             self.gameState = .movedAllCards
@@ -474,7 +564,7 @@ extension GameMaster {
             revealFaceDownCard()
         } else if playerHasBlackjack {
             self.player.activatedHand!.set(state: .blackjack)
-            if player.activatedHand!.isFirstHand {
+            if player.activatedHand!.isLastHand {//player.activatedHand!.isFirstHand {
                 self.delegate.playerInput(enabled: false)
                 revealFaceDownCard()
             } else {
@@ -487,12 +577,17 @@ extension GameMaster {
             let hand = player.activatedHand!
             if !hand.isAces() {
                 hand.set(state: .stand)
-                if !hand.isFirstHand {
+                //if Settings.shared.landscape {
+                //    self.delegate.playerInput(enabled: false)
+                //    revealFaceDownCard()
+                //} else {
+                if !hand.isLastHand {//&& Settings.shared.tableOrientation != TableOrientation.landscape.rawValue{//hand.isFirstHand && player.hands.count > 1 {//if !hand.isFirstHand {
                     moveCards(to: .left)
                 } else {
                     self.delegate.playerInput(enabled: false)
                     revealFaceDownCard()
                 }
+                //}
             } else {
                 waitForPlayerInput()
             }
@@ -501,20 +596,35 @@ extension GameMaster {
         }
     }
     
+    
+    
     func getPlayerAction() -> StrategyAction {
         var playerCardValues: [Int] = []
         for card in player.activatedHand!.cards {
             playerCardValues.append(card.value.rawValue)
         }
-        let sa = BasicStrategy.getPlayerAction(dealerCardValue: dealer.activatedHand!.cards.last!.value.rawValue, playerCardValues: playerCardValues )
+        let sa = BasicStrategy.getPlayerAction(dealerCardValue: dealer.activatedHand!.cards.last!.value.rawValue, playerCardValues: playerCardValues)
+        var s = ""
+        for value in playerCardValues {
+            s += " \(value),"
+        }
+        //print("\(c); RC: \(CardCounter.shared.getRunningCount()); TC: \(CardCounter.shared.getTrueCount()); handValue:\(s); dealerValue: \(dealer.activatedHand!.cards.last!.value.rawValue); action: \(sa.action)" )
+        c += 1
         return sa
     }
     
     func waitForPlayerInput() {
-        gameStrategyPattern.waitForPlayerInput()
+        let hand = player.activatedHand!
+        if hand.isSplitHand && hand.cards.count == 1 {
+            gameState = .dealtHit
+            dealer.deal(to: hand)
+        } else {
+            gameStrategyPattern.waitForPlayerInput()
+        }
     }
     
     private func discard(hand: Hand) {
+        SoundPlayer.shared.playSound(.discard)
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1)) {
             self.dealer.discard(hand: self.player.activatedHand!)
             self.gameState = .discardedHand
@@ -522,15 +632,18 @@ extension GameMaster {
     }
     
     private func revealFaceDownCard() {
-        self.dealer.revealCard()
-        self.gameState = .revealedFaceDownCard
+        dealer.table.stopIndicator()
+        dealer.revealCard()
+        gameState = .revealedFaceDownCard
     }
     
     private func adjustWaitTime(_ time: Double) -> Double {
         return time * Settings.dealSpeedFactor
+        //return 0
     }
     
     func discardAllHands() {
+        SoundPlayer.shared.playSound(.discard)
         let wait: Double = gameType == .runningCount ? 1.0 : 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(wait)) {
             self.dealer.discard(hand: self.dealer.activatedHand!)
@@ -544,16 +657,19 @@ extension GameMaster {
     }
     
     private func handleWon(for hand: Hand) {
+        player.indexOfLastHandScored = player.hands.firstIndex(where: { $0 === hand })
         hand.result = .won
         updateBankRoll(for: hand)
     }
     
     private func handleLost(for hand: Hand) {
+        player.indexOfLastHandScored = player.hands.firstIndex(where: { $0 === hand })
         hand.result = .lost
         updateBankRoll(for: hand)
     }
     
     private func updateBankRoll(for hand: Hand) {
+        if hand.isGhostHand { return }
         let result = hand.result
         var finalAmount: Double = 0
         let betAmount = Double(hand.betAmount)
@@ -576,6 +692,7 @@ extension GameMaster {
         if result == .won {
             message = "Won"
             if playerBets {
+                SoundPlayer.shared.playSound(.chips)
                 let amount = finalAmount - betAmount
                 if Rules.hasRemainder(amount) {
                     message += String(format: " +$%.2f", amount)
@@ -586,11 +703,13 @@ extension GameMaster {
         } else if result == .lost {
             message = "Lost"
             if playerBets {
+                SoundPlayer.shared.playSound(.chips)
                 message += " -$\(Int(betAmount))"
             }
         } else if result == .surrender {
             message = "Lost"
             if playerBets {
+                SoundPlayer.shared.playSound(.chips)
                 if Rules.hasRemainder(finalAmount) {
                     message += String(format: " -$%.2f", finalAmount)
                 } else {
@@ -600,7 +719,7 @@ extension GameMaster {
         } else if result == .push {
             message = "Push"
         }
-        delegate.showToast(message: message)
+        delegate.showToast(message: message, for: hand)
     }
     
     func returnBetsToPlayer() {
@@ -623,7 +742,7 @@ extension GameMaster {
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1)) {
             hand.set(state: .bust)
             self.gameState = .busted
-            self.delegate.showToast(message: "Bust")
+            self.delegate.showToast(message: "Bust", for: hand)
             DispatchQueue.main.asyncAfter(deadline: .now() + self.adjustWaitTime(1.5)) {
                 self.handleLost(for: hand)
                 self.discard(hand: hand)
@@ -632,7 +751,7 @@ extension GameMaster {
     }
     
     private func askInsurance() {
-        if dealer.activatedHand!.cards[1].value == .ace {
+        if Settings.shared.placeBets && dealer.activatedHand!.cards[1].value == .ace {
             Insurance.askInsurance(player: player, delegate: delegate, dealerHasBlackjack: dealerHasBlackjack, completion: { (playerWantsToInsure, message, amount) in
                 if playerWantsToInsure {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {

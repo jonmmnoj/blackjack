@@ -11,7 +11,7 @@ import SnapKit
 class DiscardTrayView: UIView {
     
     var delegate: GameViewDelegate!
-    let width = 200
+    let width = Card.width
     var button: UIButton!
     var imageView: UIImageView!
     var countView: UIView!
@@ -22,6 +22,13 @@ class DiscardTrayView: UIView {
     var buttonHeight = 40
     var counterViewHeight = 100
     var discardImageHeight = 200
+    var topOffSet: CGFloat {
+        var offSet = 50.0
+        if Settings.shared.landscape {
+            offSet = UIScreen.main.bounds.height * 0.05
+        }
+        return offSet
+    }
     
     var sView: UIStackView!
     var rcLabel: UILabel!
@@ -40,8 +47,8 @@ class DiscardTrayView: UIView {
         imageView.snp.updateConstraints { (make) in
             make.top.left.right.equalTo(self)
             let ratio = imageView.image!.size.height / imageView.image!.size.width
-            let newHeight = Settings.shared.cardWidth * ratio
-            make.width.equalTo(Settings.shared.cardWidth)
+            let newHeight = Card.width * ratio
+            make.width.equalTo(Card.width)
             make.height.equalTo(newHeight)
         }
     }
@@ -54,12 +61,19 @@ class DiscardTrayView: UIView {
         var selfHeight = discardImageHeight + buttonHeight
         if isOpen { selfHeight += (counterViewHeight - buttonHeight) }
         self.snp.makeConstraints { (make) in
-            make.top.equalTo(self.superview!).offset(50)
-            make.left.equalTo(self.superview!)
+            if Settings.shared.landscape {
+                make.top.equalTo(self.superview!).offset(topOffSet)//25)
+                //make.left.equalTo(UIScreen.main.bounds.width * 0.25)
+                make.left.equalTo(self.superview!)
+            } else {
+                make.top.equalTo(self.superview!).offset(topOffSet)
+                make.left.equalTo(self.superview!)
+            }
             make.height.equalTo(selfHeight)
         }
         
         imageView = UIImageView()
+        //imageView.imageView
         self.addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
         var image = UIImage(named: getImageName())!
@@ -67,12 +81,13 @@ class DiscardTrayView: UIView {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
         imageView.isUserInteractionEnabled = true
         imageView.addGestureRecognizer(tapGestureRecognizer)
+        //imageView.addTarget(self, action:#selector(imageTapped(tapGestureRecognizer:)), for: .touchUpInside)
         
         imageView.snp.makeConstraints { (make) in
             make.top.left.right.equalTo(self)
             let ratio = image.size.height / image.size.width
-            let newHeight = Settings.shared.cardWidth * ratio
-            make.width.equalTo(Settings.shared.cardWidth)
+            let newHeight = Card.width * ratio
+            make.width.equalTo(Card.width)
             make.height.equalTo(newHeight)
             
         }
@@ -147,20 +162,23 @@ class DiscardTrayView: UIView {
         self.updateViews()
     }
     
-    func discard() {
-        CardCounter.shared.discard()
-    }
+//    func discard() {
+//        CardCounter.shared.discard()
+//    }
     
     func updateViews() {
+        //imageView.imageView.
         imageView.image = UIImage(named: getImageName())
-        rcLabel.text = String("RC: \(CardCounter.shared.runningCount)")
+        rcLabel.text = String("RC: \(CardCounter.shared.getRunningCount())")
         divLabel.text = String("Div: \(CardCounter.shared.getNumberOfDecksInPlay())")
         tcLabel.text = String("TC: \(CardCounter.shared.getTrueCount())")
     }
     
     private func getImageName() -> String {
         let numberOfDecks = Settings.shared.numberOfDecks
-        let imageName = "D\(numberOfDecks)_\(CardCounter.shared.numberOfCardsPlayed)"
+        var numberOfCardsPlayed = CardCounter.shared.numberOfCardsPlayed
+        if numberOfCardsPlayed == 0 { numberOfCardsPlayed += 1 }
+        let imageName = "D\(numberOfDecks)_\(numberOfCardsPlayed)"
         return imageName
     }
     
@@ -188,19 +206,19 @@ class DiscardTrayView: UIView {
     @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
-        vc.view.addGestureRecognizer(tapGestureRecognizer)
+        //vc.view.addGestureRecognizer(tapGestureRecognizer)
         
-        let imageView = UIImageView()
-        vc.view.addSubview(imageView)
-        imageView.contentMode = .scaleAspectFit
+        let iv = UIImageView()
+        vc.view.addSubview(iv)
+        iv.contentMode = .scaleAspectFit
         let image = UIImage(named: getImageName())!
-        imageView.image = image
-        imageView.backgroundColor = .cyan
+        iv.image = image
+        iv.backgroundColor = .cyan
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissImageTapped(tapGestureRecognizer:)))
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(tapGestureRecognizer)
-        imageView.snp.makeConstraints { (make) in
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(tapGestureRecognizer)
+        iv.snp.makeConstraints { (make) in
             make.center.equalTo(vc.view.center)
             make.width.equalTo(Settings.shared.cardWidth * 2.5)
             let ratio = image.size.height / image.size.width
@@ -218,6 +236,7 @@ class DiscardTrayView: UIView {
     @objc func dismissImageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
         let v = self.findViewController()!
         v.dismiss(animated: true)
+        //delegate.playerInput(enabled: true)
     }
 }
 

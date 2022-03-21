@@ -7,9 +7,11 @@ class PrettyRowCell : SwiftGridCell {
     @IBOutlet weak var mainLabel: UILabel!
     @IBOutlet weak var button: UIButton!
     
+    var chart: ChartProtocol!
     var indexPath: IndexPath!
     private(set) var text: String!
     private var cellConfig: OrderedDictionary<String, UIColor>!
+    var deviationActivated = false
     private var observations = [ObjectIdentifier : Observation]()
     //var isQuiz: Bool = false
     
@@ -22,21 +24,68 @@ class PrettyRowCell : SwiftGridCell {
         super.prepareForReuse()
     }
     
-    @IBAction func touchUpInside(_ sender: Any) {
-        //print("tap row: \(indexPath.sgRow) column: \(indexPath.sgColumn)")
-        //if !isQuiz { return }
-        let currentIndex = cellConfig.index(forKey: text)!
-        let nextIndex = currentIndex + 1 != cellConfig.count ? currentIndex + 1 : 0
-        text = cellConfig.elements[nextIndex].key
+//    @IBAction func touchUpInside(_ sender: Any) {
+//        //print("tap row: \(indexPath.sgRow) column: \(indexPath.sgColumn)")
+//        //if !isQuiz { return }
+//        let currentIndex = cellConfig.index(forKey: text)!
+//        let nextIndex = currentIndex + 1 != cellConfig.count ? currentIndex + 1 : 0
+//        text = cellConfig.elements[nextIndex].key
+//        updateDisplay()
+//        stateDidChange()
+//    }
+    
+    func setup(text: String, chart: ChartProtocol) {//cellConfig: OrderedDictionary<String, UIColor>) {
+        self.text = text
+        self.chart = chart
+        self.cellConfig = chart.cellConfig
         updateDisplay()
-        stateDidChange()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tap))  //Tap function will call when user tap on button
+        //let longGesture = UILongPressGestureRecognizer(target: self, action: #selector(long))  //Long function will call when user long press on button.
+           tapGesture.numberOfTapsRequired = 1
+        //longGesture.
+           button.addGestureRecognizer(tapGesture)
+           
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPress(gesture:)))
+        //longPress.minimumPressDuration = 1
+        if chart.deviationConfig != nil {
+            self.button.addGestureRecognizer(longPress)
+        }
     }
     
-    func setup(text: String, cellConfig: OrderedDictionary<String, UIColor>) {
-        self.text = text
-        self.cellConfig = cellConfig
-        updateDisplay()
+    
+    @objc func longPress(gesture: UILongPressGestureRecognizer) {
+            if gesture.state == UIGestureRecognizer.State.began {
+           // print("Long Press")
+                deviationActivated = !deviationActivated
+                if deviationActivated {
+                    cellConfig = chart.deviationConfig
+                } else {
+                    cellConfig = chart.cellConfig
+                }
+                changeText()
+        }
     }
+
+   
+
+       @objc func tap() {
+
+           //print("Tap happend")
+                   //print("tap row: \(indexPath.sgRow) column: \(indexPath.sgColumn)")
+                   //if !isQuiz { return }
+                   changeText()
+                   updateDisplay()
+                   stateDidChange()
+       }
+    
+    func changeText() {
+        let currentIndex = cellConfig.index(forKey: text) ?? -1
+        let nextIndex = currentIndex + 1 != cellConfig.count ? currentIndex + 1 : 0
+        text = cellConfig.elements[nextIndex].key
+    }
+
+    
+    
     
     func updateDisplay() {
         var string = text ?? ""

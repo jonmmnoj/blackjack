@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 class Hand {
+    
+    
     var betAmount: Int = 0
     var insurance: Insurance?
     var cards: [Card] = []
@@ -19,7 +21,10 @@ class Hand {
     var isFirstHand: Bool {
         return owner.hands.first === self
     }
-    
+    var isLastHand: Bool {
+        return owner.hands.last === self
+    }
+    var wasSplitFromHand: Hand?
     var originPoint: CGPoint
     var wasSplit: Bool = false
     var isSplitAce: Bool = false
@@ -31,10 +36,8 @@ class Hand {
     var isGhostHand = false
     
     func adjustForScaleChange(dealPoint: CGPoint, adjustmentX: CGFloat, adjustmentY: CGFloat, changeInDealPointX: CGFloat? = nil, changeInDealPointY: CGFloat? = nil) {
-        var changeX = originPoint.x - dealPoint.x // The originPoint is the orginal point... The new deal point is apparently adjusted for the new card size.
+        var changeX = originPoint.x - dealPoint.x
         var changeY = originPoint.y - dealPoint.y
-        
-        // changeInDealPoint is never nil, so just use that and get rid of dealPoint argument
         
         if changeInDealPointX != nil {
             changeX = changeInDealPointX!
@@ -43,15 +46,13 @@ class Hand {
             changeY = changeInDealPointY!
         }
         
-        
         self.nextCardPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
         self.originPoint = CGPoint(x: originPoint.x - changeX, y: originPoint.y - changeY)
         self.adjustmentX = adjustmentX
         self.adjustmentY = adjustmentY
         for (i, card) in cards.enumerated() {
             if i > 0 {
-                adjustDealPoint(isRotated: card.rotateAnimation)
-                //card.dealPoint = nextCardPoint
+                adjustNextCardDealPoint(isRotated: card.rotateAnimation)
             }
             card.dealPoint = nextCardPoint
         }
@@ -72,16 +73,12 @@ class Hand {
         if card.value == .ace { self.hasAce = true }
         
         if Settings.shared.gameType != .runningCount_v2 {
-            if cards.count > 1 { adjustDealPoint(isRotated: card.rotateAnimation) }
+            if cards.count > 1 { adjustNextCardDealPoint(isRotated: card.rotateAnimation) }
             card.set(dealPoint: nextCardPoint)
         }
-        
-//        if self.cards.count == 2 && Rules.hasBlackjack(hand: self) {
-//            state = .blackjack
-//        }
     }
     
-    func adjustDealPoint(isRotated: Bool = false) {
+    func adjustNextCardDealPoint(isRotated: Bool = false) {
         let oldPoint = self.nextCardPoint
         var newY = oldPoint.y - adjustmentY
         var newX = oldPoint.x + adjustmentX
@@ -110,11 +107,13 @@ class Hand {
     }
     
     func createSplitHand() -> Hand {
-        let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + Card.width * 1.6, y: self.originPoint.y),
-        //let newHand = Hand(dealToPoint: CGPoint(x: self.nextCardPoint.x + 50 + Card.width, y: self.originPoint.y),
-                           adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
+        var dealPoint = CGPoint(x: self.nextCardPoint.x + Card.width * 1.2, y: self.originPoint.y)
+        //if Settings.shared.landscape { // adjust depending on how many split hands
+        //    dealPoint = CGPoint(x: self.originPoint.x - Card.width/2, y: self.originPoint.y)
+        //}
+        let newHand = Hand(dealToPoint: dealPoint, adjustmentX: self.adjustmentX, adjustmentY: self.adjustmentY, owner: self.owner)
+        newHand.wasSplitFromHand = self
         newHand.betAmount = self.betAmount
-        //Settings.shared.bankRollAmount -= Double(self.betAmount)
         Bankroll.shared.add(-Double(self.betAmount))
         newHand.isSplitHand = true
         self.isSplitHand = true
@@ -131,7 +130,8 @@ class Hand {
         //resetNextCardPoint()
         owner.activatedHand = newHand
         let index = owner.index(of: self)!
-        owner.hands.insert(newHand, at: index + 1)
+        //let newHandIndex = max(index - 1, 0)
+        owner.hands.insert(newHand, at: index)//newHandIndex)
         return newHand
     }
     
@@ -158,14 +158,12 @@ class Hand {
             return
         }
         
-        //if owner.isDealer && cards[0].isFaceDown { return }
-        
         if valueLabelView == nil {
             let width: CGFloat = 45
             let height: CGFloat = 20
             let padding: CGFloat = 10
-            let x: CGFloat = self.owner.isDealer ? originPoint.x + Settings.shared.cardWidth * 0.5 : originPoint.x + Settings.shared.cardWidth * 0.5 //originPoint.x + Settings.shared.cardWidth - width
-            valueLabelView = UILabel(frame: CGRect(x: x, y: originPoint.y + Settings.shared.cardSize + padding, width: width, height: height))
+            let x: CGFloat = originPoint.x + Settings.shared.cardWidth * 0.5 - width/2//self.owner.isDealer ? originPoint.x + Settings.shared.cardWidth * 0.5 - width/2 : originPoint.x + Settings.shared.cardWidth * 0.5 - width/2
+            valueLabelView = UILabel(frame: CGRect(x: x, y: originPoint.y + Card.height + padding, width: width, height: height))
             valueLabelView?.font = UIFont.preferredFont(forTextStyle: .body)
             valueLabelView?.backgroundColor = .white
             valueLabelView?.textAlignment = .center
@@ -193,5 +191,97 @@ class Hand {
     func isAces() -> Bool {
         guard cards.count == 2 else { return false }
         return cards[0].value == .ace && cards[1].value == .ace
+    }
+}
+
+extension Hand {
+    static func getHand(for dealer: Dealer) -> Hand {
+        return Hand(dealToPoint: Hand.dealerHandDealPoint, adjustmentX: dealerHandAdjustmentX , adjustmentY: dealerHandAdjustmentY, owner: dealer)
+    }
+    
+    static var dealerHandDealPoint: CGPoint {
+        var x = UIScreen.main.bounds.width/2 - Card.width * 0.6
+        var y = 50.0
+        if Settings.shared.showDiscardTray {
+            if UIScreen.main.bounds.width / 2 < Card.width * 2 { // if 1/2 screen width is smaller than 2 card widths
+                x = Card.width + 3
+            }
+        }
+        if Settings.shared.landscape {
+            x = UIScreen.main.bounds.width/2 - Card.width/2 + Card.width * 0.15
+            y = UIScreen.main.bounds.height * 0.05
+            if Settings.shared.verticalSizeClass == .regular {
+                y = UIScreen.main.bounds.height * 0.10
+            }
+        }
+        return CGPoint(x: x , y: y)
+    }
+    
+    static var dealerHandAdjustmentX: CGFloat {
+        var x = Card.width * 0.15
+        if Settings.shared.landscape {
+            x = Card.width * -0.15
+        }
+        return x
+    }
+    
+    static var dealerHandAdjustmentXAfterReveal: CGFloat {
+        var x = Card.width * 0.28
+        if Settings.shared.landscape {
+            x = Card.width * -1.1
+        }
+        return x
+    }
+    
+    static var dealerHandAdjustmentY: CGFloat {
+        return 0
+    }
+    
+    static func getHand(for player: Player) -> Hand {
+        return Hand(dealToPoint: Hand.getDealPoint(for: player), adjustmentX: playerAdjustmentX, adjustmentY: playerAdjustmentY, owner: player)
+    }
+    
+    static func getPlayerHandDealPoint(numberOfHandsToAdjustBy: Int) -> CGPoint {
+        var numberOfHandsAdjustment: CGFloat = 0
+        numberOfHandsAdjustment -= CGFloat(numberOfHandsToAdjustBy) * (Card.width * 1.6)
+        return  CGPoint(x: UIScreen.main.bounds.width/2 - Card.width * 0.7 + numberOfHandsAdjustment, y: UIScreen.main.bounds.height - Card.height - Card.height * 0.30)
+    }
+    
+    static func getDealPoint(for player: Player) -> CGPoint {
+        var numberOfHandsAdjustment: CGFloat = 0
+        numberOfHandsAdjustment -= CGFloat(player.hands.count) * (Card.width * 1.6)
+        return  CGPoint(x: UIScreen.main.bounds.width/2 - Card.width * 0.7 + numberOfHandsAdjustment, y: UIScreen.main.bounds.height - Card.height - Card.height * 0.30)
+    }
+    static var playerAdjustmentX: CGFloat {
+        var adj = Card.height * 0.2
+        if Settings.shared.landscape {
+            adj = Card.height * 0.15
+        }
+        return adj
+    }
+    static var playerAdjustmentY: CGFloat {
+        var adj = Card.height * 0.2
+        if Settings.shared.landscape {
+            adj = Card.height * 0.15
+        }
+        return adj
+    }
+    
+    static func getDealPoint(for spotIndex: Int) -> CGPoint {
+        var xS = [ 0.87, 0.85, 0.7, 0.5, 0.3, 0.15, 0.13]//[ 0.13, 0.15, 0.30, 0.50, 0.70, 0.85, 0.87]//.reversed()
+        var yS = [35.0, 17.0, 5.0, 4.0, 5.0, 17.0, 35.0]
+        if Settings.shared.verticalSizeClass == .compact {
+            xS = [0.85, 0.68, 0.5, 0.32, 0.15]//.reversed()
+            yS = [10.0, 3.0, 3.0, 3.0, 10.0]
+        }
+        
+        let tableWidth = UIScreen.main.bounds.width
+        let tableHeight = UIScreen.main.bounds.height
+        return CGPoint(x: tableWidth * CGFloat(xS[spotIndex]) - Card.width * 0.5, y: tableHeight - Card.height - Card.height * 0.10 * yS[spotIndex])
+    }
+    
+    static func getHand(for spot: Int, player: Player) -> Hand {
+        let hand = Hand(dealToPoint: getDealPoint(for: spot), adjustmentX: playerAdjustmentX, adjustmentY: playerAdjustmentY, owner: player)
+        return hand
     }
 }

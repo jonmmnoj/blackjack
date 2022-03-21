@@ -8,13 +8,36 @@
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UIWindowSceneDelegate {
 
+    var window: UIWindow?
+    
 
-
+    
+    var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return .all
+        } else {
+            return .landscape
+        }
+        
+        //return UIDevice.current.userInterfaceIdiom == .pad ? UIInterfaceOrientationMask.all : UIInterfaceOrientationMask.portrait
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        return true
+        
+//        self.window = UIWindow(frame: UIScreen.main.bounds)
+//
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//            let initialViewController = storyboard.instantiateViewController(withIdentifier: "SplitViewController")
+//
+//            self.window?.rootViewController = initialViewController
+//            self.window?.makeKeyAndVisible()
+//
+            return true
+        
+        
     }
 
     // MARK: UISceneSession Lifecycle
@@ -31,10 +54,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
+    var restrictRotation:UIInterfaceOrientationMask = .all
+    
     var orientationLock = UIInterfaceOrientationMask.all
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return self.orientationLock
+        //return self.orientationLock
+        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            return orientationLock
+        } else {
+            orientationLock = .landscape
+            return orientationLock
+        }
     }
     
     struct AppUtility {

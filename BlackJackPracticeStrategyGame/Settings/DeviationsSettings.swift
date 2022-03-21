@@ -10,7 +10,7 @@ import UIKit
 import QuickTableViewController
 
 class DeviationsSettings: GameTypeSettings {
-    var title: String = "Deviations"
+    var title: String = "Deviations #1"
     init(vc: SettingsViewController) {
         self.vc = vc
     }
@@ -27,6 +27,7 @@ class DeviationsSettings: GameTypeSettings {
     var hardCell: UITableViewCell!
     var dealerHitsCell: UITableViewCell!
     var quickFeedbackCell: UITableViewCell!
+    var feedbackWhenWrongCell: UITableViewCell!
     
     var tableSettings: [Section] {
         return [
@@ -60,7 +61,7 @@ class DeviationsSettings: GameTypeSettings {
                         
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
+                        gvc.gameType = Settings.shared.gameType
                         gvc.gearButton.isEnabled = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
@@ -150,12 +151,12 @@ class DeviationsSettings: GameTypeSettings {
                     self.setupSplitControl()
                     self.setupSoftControl()
                 }), //detailText: .subtitle("Pair, Soft and Hard hands. Hit, Stand, Double, Split and Surrender"),
-                SwitchRow(text: "3 card hands", detailText: .subtitle("Hard hands only. Hit and Stand only"), switchValue: settings.threeCardHands, customization: {cell,row in
+                SwitchRow(text: "3 card hands", /*detailText: .subtitle("Hard hands only. Hit and Stand only"),*/ switchValue: settings.threeCardHands, customization: {cell,row in
                     self.threeHandCell = cell
                 }, action: { _ in
                     self.settings.threeCardHands = !self.settings.threeCardHands
                 }),
-                SwitchRow(text: "4 card hands", detailText: .subtitle("Hard hands only. Hit and Stand only"), switchValue: settings.fourCardHands, customization: {cell,row in
+                SwitchRow(text: "4 card hands", /*detailText: .subtitle("Hard hands only. Hit and Stand only"),*/ switchValue: settings.fourCardHands, customization: {cell,row in
                     self.fourHandCell = cell
                 }, action: { _ in
                     self.settings.fourCardHands = !self.settings.fourCardHands
@@ -163,12 +164,17 @@ class DeviationsSettings: GameTypeSettings {
             ]),
             
             Section(title: "Miscellaneous", rows: [
-                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
-                    self.quickFeedbackCell = cell
-                }, action: { _ in
-                    self.settings.quickFeedback = !self.settings.quickFeedback
-                })
-            ]),
+//                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: { cell,row in
+//                        self.quickFeedbackCell = cell
+//                    }, action: { _ in
+//                        self.settings.quickFeedback = !self.settings.quickFeedback
+//                    }),
+                SwitchRow(text: "Feedback for Mistakes Only", switchValue: settings.feedbackWhenWrong, customization: { cell,row in
+                        self.feedbackWhenWrongCell = cell
+                    }, action: { _ in
+                        self.settings.feedbackWhenWrong = !self.settings.feedbackWhenWrong
+                    })
+                ]),
         
             Section(title: "", rows: [
                TapActionRow(
@@ -188,7 +194,7 @@ class DeviationsSettings: GameTypeSettings {
 //                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ENHC, animated: true)
 //                        (self.enhcCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        (self.surrenderCell.accessoryView as! UISwitch).setOn(true, animated: true)
+                        (self.surrenderCell.accessoryView as! UISwitch).setOn(false, animated: true)
                         (self.surrenderCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.threeCardHands = false
@@ -216,8 +222,11 @@ class DeviationsSettings: GameTypeSettings {
                         (self.twoHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.twoHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        (self.quickFeedbackCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.quickFeedback, animated: true)
-                        (self.quickFeedbackCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+//                        (self.quickFeedbackCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.quickFeedback, animated: true)
+//                        (self.quickFeedbackCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        
+                        (self.feedbackWhenWrongCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.feedbackWhenWrong, animated: true)
+                        (self.feedbackWhenWrongCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                     })
             ]),
         ]

@@ -27,6 +27,7 @@ class BasicStrategySettings: GameTypeSettings {
     var softCell: UITableViewCell!
     var hardCell: UITableViewCell!
     var quickFeedbackCell: UITableViewCell!
+    var feedbackWhenWrongCell: UITableViewCell!
     
     var tableSettings: [Section] {
         return [
@@ -60,7 +61,7 @@ class BasicStrategySettings: GameTypeSettings {
                         
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
+                        gvc.gameType = Settings.shared.gameType
                         gvc.gearButton.isEnabled = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
@@ -139,12 +140,12 @@ class BasicStrategySettings: GameTypeSettings {
                             //print("two card: \(self.settings.twoCardHands)")
                     self.setupSplitControl()
                 }), //, detailText: .subtitle("Split, Soft and Hard hands")
-                SwitchRow(text: "3 card hands", detailText: .subtitle("Soft and Hard hands only"), switchValue: settings.threeCardHands, customization: {cell,row in
+                SwitchRow(text: "3 card hands", /*detailText: .subtitle("Soft and Hard hands only"),*/ switchValue: settings.threeCardHands, customization: {cell,row in
                     self.threeHandCell = cell
                 }, action: { _ in
                     self.settings.threeCardHands = !self.settings.threeCardHands
                 }),
-                SwitchRow(text: "4 card hands", detailText: .subtitle("Soft and Hard hands only"), switchValue: settings.fourCardHands, customization: {cell,row in
+                SwitchRow(text: "4 card hands", /*detailText: .subtitle("Soft and Hard hands only"),*/ switchValue: settings.fourCardHands, customization: {cell,row in
                     self.fourHandCell = cell
                 }, action: { _ in
                     self.settings.fourCardHands = !self.settings.fourCardHands
@@ -152,10 +153,15 @@ class BasicStrategySettings: GameTypeSettings {
             ]),
             
             Section(title: "Miscellaneous", rows: [
-                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
-                    self.quickFeedbackCell = cell
+//                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
+//                    self.quickFeedbackCell = cell
+//                }, action: { _ in
+//                    self.settings.quickFeedback = !self.settings.quickFeedback
+//                }),
+                SwitchRow(text: "Feedback for Mistakes Only", switchValue: settings.feedbackWhenWrong, customization: {cell,row in
+                    self.feedbackWhenWrongCell = cell
                 }, action: { _ in
-                    self.settings.quickFeedback = !self.settings.quickFeedback
+                    self.settings.feedbackWhenWrong = !self.settings.feedbackWhenWrong
                 })
             ]),
         
@@ -181,7 +187,7 @@ class BasicStrategySettings: GameTypeSettings {
                         (self.dasCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.threeCardHands = false
-                        (self.threeHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
+                        (self.threeHandCell.accessoryView as! UISwitch).setOn(false, animated: true)
                         (self.threeHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         //self.settings.fourCardHands = false
@@ -205,10 +211,11 @@ class BasicStrategySettings: GameTypeSettings {
                         (self.twoHandCell.accessoryView as! UISwitch).setOn(true, animated: true)
                         (self.twoHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        (self.quickFeedbackCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.quickFeedback, animated: true)
-                        (self.quickFeedbackCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+//                        (self.quickFeedbackCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.quickFeedback, animated: true)
+//                        (self.quickFeedbackCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
-                        
+                        (self.feedbackWhenWrongCell.accessoryView as! UISwitch).setOn(Settings.shared.defaults.feedbackWhenWrong, animated: true)
+                        (self.feedbackWhenWrongCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
                         
                         
                     })

@@ -8,8 +8,22 @@
 import UIKit
 import QuickTableViewController
 
+protocol SplitViewDelegate {
+    func gameTypeSelected(_ type: GameType)
+}
+
+extension SettingsViewController: SplitViewDelegate {
+    func gameTypeSelected(_ type: GameType) {
+        let gts = getSettingsHelper(for: self)
+        tableContents = gts.tableSettings
+        self.navigationItem.title = gts.title
+    }
+}
+
 class SettingsViewController: QuickTableViewController {
-    var gameType: GameType!
+    
+    var subSettings = false
+    var subSettingsGTS: GameTypeSettings?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -17,23 +31,28 @@ class SettingsViewController: QuickTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        Settings.shared.gameType = gameType
-        let gts = getSettingsHelper(for: self)
+        
+        tableView.snp.makeConstraints { make in
+            make.left.right.bottom.top.equalTo(view)
+        }
+        
+        var gts: GameTypeSettings!
+        if subSettings {
+            gts = subSettingsGTS
+            
+        } else {
+            gts = getSettingsHelper(for: self)
+        }
         gts.forcedSettings()
         gts.registerCustomViews(for: tableView)
         self.navigationItem.title = gts.title
-        //navigationController?.navigationBar.prefersLargeTitles = true
         tableContents = gts.tableSettings
+
         
-        tableView.snp.makeConstraints { make in
-            //make.top.equalTo(navigationController!.navigationBar.snp.bottom)
-            make.left.right.bottom.top.equalTo(view)
-            //make.top.equalTo(view).offset(100)
-        }
     }
     
     private func getSettingsHelper(for vc: SettingsViewController) -> GameTypeSettings {
-        switch gameType {
+        switch Settings.shared.gameType {
         case .basicStrategy:
             return  BasicStrategySettings(vc: vc)
         case .freePlay:
@@ -46,12 +65,16 @@ class SettingsViewController: QuickTableViewController {
             return TrueCountSettings(vc: vc)
         case .deviations:
             return DeviationsSettings(vc: vc)
+        case .deviations_v2:
+            return DeviationsSettings_v2(vc: vc)
         case .charts:
             return ChartsSettings(vc: vc)
         case .deckRounding:
             return DeckRoundingSettings(vc: vc)
-        case .none:
-            return BasicStrategySettings(vc: vc)
+        //default:
+            
+        //case .none:
+          //  return BasicStrategySettings(vc: vc)
         }
         
     }

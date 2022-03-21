@@ -15,26 +15,7 @@ class GameViewController: UIViewController {
     }
     
     func adjustmentsForScaleChange() {
-//        stackView.snp.updateConstraints { (make) in
-//            var height = Settings.shared.cardSize * 1.2
-//            if Settings.shared.surrender {
-//                height = Settings.shared.cardSize * 1.5
-//            }
-//            make.height.equalTo(height)
-//            let width = Settings.shared.cardWidth
-//            make.width.equalTo(width)
-//            make.centerY.equalTo(self.view)
-//            make.right.equalTo(self.view)
-//        }
-        
-        //self.stackView.setNeedsLayout()
-        //self.stackView.setNeedsDisplay()
-        
-        //self.view.setNeedsLayout()
-        //self.view.setNeedsDisplay()
-        //self.view.layoutIfNeeded()
-        
-        let height = 20 * Settings.shared.cardSizeFactor / 5
+        let height = 50 * Settings.shared.cardSizeFactor / 5
         let width = height
         let offset = -30 //* Settings.shared.cardSizeFactor / 4
         gearButton.snp.updateConstraints { (make) in
@@ -49,10 +30,6 @@ class GameViewController: UIViewController {
             make.bottom.equalTo(self.view).offset(offset)
             make.left.equalTo(self.view).offset(offset * -1)
         }
-        
-        
-        
-        
     }
     
     func updateForTableSettings() {
@@ -60,20 +37,49 @@ class GameViewController: UIViewController {
         
         stackView.snp.removeConstraints()
         stackView.snp.makeConstraints { (make) in
-            var height = Settings.shared.cardSize * 1.2
+            // height
+            var height = Card.height * 1.2
             if Settings.shared.surrender {
-                height = Settings.shared.cardSize * 1.5
+                height = Card.height * 1.5
+            }
+            if Settings.shared.landscape {
+                height = Card.height * 0.3
             }
             make.height.equalTo(height)
-            let width = Settings.shared.useButtons ? Settings.shared.cardWidth : 0
-            make.width.equalTo(width)
-            make.centerY.equalTo(self.view)
             
-            if Settings.shared.buttonsOnLeft {
-                make.left.equalTo(self.view)
-            } else {
-                make.right.equalTo(self.view)
+            // width
+            var width = Card.width //Settings.shared.useButtons ? Card.width : 0
+            if Settings.shared.landscape {
+                width = width * 2.5
+                if Settings.shared.verticalSizeClass == .regular {
+                    width = width * 1.6
+                }
             }
+            make.width.equalTo(width)
+            
+            // Y position
+            if Settings.shared.landscape {
+                make.bottom.equalTo(self.view)
+            } else {
+                make.centerY.equalTo(self.view)
+            }
+            
+            // X position
+            if Settings.shared.landscape {
+                if Settings.shared.buttonsOnLeft {
+                    make.left.equalTo(100)
+                } else {
+                    make.right.equalTo(-100)
+                }
+            } else {
+                if Settings.shared.buttonsOnLeft {
+                    make.left.equalTo(self.view)
+                } else {
+                    make.right.equalTo(self.view)
+                }
+            }
+            
+            stackView.isHidden = Settings.shared.useButtons ? false : true
         }
     }
     
@@ -93,6 +99,9 @@ class GameViewController: UIViewController {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 1000, weight: .bold, scale: .large)
         let image = UIImage(systemName: "arrow.backward", withConfiguration: imageConfig) //chevron.backward.circle.fill, arrow.backward.circle.fill, arrowshape.turn.up.backward.circle.fill
         button.setImage(image , for: .normal)
+        //button.layer.borderColor = UIColor.red.cgColor
+        //button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsets(top: 12,left: 12,bottom: 12,right: 12)
         
         return button
     }()
@@ -106,13 +115,16 @@ class GameViewController: UIViewController {
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 1000, weight: .bold, scale: .large)
         let image = UIImage(systemName: "gearshape.fill", withConfiguration: imageConfig) //gear
         button.setImage(image , for: .normal)
+        //button.layer.borderColor = UIColor.red.cgColor
+        //button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsets(top: 12,left: 12,bottom: 12,right: 12)
         
         return button
     }()
     
     lazy var stackView: UIStackView = {
         let stack = UIStackView()
-        stack.axis = .vertical
+        stack.axis = Settings.shared.landscape ? .horizontal : .vertical
         stack.spacing = 5.0
         stack.alignment = .fill
         stack.distribution = .fillEqually
@@ -172,45 +184,24 @@ class GameViewController: UIViewController {
         
         if showInputButtons {
             self.view.addSubview(stackView)
-            stackView.snp.makeConstraints { (make) in
-                var height = Settings.shared.cardSize * 1.2
-                if Settings.shared.surrender {
-                    height = Settings.shared.cardSize * 1.5
-                }
-                make.height.equalTo(height)
-                let width = Settings.shared.cardWidth
-                make.width.equalTo(width)
-                make.centerY.equalTo(self.view)
-                make.right.equalTo(self.view)
-            }
         }
         
         super.view.addSubview(homeButton)
-        let height = 20 * Settings.shared.cardSizeFactor / 5
-        let width = height
-        let offset = -30 //* Settings.shared.cardSizeFactor / 4
-        homeButton.snp.makeConstraints { (make) in
-            make.height.equalTo(height)
-            make.width.equalTo(width)
-            make.bottom.equalTo(self.view).offset(offset)
-            make.left.equalTo(self.view).offset(offset * -1)
-        }
         super.view.addSubview(gearButton)
-        gearButton.snp.makeConstraints { (make) in
-            make.height.equalTo(height)
-            make.width.equalTo(width)
-            make.bottom.equalTo(self.view).offset(offset)
-            make.right.equalTo(self.view).offset(offset)
-        }
-            
+        adjustmentsForScaleChange()
+        
         gameMaster = GameMaster(gameType: gameType, table: self.view)
         gameMaster.delegate = self
-        gameMaster.startGame()
+        gameMaster.setupTable()
+        if (Settings.shared.showGestureView) {
+            showGestureView()
+        } else {
+            gameMaster.startGame()
+        }
         
         // hit
         let hitGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleHitGesture(_:)))
         self.view.addGestureRecognizer(hitGesture)
-        //gameMaster.tableView.addGestureRecognizer(hitGesture)
         
         // stand
         let standGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.handleRightOrLeftSwipe(_:)))
@@ -292,45 +283,57 @@ class GameViewController: UIViewController {
     }
     
     @objc func homeButtonAction(_ sender: UIButton!) {
-        // block the CardCounter from counting any cards that are on animation delay?
         gameMaster.gameState = .tappedBackButton
-        Stats.shared.printSessionStats()
         gameMaster.returnBetsToPlayer()
-        
-        let vc = Stats.shared.showStatsView()
-       
+        gameMaster.killGame = true
+        if let animator = gameMaster.dealer.table.currentAnimator {
+            animator.stopAnimation(true)
+        }
         
         dismiss(animated: true, completion: nil)
         
-        //dismissViewController(completion: {
-            //self.present(vc)
-        //})
+//        let x = Stats.shared.showStatsView()
+//        Stats.shared.endSession()
+//        Stats.shared.printSessionStats()
+//
+//
+//        //dismiss(animated: true, completion: nil)
+//
+//
+//
+//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let vc = storyBoard.instantiateViewController(withIdentifier: "SessionStatsViewController") as! SessionStatsViewController
+//        //dismissViewController(completion: {
+//        vc.modalPresentationStyle = .overCurrentContext
+//        vc.modalTransitionStyle = .crossDissolve
+////        if presentedViewController != nil {
+////            if !(presentedViewController is BasicStrategyViewController) {
+////                dismiss(animated: true)
+////            }
+////        }
+//        vc.dismissAction = {
+//            self.dismiss(animated: true) {
+//                self.dismiss(animated: true)
+//            }
+//        }
+//        self.present(vc, animated: true, completion: nil)
         
+        
+        if Settings.shared.deviceType == .phone {
+            AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        }
+       
         
     }
     
     @objc func gearButtonAction(_ sender: UIButton!) {
-        
         let sVC = TableSettingsViewController()
         sVC.gameVC = self
-//        let vc = SideMenuNavigationController(rootViewController: sVC)
-//        let presentationStyle = SideMenuPresentationStyle.menuSlideIn
-//        presentationStyle.presentingEndAlpha = 0.3
-//        vc.settings.presentationStyle = presentationStyle
-//        vc.settings.menuWidth = min(view.frame.width, view.frame.height) * 0.8
-//        vc.settings.statusBarEndAlpha = 0 // 0 shows status bar, 1 blacks out status bar
-//        vc.enableSwipeToDismissGesture = false
-       self.navigationController?.pushViewController(sVC, animated: true)
-        
-       
-        
-        
-        
-//        adjustStackView()
+        self.navigationController?.pushViewController(sVC, animated: true)
     }
     
     func makeButton(title: String) -> UIButton {
-        let button = UIButton()//frame: CGRect(x: view.frame.width - buttonWidth, y: buttonY, width: buttonWidth, height: buttonHeight))
+        let button = UIButton()
         button.backgroundColor = .systemBlue
         button.setTitle(title, for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -345,10 +348,6 @@ class GameViewController: UIViewController {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
                 self.view.frame.origin.y -= keyboardSize.height
-                
-//                self.view.snp.makeConstraints { make in
-//                    make.top
-//                }
             }
         }
     }
@@ -364,13 +363,37 @@ class GameViewController: UIViewController {
 // MARK: - GameViewDelegate
 
 extension GameViewController: GameViewDelegate {
+    func showGestureView() {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .black.withAlphaComponent(0.8)
+        let gestureView = GestureView()
+        vc.view.addSubview(gestureView)
+        
+        gestureView.snp.makeConstraints { (make) in
+            make.center.equalTo(vc.view.center)
+            make.width.equalTo(350)
+            make.height.equalTo(350)
+        }
+        
+        gestureView.dismissHandler = { [weak self] in
+            self?.dismiss(animated: true) {
+                self?.gameMaster.startGame()
+                Settings.shared.showGestureView = false
+            }
+        }
+        
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        self.present(vc, animated: true, completion: nil)
+    }
+    
     func showPlaceBetView() {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
         let placeBetView = PlaceBetView(player: gameMaster.player)
         placeBetView.vc = vc
         //placeBetView.player = gameMaster.player
-        placeBetView.setupNumberOfHands()
+        placeBetView.setupNumberOfHandsButtons()
         if gameMaster.dealer.table.discardTray.isOpen {
             placeBetView.discardTrayIsOpen = true
         }
@@ -407,13 +430,16 @@ extension GameViewController: GameViewDelegate {
         self.present(vc, animated: true, completion: nil)
     }
     
-    func showToast(message: String) {
+    func showToast(message: String, for hand: Hand? = nil) {
+        if hand != nil && hand!.isGhostHand { return }
         if gameType == .runningCount  || gameType == .runningCount_v2 { return }
-        Toast.show(message: message, controller: self)
-        Toast.show(message: message, controller: self)
+        Toast.show(message: message, controller: self, for: Settings.shared.landscape ? hand : nil)
     }
     
     func playerInput(enabled value: Bool) {
+        //gameMaster.dealer.table.discardTray.bringSubviewToFront(gameMaster.dealer.table.view)
+        
+        
         gearButton.isEnabled = value
         
         hitButton.isEnabled = value

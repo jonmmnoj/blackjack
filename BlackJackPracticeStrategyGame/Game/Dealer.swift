@@ -37,13 +37,14 @@ class Dealer: Dealable {
         players.append(player)
     }
     
-    //var i = 0
+//    var i = 0
     func dealCardToSelf() {
         let card = getCard()
-//        var card = getCard()
+        //var card = getCard()
+        //i += 1
 //        if i == 0 {
-//            card = Card(value: .ten, suit: .clubs)
-//            i = 1
+//              card = Card(value: .ten, suit: .clubs)
+//           i += 1
 //        } else if i == 1 {
 //            i = 0
 //            card = Card(value: .ace, suit: .clubs)
@@ -64,14 +65,19 @@ class Dealer: Dealable {
     //var i2 = 0
     func deal(to player: Player) {
         
-        let hands = player.hands.reversed()
+        var hands: [Hand]!
+//        if Settings.shared.landscape {
+//            hands = player.hands
+//        } else {
+            hands = player.hands//.reversed()
+        //}
         hands.forEach {
         //    let card = getCard()
         //player.hands.forEach {
            let card = getCard()
-//            var card = getCard()
+            //var card = getCard()
 //           if i2 == 0 {
-//                card = Card(value: .ace, suit: .diamonds)
+              //  card = Card(value: .ace, suit: .diamonds)
 //                i2 += 1
 //            } else if i2 == 1 {
 //                //i2 += 1
@@ -98,7 +104,7 @@ class Dealer: Dealable {
     func dealtToAtLeast17() -> Void {
         while !Rules.isSoftOrHardSeventeenOrGreater(hand: self.activatedHand!) {
             let card = getCard()
-            //card = Card(value: .eight, suit: .diamonds)
+            //let card = Card(value: .two, suit: .diamonds)
             self.deal(card: card, to: self.activatedHand!)
         }
         return
@@ -161,15 +167,28 @@ class Dealer: Dealable {
     
     func splitHand(for hand: Hand) {
         let newHand = hand.createSplitHand()
-        let cardToMove = newHand.cards.first!
-        // check for move all hands to the right of this hand, first
-        if let newHandIndex = players[0].index(of: newHand) {
-            if newHandIndex < players[0].hands.count - 1 {
-                table.moveAllCards(for: players[0], to: .left, startIndex: newHandIndex + 1)
+        players[0].updateSplitHandGroups(new: newHand, original: hand)
+        
+        if Settings.shared.landscape {
+            let group = players[0].splitHandGroups.first(where: { hands in hands.contains(where: { $0 === newHand}) })
+            for hand in group! {
+                for card in hand.cards {
+                    table.animateMove(card: card)//, isDelay: false)
+                }
             }
+        } else {
+            let cardToMove = newHand.cards.first!
+            if let newHandIndex = players[0].index(of: newHand) {
+                if newHandIndex > 0 {
+                    table.moveAllCards(for: players[0], to: .left, stopIndex: newHandIndex - 1)
+                    table.moveAllCards(for: players[0], to: .right)
+                } else {
+                    table.moveAllCards(for: players[0], to: .right)
+                }
+            }
+            table.animateMove(card: cardToMove)
         }
-        table.animateMove(card: cardToMove)
-        let rotate = cardToMove.value == .ace
+        let rotate = newHand.cards.first!.value == .ace
         dealCardsAfterSplit(newHand: newHand, otherHand: hand, rotate: rotate)
     }
     
@@ -179,44 +198,63 @@ class Dealer: Dealable {
             newHand.set(state: .splitAces)
             otherHand.set(state: .splitAces)
         }
-        var card = getCard()
-        //var card = Card(value: .nine, suit: .diamonds)//
-        if isSplitAce {
-            card.rotateForSplitAce = true
-        }
+        let card = getCard()
+        if isSplitAce { card.rotateForSplitAce = true }
         deal(card: card, to: newHand)
-        card = getCard()
-        //card = Card(value: .ace, suit: .diamonds)
+       
         if isSplitAce {
+            let card = getCard()
             card.rotateForSplitAce = true
+            deal(card: card, to: otherHand)
         }
-        deal(card: card, to: otherHand)
+        
+        //newHand.cards[0].view!.layer.zPosition = CGFloat(MAXFLOAT)
+        table.view.bringSubviewToFront(newHand.cards[0].view!)
+        table.view.bringSubviewToFront(newHand.cards[1].view!)
+        
+       
     }
     
     func revealCard() {
-        let faceUpCard = self.activatedHand!.cards[1]
-        faceUpCard.dealPoint = CGPoint(x: faceUpCard.dealPoint.x + Card.width * 0.85, y: faceUpCard.dealPoint.y)
-        table.animateMove(card: faceUpCard)
+        if Settings.shared.landscape {
+            let faceDownCard = self.activatedHand!.cards[0]
+            let faceUpCard = self.activatedHand!.cards[1]
+            let x = faceUpCard.dealPoint.x + (Hand.dealerHandAdjustmentXAfterReveal * -1)
+            faceDownCard.dealPoint = CGPoint(x: x, y: faceDownCard.dealPoint.y)
+            table.animateMove(card: faceDownCard)
+            table.view.bringSubviewToFront(self.activatedHand!.cards[1].view!)
+        } else {
+            let faceUpCard = self.activatedHand!.cards[1]
+            var x = faceUpCard.dealPoint.x + Card.width * 0.85
+            if Settings.shared.landscape {
+                x = faceUpCard.dealPoint.x
+            }
+            faceUpCard.dealPoint = CGPoint(x: x, y: faceUpCard.dealPoint.y)
+            table.animateMove(card: faceUpCard)
+        }
         
         let faceDownCard = self.activatedHand!.cards.first!
         faceDownCard.isFaceDown = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5 * Settings.dealSpeedFactor) {
             self.table.animateReveal(card: faceDownCard)
         }
-        
-        //faceUpCard.dealPoint = CGPoint(x: faceUpCard.dealPoint.x - Card.width * 0.8, y: faceUpCard.dealPoint.y)
-        //table.animateMove(card: faceUpCard)
-        
     }
     
     func moveCardToNewPositionOnTable() {
-        let card = self.activatedHand!.cards.last!
-        self.activatedHand!.set(adjustmentX: Card.width * 0.28, adjustmentY: 0)//Settings.shared.cardSize * 0.2, adjustmentY: 0) //50
-        self.activatedHand!.resetNextCardPoint()
-        self.activatedHand!.adjustDealPoint()
-        card.set(dealPoint: self.activatedHand!.nextCardPoint)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25 * Settings.dealSpeedFactor) {
-            self.table.animateMove(card: card, isDelay: false)
+        if Settings.shared.landscape {
+            let x = Hand.dealerHandAdjustmentXAfterReveal
+            self.activatedHand!.set(adjustmentX: x, adjustmentY: 0)
+            table.gameMaster.resume()
+        } else {
+            let card = self.activatedHand!.cards.last!
+            let x = Hand.dealerHandAdjustmentXAfterReveal
+            self.activatedHand!.set(adjustmentX: x, adjustmentY: 0)
+            self.activatedHand!.resetNextCardPoint()
+            self.activatedHand!.adjustNextCardDealPoint()
+            card.set(dealPoint: self.activatedHand!.nextCardPoint)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25 * Settings.dealSpeedFactor) {
+                self.table.animateMove(card: card, isDelay: false)
+            }
         }
     }
     

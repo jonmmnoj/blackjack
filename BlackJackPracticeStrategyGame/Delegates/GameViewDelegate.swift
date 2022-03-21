@@ -13,8 +13,10 @@ protocol GameViewDelegate {
     func presentBasicStrategyFeedbackView(isCorrect: Bool, playerAction: String, correctAction: String, completion: @escaping () -> Void)
     //func alertMistake(message: String, completion: @escaping ((Bool) -> Void))
     func present(_: UIViewController)
-    func showToast(message: String)
+    func showToast(message: String, for hand: Hand?)
     //func showDiscardTrayExpanded(image: UIImage)
     func showPlaceBetView()
     func enableTableSettingsButton(_ setting: Bool)
+    
+    func showGestureView()
 }

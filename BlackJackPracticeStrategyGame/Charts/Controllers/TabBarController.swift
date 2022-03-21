@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print("chart tab vc will disappear")
+        //print("chart tab vc will disappear")
         super.viewWillDisappear(animated)
     }
     

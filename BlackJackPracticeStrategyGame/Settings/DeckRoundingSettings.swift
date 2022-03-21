@@ -25,6 +25,7 @@ class DeckRoundingSettings: GameTypeSettings {
     var numberOfDecksViewCell: UITableViewCell!
     var deckRoundedToCell: UITableViewCell!
     var deckFractionCell: UITableViewCell!
+    var feedbackWhenWrongCell: UITableViewCell!
    
     @objc private func setNumberOfDecksSetting(notification: Notification) {
         let string = notification.object as! String
@@ -89,7 +90,7 @@ class DeckRoundingSettings: GameTypeSettings {
                     action: { _ in
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
+                        gvc.gameType = Settings.shared.gameType
                         gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
@@ -155,12 +156,16 @@ class DeckRoundingSettings: GameTypeSettings {
                 }, action: { _ in
                     self.settings.roundLastThreeDecksToHalf = !self.settings.roundLastThreeDecksToHalf
                 }),
-                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
-                    self.quickFeedbackCell = cell
-                }, action: { _ in
-                    self.settings.quickFeedback = !self.settings.quickFeedback
-                })
-                
+//                SwitchRow(text: "Quick Feedback", switchValue: settings.quickFeedback, customization: {cell,row in
+//                    self.quickFeedbackCell = cell
+//                }, action: { _ in
+//                    self.settings.quickFeedback = !self.settings.quickFeedback
+//                }),
+                SwitchRow(text: "Feedback for Mistakes Only", switchValue: settings.feedbackWhenWrong, customization: { cell,row in
+                        self.feedbackWhenWrongCell = cell
+                    }, action: { _ in
+                        self.settings.feedbackWhenWrong = !self.settings.feedbackWhenWrong
+                })                
             ])
 
 //            Section(title: "", rows: [

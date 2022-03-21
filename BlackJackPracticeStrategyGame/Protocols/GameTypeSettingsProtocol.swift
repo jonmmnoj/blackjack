@@ -18,6 +18,9 @@ protocol GameTypeSettings {
 }
 
 extension GameTypeSettings {
-    func registerCustomViews(for tableView: UITableView) {}
+    func registerCustomViews(for tableView: UITableView) {
+        let cell = UINib(nibName: "SliderTableViewCell", bundle: nil)
+        tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
+    }
     func forcedSettings() {}
 }

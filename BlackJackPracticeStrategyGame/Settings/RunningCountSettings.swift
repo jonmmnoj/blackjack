@@ -5,7 +5,6 @@
 //  Created by JON on 7/26/21.
 //
 
-import Foundation
 import UIKit
 import QuickTableViewController
 
@@ -17,32 +16,77 @@ class RunningCountSettings: GameTypeSettings {
     var vc: SettingsViewController
     var sliderView: SliderTableViewCell!
     var runningCountView: UITableViewCell!
+    var spotsCell: UITableViewCell!
+    var ghostHandCell: UITableViewCell!
+    var tableOrientationCell: UITableViewCell!
+    
+    @objc private func setTableOrientationSetting(notification: Notification) {
+        let string = notification.object as! String
+        tableOrientationCell.detailTextLabel?.text = string
+        Settings.shared.tableOrientation = string
+        updateTableSettingControls()
+    }
+    
+    private func updateTableSettingControls() {
+        if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+            ghostHandCell.isUserInteractionEnabled = false
+            ghostHandCell.textLabel!.isEnabled = false
+            (ghostHandCell.accessoryView as! UISwitch).isEnabled = false
+            (ghostHandCell.accessoryView as! UISwitch).setOn(false, animated: true)
+            (self.ghostHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+            
+            spotsCell.isUserInteractionEnabled = true
+            spotsCell.textLabel!.isEnabled = true
+            spotsCell.detailTextLabel?.text = String(Settings.shared.rcNumberOfSpots)
+        } else { // Portrait
+            ghostHandCell.isUserInteractionEnabled = true
+            ghostHandCell.textLabel!.isEnabled = true
+            (ghostHandCell.accessoryView as! UISwitch).isEnabled = true
+            
+            spotsCell.isUserInteractionEnabled = false
+            spotsCell.textLabel!.isEnabled = false
+            spotsCell.detailTextLabel?.text = ""
+        }
+    }
     
     @objc private func setAskForRunningCountSetting(notification: Notification) {
         let string = notification.object as! String
         runningCountView.detailTextLabel?.text = string
         Settings.shared.numberOfRoundsBeforeAskRunningCount = string
     }
+    @objc private func setRunningCountSpotsSetting(notification: Notification) {
+        let string = notification.object as! String
+        spotsCell.detailTextLabel?.text = string
+        Settings.shared.rcNumberOfSpots = Int(string)!
+    }
     
     private func showViewSettingOptions(sectionTitle: String, data: [String], checkMarkedValue: String, notificationName: String) {
         let vc = SettingsListTableViewController(sectionTitle: sectionTitle, data: data, checkMarkedValue: checkMarkedValue, notificationName: notificationName)
-        //vc.title = $0.text //+ ($0.detailText?.text ?? "")
         self.vc.navigationController?.pushViewController(vc, animated: true)
     }
     
+    var numberOfSpotsSection: Row & RowStyle {
+        //if Settings.shared.landscape {
+            return NavigationRow(text: "Number of Spots", detailText: .value1(""), customization: { cell, row in
+                    self.spotsCell = cell
+                    self.spotsCell.detailTextLabel?.text = String(Settings.shared.rcNumberOfSpots)
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setRunningCountSpotsSetting(notification:)), name: Notification.Name("RunningCountSpotsSetting"), object: nil)
+                },
+                  action: { row in
+                let values = Settings.shared.deviceType == .phone ? [1,2,3,4,5] : [1,2,3,4,5,6,7]
+                      var data = [String]()
+                      for value in values {
+                          data.append("\(value)")
+                      }
+                    let checkMarkedValue = String(Settings.shared.rcNumberOfSpots)
+                      self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "RunningCountSpotsSetting")
+                      return
+                  })
+       // }
+    }
+    
     var tableSettings: [Section] {
-        
-        
-        
-//        radioSection = RadioSection(title: "Ask for count every", options: [
-//            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.oneRound.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.threeRounds.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.fiveRounds.rawValue, action: didToggleSelection()),
-//            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskRunningCount == CountRounds.onceAtEnd.rawValue, action: didToggleSelection())
-//        ] /*, footer: "See RadioSection for more details."*/)
-//        radioSection.alwaysSelectsOneOption = true
-        
-        return [
+        var sections = [
             Section(title: "", rows: [
                
                 TapActionRow(
@@ -57,15 +101,26 @@ class RunningCountSettings: GameTypeSettings {
                         //cell.frame.height = cell.frame.height * 2
                     },
                     action: { _ in
+                        if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+                            //let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                            //UIDevice.current.setValue(value, forKey: "orientation")
+                            if Settings.shared.deviceType == .phone {
+                                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+                            }
+                        } else if Settings.shared.tableOrientation == TableOrientation.portrait.rawValue {
+                            //let value = UIInterfaceOrientation.portrait.rawValue
+                            //UIDevice.current.setValue(value, forKey: "orientation")
+                            if Settings.shared.deviceType == .phone {
+                                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+                            }
+                        }
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
+                        gvc.gameType = Settings.shared.gameType
                         gvc.gearButton.isHidden = true
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
                         self.vc.present(nvc, animated: true, completion: nil)
-                        //gvc.modalPresentationStyle = .overFullScreen
-                        //self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),
             
@@ -99,6 +154,7 @@ class RunningCountSettings: GameTypeSettings {
             ]),
             
             Section(title: "Card counting", rows: [
+                //numberOfSpotsSection,
                 NavigationRow(text: "Ask for true count every", detailText: .value1(""), customization: { cell, row in
                         self.runningCountView = cell
                     self.runningCountView.detailTextLabel?.text = Settings.shared.numberOfRoundsBeforeAskRunningCount
@@ -113,46 +169,57 @@ class RunningCountSettings: GameTypeSettings {
                           let checkMarkedValue = Settings.shared.numberOfRoundsBeforeAskRunningCount
                           self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "AskRunningCountSetting")
                           return
-                      }),
-            
+                 })
             ]),
-            
-            //radioSection,
-            
-//            Section(title: "", rows: [
-//               TapActionRow(
-//                    text: "Reset to defaults",
-//                    customization: {(cell,row) in
-//                        cell.textLabel?.textColor = .systemRed
-//                        cell.tintColor = .systemRed
-//                        cell.backgroundColor = .secondarySystemGroupedBackground
-//                        //cell.textLabel?.textColor = .systemBlue
-//                        cell.textLabel?.font = .systemFont(ofSize: 17, weight: .regular)//font-family: "UICTFontTextStyleBody"; font-weight: normal; font-style: normal; font-size: 17.00pt
-//                        cell.selectionStyle = .default
-//                    },
-//                
-//                    action: { _ in
-//                        
-//                        self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
-//                        self.sliderView.slider.sendActions(for: .valueChanged)
-//                        
-//                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
-//                            let indexPath = IndexPath(row: 0, section: 2)
-//                            self.vc.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-//                            self.vc.tableView.delegate?.tableView!(self.vc.tableView, didSelectRowAt: indexPath)
-//                        }
-//                        
-//                        if Settings.shared.numberOfRoundsBeforeAskRunningCount != Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount {
-//                            Settings.shared.numberOfRoundsBeforeAskRunningCount = Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount
-//                            NotificationCenter.default.post(name: Notification.Name("AskRunningCountSetting"), object: Settings.shared.defaults.numberOfRoundsBeforeAskRunningCount)
-//                        }
-//                        
-//                    })
-//            ]),
         ]
+        
+        if Settings.shared.deviceType == .phone {
+            let tableSection = Section(title: "Table", rows: [
+                NavigationRow(text: "Orientation", detailText: .value1(""), customization: { cell, row in
+                        self.tableOrientationCell = cell
+                        self.tableOrientationCell.detailTextLabel?.text = Settings.shared.tableOrientation
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.setTableOrientationSetting(notification:)), name: Notification.Name("TableOrientationSetting"), object: nil)
+                        
+                    },
+                      action: { row in
+                          let values = TableOrientation.allCases
+                          var data = [String]()
+                          for value in values {
+                              data.append(value.rawValue)
+                          }
+                          let checkMarkedValue = Settings.shared.tableOrientation
+                          self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "TableOrientationSetting")
+                          return
+                }),
+                
+                numberOfSpotsSection,
+                
+                SwitchRow(
+                    text: "Ghost Hand",
+                    switchValue: Settings.shared.ghostHand,
+                      customization: { cell, row in
+                        self.ghostHandCell = cell
+                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(Settings.shared.ghostHand, animated: false)
+                          self.updateTableSettingControls()
+                      },
+                      action: { _ in
+                        Settings.shared.ghostHand = !Settings.shared.ghostHand
+                })
+            ])
+            sections.insert(tableSection, at: 1)
+        }
+        else { // Pad
+            let tableSection = Section(title: "Table", rows: [
+                
+                numberOfSpotsSection
+             ])
+            sections.insert(tableSection, at: 1)
+        }
+    
+    
+        
+        return sections
     }
-    
-    
     
     func registerCustomViews(for tableView: UITableView) {
         let cell = UINib(nibName: "SliderTableViewCell", bundle: nil)
@@ -167,9 +234,5 @@ class RunningCountSettings: GameTypeSettings {
             }
         }
       }
-    }
-    
-    func forcedSettings() {
-        //Settings.shared.number
     }
 }

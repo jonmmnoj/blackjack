@@ -34,6 +34,9 @@ class FreePlaySettings: GameTypeSettings {
     var trueCountCell: UITableViewCell!
     var betSpreadCell: UITableViewCell!
     var ghostHandCell: UITableViewCell!
+    var countBiasCell: UITableViewCell!
+    var spotAssignmentCell: UITableViewCell!
+    var tableOrientationCell: UITableViewCell!
 
     var navigateToOption: String?
     
@@ -49,6 +52,33 @@ class FreePlaySettings: GameTypeSettings {
         numberOfDecksViewCell.detailTextLabel?.text = string
         Settings.shared.numberOfDecks = Int(string)!
     }
+    @objc private func setTableOrientationSetting(notification: Notification) {
+        let string = notification.object as! String
+        tableOrientationCell.detailTextLabel?.text = string
+        Settings.shared.tableOrientation = string
+        updateTableSettingControls()
+    }
+    
+    private func updateTableSettingControls() {
+        if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+            ghostHandCell.isUserInteractionEnabled = false
+            ghostHandCell.textLabel!.isEnabled = false
+            (ghostHandCell.accessoryView as! UISwitch).isEnabled = false
+            (ghostHandCell.accessoryView as! UISwitch).setOn(false, animated: true)
+            (self.ghostHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+            //Settings.shared.ghostHand = false
+            
+            spotAssignmentCell.isUserInteractionEnabled = true
+            spotAssignmentCell.textLabel!.isEnabled = true
+        } else { // Portrait
+            ghostHandCell.isUserInteractionEnabled = true
+            ghostHandCell.textLabel!.isEnabled = true
+            (ghostHandCell.accessoryView as! UISwitch).isEnabled = true
+            
+            spotAssignmentCell.isUserInteractionEnabled = false
+            spotAssignmentCell.textLabel!.isEnabled = false
+        }
+    }
     
     @objc private func setAskForTrueCountSetting(notification: Notification) {
         let string = notification.object as! String
@@ -57,9 +87,7 @@ class FreePlaySettings: GameTypeSettings {
     }
     
     @objc private func setBetSpreadSetting(notification: Notification) {
-        //let set = notification.object as! Bool
         betSpreadCell.detailTextLabel?.text = Settings.shared.betSpread ? "On" : "Off"
-        //Settings.shared.betSpread = set
     }
     
     private func showViewSettingOptions(sectionTitle: String, data: [String], checkMarkedValue: String, notificationName: String, isBetSpreadTable: Bool = false) {
@@ -67,49 +95,46 @@ class FreePlaySettings: GameTypeSettings {
         if isBetSpreadTable {
             vc.isBetSpreadTable = true
         }
-        //vc.title = $0.text //+ ($0.detailText?.text ?? "")
         self.vc.navigationController?.pushViewController(vc, animated: true)
     }
     
     var tableSettings: [Section] {
-        
-//        countSection = RadioSection(title: "Ask for true count every", options: [
-//            OptionRow(text: CountRounds.oneRound.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.oneRound.rawValue, action: didToggleCountSelection()),
-//            OptionRow(text: CountRounds.threeRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.threeRounds.rawValue, action: didToggleCountSelection()),
-//            OptionRow(text: CountRounds.fiveRounds.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.fiveRounds.rawValue, action: didToggleCountSelection()),
-//            OptionRow(text: CountRounds.onceAtEnd.rawValue, isSelected: Settings.shared.numberOfRoundsBeforeAskTrueCount == CountRounds.onceAtEnd.rawValue, action: didToggleCountSelection())
-//        ] /*, footer: "See RadioSection for more details."*/)
-//        countSection.alwaysSelectsOneOption = true
-        
-        
-        return [
+        var sections = [
             Section(title: "", rows: [
                
                 TapActionRow(
                     text: "Start",
                     customization: {(cell,row) in
-                        //cell.backgroundColor = .systemGreen
                         cell.textLabel?.textColor = .systemGreen
                         cell.tintColor = .systemGreen
                         cell.textLabel?.font = .systemFont(ofSize: 20, weight: .bold)
-                        //cell.selectionStyle = UITableViewCell.SelectionStyle.none;
-                        
-                        //cell.frame.height = cell.frame.height * 2
                     },
                     action: { _ in
+                        
+                        if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+                            //let value = UIInterfaceOrientation.landscapeLeft.rawValue
+                            //UIDevice.current.setValue(value, forKey: "orientation")
+                            if Settings.shared.deviceType == .phone {
+                                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.landscapeLeft, andRotateTo: UIInterfaceOrientation.landscapeLeft)
+                            }
+                        } else if Settings.shared.tableOrientation == TableOrientation.portrait.rawValue {
+                            //let value = UIInterfaceOrientation.portrait.rawValue
+                            //UIDevice.current.setValue(value, forKey: "orientation")
+                            if Settings.shared.deviceType == .phone {
+                                AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+                            }
+                        }
+                        
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-                        gvc.gameType = self.vc.gameType
-                        //gvc.modalPresentationStyle = .overFullScreen
+                        gvc.gameType = Settings.shared.gameType
                         let nvc = UINavigationController(rootViewController: gvc)
                         nvc.modalPresentationStyle = .fullScreen
                         self.vc.present(nvc, animated: true, completion: nil)
-                        //self.vc.present(gvc, animated: true, completion: nil)
                     })
             ]),
             
             Section(title: "Rules", rows: [
-                
                 SwitchRow(
                     text: "Dealer Hits Soft 17",
                     switchValue: settings.dealerHitsSoft17,
@@ -120,22 +145,7 @@ class FreePlaySettings: GameTypeSettings {
                       action: { _ in
                         self.settings.dealerHitsSoft17 = !self.settings.dealerHitsSoft17
                       }),
-//                SwitchRow(
-//                    text: "ENHC",
-//                    switchValue: settings.ENHC,
-//                    customization:  { (cell, row) in
-//                        self.enhcCell = cell
-//                        (self.enhcCell.accessoryView as! UISwitch).setOn(self.settings.ENHC, animated: false)
-//                    },action: { row in
-//                        self.settings.ENHC = !self.settings.ENHC
-//                        UIView.transition(with: self.surrenderCell.textLabel!,
-//                                          duration: 0.5,
-//                                      options: .transitionFlipFromTop,
-//                                    animations: { [weak self] in
-//                                        self!.surrenderCell.textLabel!.text = self!.settings.ENHC ? "ES10" : "Surrender"
-//                                 }, completion: nil)
-//
-//                    }),
+
                 
                 SwitchRow(
                     text: "Surrender",
@@ -290,16 +300,25 @@ class FreePlaySettings: GameTypeSettings {
             
             
             Section(title: "Miscellaneous", rows: [
+//                SwitchRow(
+//                    text: "Ghost Hand",
+//                    switchValue: settings.ghostHand,
+//                      customization: { cell, row in
+//                        self.ghostHandCell = cell
+//                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.ghostHand, animated: false)
+//                      },
+//                      action: { _ in
+//                        self.settings.ghostHand = !self.settings.ghostHand
+//                      }),
                 SwitchRow(
-                    text: "Ghost Hand",
-                    switchValue: settings.ghostHand,
+                    text: "Positive Count Bias",
+                    switchValue: settings.countBias,
                       customization: { cell, row in
-                        self.ghostHandCell = cell
-                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.ghostHand, animated: false)
+                        self.countBiasCell = cell
+                        (self.countBiasCell.accessoryView as! UISwitch).setOn(self.settings.countBias, animated: false)
                       },
                       action: { _ in
-                        self.settings.ghostHand = !self.settings.ghostHand
-                          //self.setupWatchBetSpread()
+                        self.settings.countBias = !self.settings.countBias
                       }),
             ]),
             
@@ -349,10 +368,12 @@ class FreePlaySettings: GameTypeSettings {
                         //cell.tintColor = .systemBlue
                     },
                     action: { _ in
-                        self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
-                        self.sliderView.slider.sendActions(for: .valueChanged)
-                        if self.sliderView.isHidden {
-                            self.settings.dealSpeed = self.settings.defaults.dealSpeed
+                        if self.sliderView.slider != nil {
+                            self.sliderView.slider.setValue(Settings.shared.defaults.dealSpeed, animated: true)
+                            self.sliderView.slider.sendActions(for: .valueChanged)
+                            if self.sliderView.isHidden {
+                                self.settings.dealSpeed = self.settings.defaults.dealSpeed
+                            }
                         }
                         
                         
@@ -423,10 +444,17 @@ class FreePlaySettings: GameTypeSettings {
                             NotificationCenter.default.post(name: Notification.Name("BetSpreadSetting"), object: nil)
                         }
                         
-                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ghostHand, animated: true)
-                        (self.ghostHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
-                        if self.ghostHandCell.isHidden {
-                            self.settings.ghostHand = self.settings.defaults.ghostHand
+                        if (self.ghostHandCell != nil) {
+                            (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.defaults.ghostHand, animated: true)
+                            (self.ghostHandCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                            if self.ghostHandCell.isHidden {
+                                self.settings.ghostHand = self.settings.defaults.ghostHand
+                            }
+                        }
+                        (self.countBiasCell.accessoryView as! UISwitch).setOn(self.settings.defaults.countBias, animated: true)
+                        (self.countBiasCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
+                        if self.countBiasCell.isHidden {
+                            self.settings.countBias = self.settings.defaults.countBias
                         }
                         
                         
@@ -445,49 +473,85 @@ class FreePlaySettings: GameTypeSettings {
                     })
             ]),
         ]
+        
+        if Settings.shared.deviceType == .phone {
+            let tableSection = Section(title: "Table", rows: [
+                NavigationRow(text: "Orientation", detailText: .value1(""), customization: { cell, row in
+                        self.tableOrientationCell = cell
+                        self.tableOrientationCell.detailTextLabel?.text = Settings.shared.tableOrientation
+                        NotificationCenter.default.addObserver(self, selector: #selector(self.setTableOrientationSetting(notification:)), name: Notification.Name("TableOrientationSetting"), object: nil)
+                        
+                    },
+                      action: { row in
+                          let values = TableOrientation.allCases
+                          var data = [String]()
+                          for value in values {
+                              data.append(value.rawValue)
+                          }
+                          let checkMarkedValue = Settings.shared.tableOrientation
+                          self.showViewSettingOptions(sectionTitle: row.text, data: data, checkMarkedValue: checkMarkedValue, notificationName: "TableOrientationSetting")
+                          return
+                }),
+                
+                NavigationRow(text: "Spot Assignments", detailText: .value1(""), customization: { cell, row in
+                        self.spotAssignmentCell = cell
+                        self.spotAssignmentCell.detailTextLabel?.text = ""
+                    
+                    },
+                      action: { row in
+                          let vc = SettingsViewController()
+                          vc.subSettings = true
+                          let sas = SpotAssignmentSettings(vc: self.vc)
+                          //sas.title = self.title
+                          vc.subSettingsGTS = sas
+                          self.vc.navigationController?.pushViewController(vc, animated: true)
+                        
+                }),
+                
+                SwitchRow(
+                    text: "Ghost Hand",
+                    switchValue: settings.ghostHand,
+                      customization: { cell, row in
+                        self.ghostHandCell = cell
+                        (self.ghostHandCell.accessoryView as! UISwitch).setOn(self.settings.ghostHand, animated: false)
+                          self.updateTableSettingControls()
+                      },
+                      action: { _ in
+                        self.settings.ghostHand = !self.settings.ghostHand
+                })
+            ])
+            sections.insert(tableSection, at: 1)
+        }
+        else { // Pad
+            let tableSection = Section(title: "Table", rows: [
+                
+                NavigationRow(text: "Spot Assignments", detailText: .value1(""), customization: { cell, row in
+                        self.spotAssignmentCell = cell
+                        self.spotAssignmentCell.detailTextLabel?.text = ""
+                    
+                    },
+                      action: { row in
+                          let vc = SettingsViewController()
+                          vc.subSettings = true
+                          let sas = SpotAssignmentSettings(vc: self.vc)
+                          //sas.title = self.title
+                          vc.subSettingsGTS = sas
+                          self.vc.navigationController?.pushViewController(vc, animated: true)
+                        
+                })
+             ])
+            sections.insert(tableSection, at: 1)
+        }
+    
+    
+        
+        return sections
     }
     
     func registerCustomViews(for tableView: UITableView) {
         let cell = UINib(nibName: "SliderTableViewCell", bundle: nil)
         tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
     }
-    
-//    private func didToggleSelection() -> (Row) -> Void {
-//      return { row in
-//        if let option = row as? OptionRowCompatible {
-//            if option.isSelected {
-//                Settings.shared.numberOfDecks = Int(row.text) ?? Settings.shared.defaults.numberOfDecks
-//            }
-//        }
-//      }
-//    }
-    
-//    private func didToggleCountSelection() -> (Row) -> Void {
-//      return { row in
-//        if let option = row as? OptionRowCompatible {
-//            if option.isSelected {
-//                Settings.shared.numberOfRoundsBeforeAskTrueCount = row.text
-//            }
-//        }
-//      }
-//    }
-    
-//    private func setupWatchBetSpread() {
-//        if settings.notifyMistakes {
-//            betSpreadCell.isUserInteractionEnabled = true
-//            betSpreadCell.textLabel!.isEnabled = true
-//            //(betSpreadCell.accessoryView as! UISwitch).isEnabled = true
-//            //(betSpreadCell.accessoryView as! UISwitch).setOn(settings.splitHands, animated: true)
-//            //(self.betSpreadCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
-//        } else {
-//            betSpreadCell.isUserInteractionEnabled = false
-//            betSpreadCell.textLabel!.isEnabled = false
-//            //(betSpreadCell.accessoryView as! UISwitch).isEnabled = false
-//            //(betSpreadCell.accessoryView as! UISwitch).setOn(false, animated: true)
-//            //(self.betSpreadCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
-//        }
-//    }
-    
     
 }
 

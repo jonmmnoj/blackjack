@@ -55,21 +55,27 @@ class MainMenuContent {
             
             MainMenuCellContent(
                 gameType: .trueCount,
-                title: "True Count Conversion",
+                title: "True Count",
                 detail: getAttrString(["Drill deck estimation and true count conversion.", "Improve true count conversion accuracy and speed.", "Customize to skill level."]),
                 imageName: "divide"),
             
             MainMenuCellContent(
                 gameType: .deviations,
-                title: "Deviations",
-                detail: getAttrString(["Drill deviations on basic strategy.", "Improve deviation accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
+                title: "Deviations #1",
+                detail: getAttrString(["Drill deviation knowledge.", "Improve deviation accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
                 imageName: "deviation"),
+            
+            MainMenuCellContent(
+                gameType: .deviations_v2,
+                title: "Deviations #2",
+                detail: getAttrString(["Drill deviations on basic strategy.", "Improve deviation accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
+                imageName: "change"), //scheme
             
             MainMenuCellContent(
                 gameType: .charts,
                 title: "Charts",
                 detail: getAttrString(["Review charts on basic strategy, hard 17, soft 17, and devations.", "Fill-in chart quizes with automated feedback on errors."]),
-                imageName: "chart"),
+                imageName: "table"),
             
     //        CellContent(
     //            gameType: .stats,
