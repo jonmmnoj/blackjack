@@ -151,6 +151,7 @@ class GameMaster {
     }
     
     func dealCards() {
+        delegate.showNoticeScalingView()
         gameStrategyPattern.dealCards()
     }
     func setupTable() {
@@ -624,8 +625,10 @@ extension GameMaster {
     }
     
     private func discard(hand: Hand) {
-        SoundPlayer.shared.playSound(.discard)
+        //SoundPlayer.shared.playSound(.discard)
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1)) {
+            SoundPlayer.shared.playSound(.discard)
+            
             self.dealer.discard(hand: self.player.activatedHand!)
             self.gameState = .discardedHand
         }
@@ -643,9 +646,11 @@ extension GameMaster {
     }
     
     func discardAllHands() {
-        SoundPlayer.shared.playSound(.discard)
+        //SoundPlayer.shared.playSound(.discard)
         let wait: Double = gameType == .runningCount ? 1.0 : 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(wait)) {
+            SoundPlayer.shared.playSound(.discard)
+            
             self.dealer.discard(hand: self.dealer.activatedHand!)
             self.player.hands.forEach {
                 self.dealer.discard(hand: $0)

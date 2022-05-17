@@ -13,7 +13,7 @@ protocol GameTypeSettings {
     var title: String { get set }
     func registerCustomViews(for tableView: UITableView)
     func forcedSettings()
-        //func selectedSettingOption()
+    func playClickSound()
     
 }
 
@@ -23,4 +23,7 @@ extension GameTypeSettings {
         tableView.register(cell, forCellReuseIdentifier: "SliderTableViewCell")
     }
     func forcedSettings() {}
+    func playClickSound() {
+        SoundPlayer.shared.playSound(.click)
+    }
 }

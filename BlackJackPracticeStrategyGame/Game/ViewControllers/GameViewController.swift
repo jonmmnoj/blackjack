@@ -177,6 +177,29 @@ class GameViewController: UIViewController {
         return button
     }()
     
+//    private func showNoticeForScaling() {
+//        if  Settings.shared.showScalingAlert == false {
+//            return
+//        }
+//        if [GameType.freePlay, GameType.deviations].contains(Settings.shared.gameType) == false {
+//            return
+//        }
+//        if Settings.shared.gameType == .freePlay && (Settings.shared.numberOfSpotsAssigned == 1 || (Settings.shared.tableOrientation == TableOrientation.portrait.rawValue && Settings.shared.deviceType == .phone)) {
+//            return
+//        }
+//
+//
+//        let alert = UIAlertController(title: "User Interface", message: "You might want to adjust the size of the cards. Tap on the gear icon to adjust.", preferredStyle: .alert)
+//
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//        alert.addAction(UIAlertAction(title: "Don't show again", style: .cancel, handler: { action in
+//            Settings.shared.showScalingAlert = false
+//        }))
+//        self.present(alert, animated: true)
+//
+//
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -192,7 +215,9 @@ class GameViewController: UIViewController {
         
         gameMaster = GameMaster(gameType: gameType, table: self.view)
         gameMaster.delegate = self
-        gameMaster.setupTable()
+        //gameMaster.setupTable()
+        
+        //showNoticeForScaling()
         if (Settings.shared.showGestureView) {
             showGestureView()
         } else {
@@ -358,11 +383,38 @@ class GameViewController: UIViewController {
             self.view.frame.origin.y = 0
         }
     }
+    
+    var showedNoticeScalingView = false
 }
 
 // MARK: - GameViewDelegate
 
 extension GameViewController: GameViewDelegate {
+    func showNoticeScalingView() {
+        if showedNoticeScalingView {
+             return
+        }
+        if  Settings.shared.showScalingAlert == false {
+            return
+        }
+        if [GameType.freePlay, GameType.deviations].contains(Settings.shared.gameType) == false {
+            return
+        }
+        if Settings.shared.gameType == .freePlay && (Settings.shared.numberOfSpotsAssigned == 1 || (Settings.shared.tableOrientation == TableOrientation.portrait.rawValue && Settings.shared.deviceType == .phone)) {
+            return
+        }
+        
+        
+        let alert = UIAlertController(title: "User Interface", message: "You might want to adjust the size of the cards. Tap on the gear icon to adjust.", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Don't show again", style: .cancel, handler: { action in
+            Settings.shared.showScalingAlert = false
+        }))
+        self.present(alert, animated: true)
+        showedNoticeScalingView = true
+    }
+    
     func showGestureView() {
         let vc = UIViewController()
         vc.view.backgroundColor = .black.withAlphaComponent(0.8)
@@ -474,13 +526,6 @@ extension GameViewController: GameViewDelegate {
         vc.modalTransitionStyle = .crossDissolve
         self.present(vc, animated: true, completion: nil)
     }
-    
-//    func alertMistake(message: String, completion: @escaping (Bool) -> Void) {
-//        let alert = UIAlertController(title: "Strategy Mistake", message: message, preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "Continue", style: .destructive, handler: { _ in completion(false) }))
-//        alert.addAction(UIAlertAction(title: "Fix", style: .cancel, handler: { _ in completion(true) }))
-//        self.present(alert, animated: true)
-//    }
     
     func present(_ vc: UIViewController) {
         //vc.modalPresentationStyle = .overCurrentContext

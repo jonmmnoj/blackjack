@@ -59,7 +59,9 @@ class MainMenuViewController: UITableViewController {
             cell.superview?.backgroundColor = color
             cell.selectedBackgroundView?.backgroundColor = color
             cell.isUserInteractionEnabled = false
-            
+            for view in cell.contentView.subviews {
+                view.addShadow()
+            }
             return cell
         }
         
@@ -76,10 +78,16 @@ class MainMenuViewController: UITableViewController {
         cell.selectedBackgroundView?.backgroundColor = color
         
         cell.layoutIfNeeded()
+        
+        for view in cell.contentView.subviews {
+            view.addShadow()
+        }
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        SoundPlayer.shared.playSound(.click)
         tableView.deselectRow(at: indexPath, animated: false)
         let gameType = cellContents[indexPath.row].gameType
         Settings.shared.gameType = gameType

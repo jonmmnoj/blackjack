@@ -47,6 +47,8 @@ class DeviationsSettings_v2: GameTypeSettings {
                         //cell.frame.height = cell.frame.height * 2
                     },
                     action: { _ in
+                        self.playClickSound()
+                        
                         let emptyHandSetting = !self.settings.softHands && !self.settings.hardHands && !self.settings.splitHands ? true : false
                         let emptyNumberSetting = !self.settings.twoCardHands && !self.settings.threeCardHands && !self.settings.fourCardHands ? true : false
                         if emptyHandSetting || emptyNumberSetting {

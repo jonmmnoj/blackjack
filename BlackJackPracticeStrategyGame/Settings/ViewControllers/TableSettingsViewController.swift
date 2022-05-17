@@ -85,41 +85,7 @@ class TableSettingsViewController: QuickTableViewController {
         
         tableContents = [
             
-            Section(title: "Colors", rows: [
             
-            NavigationRow(text: "Table Color", detailText: .value1(""), customization: { cell, row in
-                    self.tableColorCell = cell
-                    self.tableColorCell.detailTextLabel?.text = Settings.shared.tableColor
-                    NotificationCenter.default.addObserver(self, selector: #selector(self.setTableColor(notification:)), name: Notification.Name("TableColorSetting"), object: nil)
-                },
-                  action: { row in
-                      let checkMarkedValue = Settings.shared.tableColor
-                      self.showViewSettingOptions(sectionTitle: row.text, data: self.tableColorData, checkMarkedValue: checkMarkedValue, notificationName: "TableColorSetting")
-                      return
-                  }),
-            
-            NavigationRow(text: "Button Color", detailText: .value1(""), customization: { cell, row in
-                    self.buttonColorCell = cell
-                self.buttonColorCell.detailTextLabel?.text = Settings.shared.buttonColor
-                NotificationCenter.default.addObserver(self, selector: #selector(self.setButtonColor(notification:)), name: Notification.Name("ButtonColorSetting"), object: nil)
-            },
-              action: { row in
-                  let checkMarkedValue = Settings.shared.buttonColor
-                  self.showViewSettingOptions(sectionTitle: row.text, data: self.tableColorData, checkMarkedValue: checkMarkedValue, notificationName: "ButtonColorSetting")
-                  return
-              }),
-            
-            NavigationRow(text: "Card Color", detailText: .value1(""), customization: { cell, row in
-                    self.cardColorCell = cell
-                    self.cardColorCell.detailTextLabel?.text = Settings.shared.cardColor
-                NotificationCenter.default.addObserver(self, selector: #selector(self.setCardColor(notification:)), name: Notification.Name("CardColorSetting"), object: nil)
-            },
-              action: { row in
-                  let checkMarkedValue = Settings.shared.cardColor
-                  self.showViewSettingOptions(sectionTitle: row.text, data: self.cardColorData, checkMarkedValue: checkMarkedValue, notificationName: "CardColorSetting")
-                  return
-              }),
-            ]),
             
             Section(title: "Input", rows: [
                 SwitchRow(
@@ -156,6 +122,54 @@ class TableSettingsViewController: QuickTableViewController {
                 
             ]),
             
+            Section(title: "Sound", rows: [
+                SwitchRow(
+                    text: "Sound Effects",
+                    switchValue: Settings.shared.soundOn,
+                      customization: { cell, row in
+                        self.soundCell = cell
+                      },
+                      action: { _ in
+                        Settings.shared.soundOn = !Settings.shared.soundOn
+                      }),
+            ]),
+            
+            Section(title: "Colors", rows: [
+            
+                NavigationRow(text: "Table Color", detailText: .value1(""), customization: { cell, row in
+                    self.tableColorCell = cell
+                    self.tableColorCell.detailTextLabel?.text = Settings.shared.tableColor
+                    NotificationCenter.default.addObserver(self, selector: #selector(self.setTableColor(notification:)), name: Notification.Name("TableColorSetting"), object: nil)
+                },
+                  action: { row in
+                      let checkMarkedValue = Settings.shared.tableColor
+                      self.showViewSettingOptions(sectionTitle: row.text, data: self.tableColorData, checkMarkedValue: checkMarkedValue, notificationName: "TableColorSetting")
+                      return
+                  }),
+            
+            NavigationRow(text: "Button Color", detailText: .value1(""), customization: { cell, row in
+                    self.buttonColorCell = cell
+                self.buttonColorCell.detailTextLabel?.text = Settings.shared.buttonColor
+                NotificationCenter.default.addObserver(self, selector: #selector(self.setButtonColor(notification:)), name: Notification.Name("ButtonColorSetting"), object: nil)
+            },
+              action: { row in
+                  let checkMarkedValue = Settings.shared.buttonColor
+                  self.showViewSettingOptions(sectionTitle: row.text, data: self.tableColorData, checkMarkedValue: checkMarkedValue, notificationName: "ButtonColorSetting")
+                  return
+              }),
+            
+            NavigationRow(text: "Card Color", detailText: .value1(""), customization: { cell, row in
+                    self.cardColorCell = cell
+                    self.cardColorCell.detailTextLabel?.text = Settings.shared.cardColor
+                NotificationCenter.default.addObserver(self, selector: #selector(self.setCardColor(notification:)), name: Notification.Name("CardColorSetting"), object: nil)
+            },
+              action: { row in
+                  let checkMarkedValue = Settings.shared.cardColor
+                  self.showViewSettingOptions(sectionTitle: row.text, data: self.cardColorData, checkMarkedValue: checkMarkedValue, notificationName: "CardColorSetting")
+                  return
+              }),
+            ]),
+            
             Section(title: "Miscellaneous", rows: [
                 SwitchRow(
                     text: "Show Hand Totals",
@@ -166,15 +180,15 @@ class TableSettingsViewController: QuickTableViewController {
                       action: { _ in
                         Settings.shared.showHandTotal = !Settings.shared.showHandTotal
                       }),
-                SwitchRow(
-                    text: "Sound Effects",
-                    switchValue: Settings.shared.soundOn,
-                      customization: { cell, row in
-                        self.soundCell = cell
-                      },
-                      action: { _ in
-                        Settings.shared.soundOn = !Settings.shared.soundOn
-                      }),
+//                SwitchRow(
+//                    text: "Sound Effects",
+//                    switchValue: Settings.shared.soundOn,
+//                      customization: { cell, row in
+//                        self.soundCell = cell
+//                      },
+//                      action: { _ in
+//                        Settings.shared.soundOn = !Settings.shared.soundOn
+//                      }),
                 SwitchRow(
                     text: "Cards Dealt Askew",
                     switchValue: Settings.shared.cardsAskew,
@@ -256,7 +270,25 @@ class TableSettingsViewController: QuickTableViewController {
                         
                     }
                 ),
-            ])
+            ]),
+            
+            Section(title: "", rows: [
+               TapActionRow(
+                    text: "Reset Bankroll",
+                    customization: {(cell,row) in
+                        cell.textLabel?.textColor = .systemRed
+                        cell.tintColor = .systemRed
+                        cell.backgroundColor = .secondarySystemGroupedBackground
+                        //cell.textLabel?.textColor = .systemBlue
+                        cell.textLabel?.font = .systemFont(ofSize: 17, weight: .regular)//font-family: "UICTFontTextStyleBody"; font-weight: normal; font-style: normal; font-size: 17.00pt
+                        cell.selectionStyle = .default //nil//UITableViewCell.SelectionStyle.none; default
+                        //cell.tintColor = .systemBlue
+                    },
+                    action: { _ in
+                        Bankroll.shared.amount = Settings.shared.defaults.bankRollAmount
+                    })
+               ])
+                    
         ]
       }
 

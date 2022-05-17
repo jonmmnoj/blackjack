@@ -63,6 +63,7 @@ class RunningCountSettings_v2: GameTypeSettings {
                         //cell.frame.height = cell.frame.height * 2
                     },
                     action: { _ in
+                        self.playClickSound()
                         self.vc.tableView.deselectRow(at: IndexPath(row:0, section: 0), animated: true)
                         let gvc = self.vc.storyboard!.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
                         gvc.gameType = Settings.shared.gameType

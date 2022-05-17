@@ -30,6 +30,7 @@ class SoundPlayer {
         case .discard: fileName = "clear2.mp3"
         case .shuffle: fileName = "shuffle.mp3"
         case .chips: fileName = "chips.mp3"
+        case .click: fileName = "click.mp3"
         }
         return fileName
     }
@@ -42,8 +43,10 @@ class SoundPlayer {
 
         do {
             player = try AVAudioPlayer(contentsOf: url)
-           // player.play()
-        } catch { }
+            player.play()
+        } catch {
+            print(error)
+        }
     }
     
     var queuePlayer: AVQueuePlayer = AVQueuePlayer()
@@ -65,6 +68,6 @@ class SoundPlayer {
 }
 
 enum SoundType {
-    case deal, flip, discard, shuffle, chips
+    case deal, flip, discard, shuffle, chips, click
 }
 

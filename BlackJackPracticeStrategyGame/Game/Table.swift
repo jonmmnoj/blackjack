@@ -45,6 +45,9 @@ class Table {
         self.arrowView = imageView
         
         self.view.addSubview(discardTray)
+        discardTray.layoutSubviews()
+        //discardTray.layoutIfNeeded()
+        
         if !Settings.shared.showDiscardTray || Settings.shared.gameType != .freePlay {
             discardTray.isHidden = true
         }

@@ -12,6 +12,12 @@ class GestureView: UIView {
     @IBOutlet weak var surrenderLabel: UILabel!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var dismissButton: UIButton!
+    @IBOutlet weak var imageView1: UIImageView!
+    @IBOutlet weak var imageView2: UIImageView!
+    @IBOutlet weak var imageView3: UIImageView!
+    @IBOutlet weak var imageView4: UIImageView!
+    @IBOutlet weak var imageView5: UIImageView!
+    
     var dismissHandler: (() -> Void)!
  
     required init() {
@@ -38,6 +44,11 @@ class GestureView: UIView {
         dismissButton.setTitleColor(.white, for: .normal)
         
         surrenderLabel.adjustsFontSizeToFitWidth = true
+        
+        let imageViews = [imageView1, imageView2, imageView3, imageView4, imageView5]
+        for imageView in imageViews {
+            imageView?.setImage(color: UIColor.secondaryLabel)
+        }
     }
     
     @IBAction func dismissAction(_ sender: UIButton!) {

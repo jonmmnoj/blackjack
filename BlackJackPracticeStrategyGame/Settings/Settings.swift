@@ -10,6 +10,25 @@ import UIKit
 
 class Settings {
     
+    func resetSpotAssignments() {
+        Settings.shared.spotOneAssignment = Settings.shared.defaults.spotOneAssignment
+        Settings.shared.spotTwoAssignment = Settings.shared.defaults.spotTwoAssignment
+        Settings.shared.spotThreeAssignment = Settings.shared.defaults.spotThreeAssignment
+        Settings.shared.spotFourAssignment = Settings.shared.defaults.spotFourAssignment
+        Settings.shared.spotFiveAssignment = Settings.shared.defaults.spotFiveAssignment
+        Settings.shared.spotSixAssignment = Settings.shared.defaults.spotSixAssignment
+        Settings.shared.spotSevenAssignment = Settings.shared.defaults.spotSevenAssignment
+    }
+    
+    var numberOfSpotsAssigned: Int {
+        var count = 0
+        for spot in spotAssignments {
+            if spot != .empty {
+                count += 1
+            }
+        }
+        return count
+    }
     var spotAssignments: [SpotAssignment] {
         if Settings.shared.deviceType == .phone {
             return [SpotAssignment(rawValue: Settings.shared.spotOneAssignment)!, SpotAssignment(rawValue: Settings.shared.spotTwoAssignment)!, SpotAssignment(rawValue: Settings.shared.spotThreeAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFourAssignment)!, SpotAssignment(rawValue: Settings.shared.spotFiveAssignment)!]
@@ -623,8 +642,18 @@ class Settings {
         }
     }
     
+    var showScalingAlert: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: "showScalingAlert")
+        }
+        get {
+            return UserDefaults.standard.object(forKey: "showScalingAlert") as? Bool ?? defaults.showScalingAlert
+        }
+    }
+    
     
     struct Defaults {
+        var showScalingAlert = true
         var showGestureView = true
         var dealSpeed: Float = 6.5
         var ENHC: Bool = false
@@ -656,7 +685,7 @@ class Settings {
         var roundLastThreeDecksToHalf = false
         var bankRollAmount = 100000.00
         var previousBetAmount = 0
-        var placeBets = false
+        var placeBets = true
         
         var twoCardHands = true
         var threeCardHands = false

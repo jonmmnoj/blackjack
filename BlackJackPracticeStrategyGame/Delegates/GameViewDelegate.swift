@@ -19,4 +19,5 @@ protocol GameViewDelegate {
     func enableTableSettingsButton(_ setting: Bool)
     
     func showGestureView()
+    func showNoticeScalingView()
 }

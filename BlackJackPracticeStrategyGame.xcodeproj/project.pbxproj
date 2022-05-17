@@ -120,6 +120,8 @@
 		FCA92EBC273ADD6200D69FB3 /* SettingsListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */; };
 		FCAFFD76277009D000F5CAE4 /* DeviationsGameTypeHelper_v2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAFFD75277009D000F5CAE4 /* DeviationsGameTypeHelper_v2.swift */; };
 		FCAFFD782770124300F5CAE4 /* DeviationsSettings_v2.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCAFFD772770124300F5CAE4 /* DeviationsSettings_v2.swift */; };
+		FCC2C98D281D85590014F27B /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC2C98C281D85590014F27B /* UIView+Extension.swift */; };
+		FCC2C98F281D88B20014F27B /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FCC2C98E281D88B20014F27B /* click.mp3 */; };
 		FCC7A9B7273C65A40021486E /* TableSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9B6273C65A40021486E /* TableSettingsViewController.swift */; };
 		FCC7A9B9273D941F0021486E /* PlayError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9B8273D941F0021486E /* PlayError.swift */; };
 		FCC7A9BC273ED22E0021486E /* BetSpreadTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCC7A9BA273ED22E0021486E /* BetSpreadTableViewCell.swift */; };
@@ -263,6 +265,8 @@
 		FCA92EBB273ADD6200D69FB3 /* SettingsListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsListTableViewController.swift; sourceTree = "<group>"; };
 		FCAFFD75277009D000F5CAE4 /* DeviationsGameTypeHelper_v2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationsGameTypeHelper_v2.swift; sourceTree = "<group>"; };
 		FCAFFD772770124300F5CAE4 /* DeviationsSettings_v2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviationsSettings_v2.swift; sourceTree = "<group>"; };
+		FCC2C98C281D85590014F27B /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		FCC2C98E281D88B20014F27B /* click.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = click.mp3; sourceTree = "<group>"; };
 		FCC7A9B6273C65A40021486E /* TableSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableSettingsViewController.swift; sourceTree = "<group>"; };
 		FCC7A9B8273D941F0021486E /* PlayError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayError.swift; sourceTree = "<group>"; };
 		FCC7A9BA273ED22E0021486E /* BetSpreadTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetSpreadTableViewCell.swift; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 		FC0EE135275FF00300517546 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				FCC2C98E281D88B20014F27B /* click.mp3 */,
 				FC0EE144275FFBBB00517546 /* clear.mp3 */,
 				FC36EB8A276686330028C3C4 /* cards shuffle 3.mp3 */,
 				FC36EB8C276686430028C3C4 /* Great audio of a fine card shuffle_AOS00635.mp3 */,
@@ -625,8 +630,8 @@
 				FC79378A2694D4070000ACB7 /* Deck.swift */,
 				FC79378C2694D4240000ACB7 /* Card.swift */,
 				FC7937932694DFF50000ACB7 /* Table.swift */,
-				FC36EB89276455210028C3C4 /* Helpers */,
 				FC79378F2694D4410000ACB7 /* ViewControllers */,
+				FC36EB89276455210028C3C4 /* Helpers */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -679,6 +684,7 @@
 				FCA92EB827399A9600D69FB3 /* UIImage+Extension.swift */,
 				FCC7A9CA27417FB40021486E /* UIColor+Extension.swift */,
 				FC9465E72760962700BFEB92 /* String+Extension.swift */,
+				FCC2C98C281D85590014F27B /* UIView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -840,6 +846,7 @@
 				FC7937772694D2EC0000ACB7 /* LaunchScreen.storyboard in Resources */,
 				FC0EE133275BCC9C00517546 /* StatsSummaryView.xib in Resources */,
 				FC610EB526B8336C0089C7C9 /* DeviationInputView.xib in Resources */,
+				FCC2C98F281D88B20014F27B /* click.mp3 in Resources */,
 				FC0EE140275FF00400517546 /* discard.mp3 in Resources */,
 				FC0EE141275FF00400517546 /* deal.mp3 in Resources */,
 				FCC7A9BD273ED22E0021486E /* BetSpreadTableViewCell.xib in Resources */,
@@ -979,6 +986,7 @@
 				FC610EA526AF9D440089C7C9 /* RunningCountSettings.swift in Sources */,
 				FCA92EAB273840D500D69FB3 /* 3.swift in Sources */,
 				FC7937852694D31B0000ACB7 /* Player.swift in Sources */,
+				FCC2C98D281D85590014F27B /* UIView+Extension.swift in Sources */,
 				FC79378D2694D4240000ACB7 /* Card.swift in Sources */,
 				FCA92EA227373FDC00D69FB3 /* Bankroll.swift in Sources */,
 				FCC7A9CB27417FB50021486E /* UIColor+Extension.swift in Sources */,

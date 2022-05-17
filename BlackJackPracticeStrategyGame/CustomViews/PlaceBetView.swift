@@ -9,6 +9,7 @@ import UIKit
 
 class PlaceBetView: UIView {
     
+    var reservedSpotsString = "+ Reserved Spots"
     var player: Player
     var vc: UIViewController!
     var dealHandler: ((Int) -> Void)!
@@ -35,7 +36,7 @@ class PlaceBetView: UIView {
         }
     }
     private func isFreePlayLandscape() -> Bool {
-        return Settings.shared.gameType == .freePlay && Settings.shared.tableOrientation == TableOrientation.landscape.rawValue
+        return Settings.shared.gameType == .freePlay && (Settings.shared.deviceType != .phone || Settings.shared.tableOrientation == TableOrientation.landscape.rawValue)
     }
     private func getNumberOfSpots(type: SpotAssignment) -> Int {
         var number = 0
@@ -205,7 +206,16 @@ class PlaceBetView: UIView {
         
         if Settings.shared.landscape {
             oneHandButton.setTitle("Active Spots", for: .normal)
-            twoHandsButton.setTitle("+ Reserved Spots", for: .normal)
+            twoHandsButton.setTitle(reservedSpotsString, for: .normal)
+            var reservedSpotsCount = 0
+            for spot in Settings.shared.spotAssignments {
+                if spot == SpotAssignment.playerReserved {
+                    reservedSpotsCount += 1
+                }
+            }
+            if reservedSpotsCount == 0 {
+                twoHandsButton.isEnabled = false
+            }
         }
         
         bankRollAmount = Settings.shared.bankRollAmount
@@ -238,7 +248,7 @@ class PlaceBetView: UIView {
             oneHandButton.backgroundColor = .systemFill
             twoHandsButton.backgroundColor = .systemBackground
             player.dealt2Hands = false
-            if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+            if Settings.shared.deviceType != .phone || Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
                 let numberOfReservedSpots = getNumberOfSpots(type: .playerReserved)
                 let addToBankRoll = Double(numberOfReservedSpots) * Double(betAmount)
                 bankRollAmount += addToBankRoll
@@ -250,7 +260,8 @@ class PlaceBetView: UIView {
             player.dealt2Hands = true
             oneHandButton.backgroundColor = .systemBackground
             twoHandsButton.backgroundColor = .systemFill
-            if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+            //if Settings.shared.tableOrientation == TableOrientation.landscape.rawValue {
+            if sender.title(for: .normal) == reservedSpotsString {
                 let numberOfReservedSpots = getNumberOfSpots(type: .playerReserved)
                 let takeFromBankRoll = Double(numberOfReservedSpots) * Double(betAmount)
                 bankRollAmount -= takeFromBankRoll
