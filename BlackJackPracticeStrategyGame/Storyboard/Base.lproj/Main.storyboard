@@ -312,7 +312,7 @@
                                                 <constraint firstAttribute="width" secondItem="QZF-xz-nY7" secondAttribute="height" multiplier="1.5:1" id="bqB-xu-XOu"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi-Lo Card Counting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eul-nX-Bn6">
+                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hi-Lo Card Counting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eul-nX-Bn6">
                                             <rect key="frame" x="34.666666666666657" y="115" width="306" height="39"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -320,7 +320,7 @@
                                             <size key="shadowOffset" width="-1" height="-1"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Blackjack PRO" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fis-k6-RvF">
-                                            <rect key="frame" x="50" y="67" width="275" height="49"/>
+                                            <rect key="frame" x="50" y="61" width="275" height="49"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="41"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -330,7 +330,7 @@
                                     <constraints>
                                         <constraint firstItem="Eul-nX-Bn6" firstAttribute="centerX" secondItem="vYj-Xd-3pV" secondAttribute="centerX" id="7zM-YX-5HZ"/>
                                         <constraint firstItem="QZF-xz-nY7" firstAttribute="top" secondItem="vYj-Xd-3pV" secondAttribute="topMargin" id="CfW-eZ-kQe"/>
-                                        <constraint firstItem="Fis-k6-RvF" firstAttribute="top" secondItem="vYj-Xd-3pV" secondAttribute="topMargin" constant="56" id="Frs-x0-qub"/>
+                                        <constraint firstItem="Fis-k6-RvF" firstAttribute="top" secondItem="vYj-Xd-3pV" secondAttribute="topMargin" constant="50" id="Frs-x0-qub"/>
                                         <constraint firstItem="QZF-xz-nY7" firstAttribute="centerX" secondItem="vYj-Xd-3pV" secondAttribute="centerX" id="IGj-zU-3mV"/>
                                         <constraint firstItem="QZF-xz-nY7" firstAttribute="centerY" secondItem="vYj-Xd-3pV" secondAttribute="centerY" id="LtR-0R-3MC"/>
                                         <constraint firstItem="Fis-k6-RvF" firstAttribute="centerX" secondItem="vYj-Xd-3pV" secondAttribute="centerX" id="QI9-Ky-XO3"/>

@@ -688,7 +688,7 @@ class Settings {
         var placeBets = true
         
         var twoCardHands = true
-        var threeCardHands = false
+        var threeCardHands = true
         var fourCardHands = false
         
         var quickFeedback = false
