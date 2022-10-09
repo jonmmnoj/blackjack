@@ -84,9 +84,6 @@ class TableSettingsViewController: QuickTableViewController {
         registerCustomViews(for: tableView)
         
         tableContents = [
-            
-            
-            
             Section(title: "Input", rows: [
                 SwitchRow(
                     text: "Use Gestures",

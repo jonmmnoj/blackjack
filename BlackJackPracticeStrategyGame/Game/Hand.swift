@@ -150,8 +150,14 @@ class Hand {
     
     var valueLabelView: UILabel?
     
+    private func showHandTotal() -> Bool {
+        let currentGameType = Settings.shared.gameType
+        let applicableGameTypes: [GameType] = [.freePlay, .basicStrategy, .deviations, .deviations_v2]
+        return Settings.shared.showHandTotal && applicableGameTypes.contains(currentGameType)
+    }
+    
     func updateViewValueOfHand(for table: Table) {
-        guard Settings.shared.showHandTotal else {
+        guard showHandTotal() else {
             if valueLabelView != nil {
                 valueLabelView?.removeFromSuperview()
             }

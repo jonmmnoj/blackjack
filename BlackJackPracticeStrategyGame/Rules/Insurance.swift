@@ -60,24 +60,17 @@ class Insurance {
     }
     
     static func betInsurance(for player: Player) {
-        SoundPlayer.shared.playSound(.chips)
         let insuranceBetAmount = getInsuranceAmount(for: player)
+        if insuranceBetAmount != 0 { SoundPlayer.shared.playSound(.chips) }
         Bankroll.shared.add(-insuranceBetAmount)
     }
     
     static private func payoutInsurance(for player: Player) {
-        SoundPlayer.shared.playSound(.chips)
-        //let hand = player.hands.first(where: { !$0.isGhostHand })!
         let insuranceBetAmount = getInsuranceAmount(for: player)
-        
-        
+        if insuranceBetAmount != 0 { SoundPlayer.shared.playSound(.chips) }
         let amount = insuranceBetAmount * 3
-        //var amount = Double(hand.betAmount) * 0.5 * 3 // original bet plus 2 times that.
-        //if player.dealt2Hands { amount += amount }
         Bankroll.shared.add(amount)
     }
-    
-    
     
     static func playerShouldInsureHand() -> Bool {
         return CardCounter.shared.getTrueCount() >= insureOnThisTrueCount()

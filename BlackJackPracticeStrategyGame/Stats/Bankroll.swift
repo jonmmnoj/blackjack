@@ -21,8 +21,5 @@ class Bankroll {
     
     func add(_ amount: Double) {
         Settings.shared.bankRollAmount += amount
-        //if amount > 0 || amount < 0 {
-            //SoundPlayer.shared.playSound(type: .chips)
-        //}
     }
 }

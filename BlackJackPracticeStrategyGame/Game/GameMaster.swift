@@ -120,10 +120,12 @@ class GameMaster {
     }
     
     func playerBet(amount: Int) {
-        if player.dealt2Hands {
-            SoundPlayer.shared.playSounds([.chips, .chips])
-        } else {
-            SoundPlayer.shared.playSound(.chips)
+        if amount != 0 {
+            if player.dealt2Hands {
+                SoundPlayer.shared.playSounds([.chips, .chips])
+            } else {
+                SoundPlayer.shared.playSound(.chips)
+            }
         }
         
         if player.dealt2Hands {
@@ -625,7 +627,6 @@ extension GameMaster {
     }
     
     private func discard(hand: Hand) {
-        //SoundPlayer.shared.playSound(.discard)
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(1)) {
             SoundPlayer.shared.playSound(.discard)
             
@@ -646,7 +647,6 @@ extension GameMaster {
     }
     
     func discardAllHands() {
-        //SoundPlayer.shared.playSound(.discard)
         let wait: Double = gameType == .runningCount ? 1.0 : 1.0
         DispatchQueue.main.asyncAfter(deadline: .now() + adjustWaitTime(wait)) {
             SoundPlayer.shared.playSound(.discard)
@@ -697,8 +697,10 @@ extension GameMaster {
         if result == .won {
             message = "Won"
             if playerBets {
-                SoundPlayer.shared.playSound(.chips)
                 let amount = finalAmount - betAmount
+                if amount != 0 {
+                    SoundPlayer.shared.playSound(.chips)
+                }
                 if Rules.hasRemainder(amount) {
                     message += String(format: " +$%.2f", amount)
                 } else {
@@ -708,13 +710,16 @@ extension GameMaster {
         } else if result == .lost {
             message = "Lost"
             if playerBets {
-                SoundPlayer.shared.playSound(.chips)
+                if betAmount != 0 {
+                    SoundPlayer.shared.playSound(.chips)
+                    SoundPlayer.shared.playSound(.chips)
+                }
                 message += " -$\(Int(betAmount))"
             }
         } else if result == .surrender {
             message = "Lost"
             if playerBets {
-                SoundPlayer.shared.playSound(.chips)
+                if finalAmount != 0 { SoundPlayer.shared.playSound(.chips) }
                 if Rules.hasRemainder(finalAmount) {
                     message += String(format: " -$%.2f", finalAmount)
                 } else {

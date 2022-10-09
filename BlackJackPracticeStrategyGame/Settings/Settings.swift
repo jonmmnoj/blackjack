@@ -683,7 +683,7 @@ class Settings {
         var deckRoundedTo: String = DeckRoundedTo.whole.rawValue
         var showDiscardedRemainingDecks = false
         var roundLastThreeDecksToHalf = false
-        var bankRollAmount = 100000.00
+        var bankRollAmount = 10000.00
         var previousBetAmount = 0
         var placeBets = true
         

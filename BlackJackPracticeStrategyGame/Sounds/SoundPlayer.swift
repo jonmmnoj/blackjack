@@ -62,7 +62,7 @@ class SoundPlayer {
         }
         
         queuePlayer = AVQueuePlayer(items: audioItems)
-       //queuePlayer.play()
+       queuePlayer.play()
     }
         
 }
