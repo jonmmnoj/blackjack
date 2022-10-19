@@ -187,6 +187,7 @@
 		FC4E622E26A21B6300D1AF93 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
 		FC4E9DB126E172EC00CAC0A0 /* DeckRoundingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckRoundingSettings.swift; sourceTree = "<group>"; };
 		FC4E9DB326E1B7A300CAC0A0 /* Shoe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shoe.swift; sourceTree = "<group>"; };
+		FC50E5F528FFAED500C8C610 /* todo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = todo.txt; sourceTree = "<group>"; };
 		FC549B9F26A8F3F700FFD50E /* BasicStrategyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyViewController.swift; sourceTree = "<group>"; };
 		FC610E8E26A8FBEA0089C7C9 /* BasicStrategyGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicStrategyGameType.swift; sourceTree = "<group>"; };
 		FC610E9026A8FC0D0089C7C9 /* FreePlayGameType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreePlayGameType.swift; sourceTree = "<group>"; };
@@ -582,6 +583,7 @@
 		FC79375E2694D2E90000ACB7 = {
 			isa = PBXGroup;
 			children = (
+				FC50E5F528FFAED500C8C610 /* todo.txt */,
 				FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */,
 				FC36EB9327682B500028C3C4 /* ipad */,
 				FC7937682694D2E90000ACB7 /* Products */,

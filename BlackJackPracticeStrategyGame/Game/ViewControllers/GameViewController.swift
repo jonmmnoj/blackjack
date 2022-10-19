@@ -405,7 +405,7 @@ extension GameViewController: GameViewDelegate {
         }
         
         
-        let alert = UIAlertController(title: "User Interface", message: "You might want to adjust the size of the cards. Tap on the gear icon to change settings.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "User Interface", message: "The size of the cards and other table settings are accessable by clicking the gear icon located in the bottom-right corner of the screen.", preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Don't show again", style: .cancel, handler: { action in

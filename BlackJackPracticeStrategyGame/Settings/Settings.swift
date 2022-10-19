@@ -659,10 +659,10 @@ class Settings {
         var ENHC: Bool = false
         var numberOfDecks = 6
         var dealerHitsSoft17 = true
-        var surrender = false
+        var surrender = true
         var resplitAces = false
         var doubleAfterSplit = true
-        var notifyMistakes = true
+        var notifyMistakes = false
         var showHandTotal = false
         var showDiscardTray = true
         var deviations: Bool {
@@ -685,7 +685,7 @@ class Settings {
         var roundLastThreeDecksToHalf = false
         var bankRollAmount = 10000.00
         var previousBetAmount = 0
-        var placeBets = true
+        var placeBets = false
         
         var twoCardHands = true
         var threeCardHands = true
