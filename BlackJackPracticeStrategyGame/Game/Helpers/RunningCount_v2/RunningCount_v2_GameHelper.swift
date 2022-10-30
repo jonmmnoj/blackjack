@@ -77,6 +77,7 @@ class RunningCountV2GameHelper: FreePlayGameTypeStrategy {
                     delay = 0
                 }
                 card.customDealDelay = delay
+                card.noShadow = true
                 cards.append(card)
                 
                 if Settings.shared.rcDealInPairs {
@@ -91,8 +92,11 @@ class RunningCountV2GameHelper: FreePlayGameTypeStrategy {
                 }
             }
             for card in cards {
+                
                 self.dealer.deal(card: card, to: self.player.activatedHand!)
+                
             }
+            
         }
         self.gameMaster.gameState = .dealtCards
     }

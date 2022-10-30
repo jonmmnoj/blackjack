@@ -38,6 +38,7 @@ class Card {
     var adjustDealPoint = true
     var customDealDelay: Double?
     var isPenetrationCard = false
+    var noShadow = false
     
     init(value: CardValue, suit: CardSuit) {
         self.value = value
@@ -113,11 +114,25 @@ class Card {
         self.isFaceDown = false
     }
     
+    private func addShadow() {
+        guard !noShadow else { return }
+        self.view!.layer.shadowColor = UIColor.black.cgColor
+        self.view!.layer.shadowOffset = CGSize(width: 5, height: 5)
+        self.view!.layer.shadowRadius = 5
+        self.view!.layer.shadowOpacity = 0.5
+        
+    }
+    
+    func removeShadow() {
+        self.view!.layer.shadowOpacity = 0.0
+    }
+    
     func createViews() {
         let view = UIView()
         //view.layer.borderColor = UIColor.red.cgColor
         //view.layer.borderWidth = 2
         //view.backgroundColor = .black
+        
         
         let back = UIImageView()
         back.image = UIImage(named: backImageName())
@@ -141,6 +156,8 @@ class Card {
         self.view = view
         self.faceView = front
         self.backView = back
+        
+        addShadow()
     }
     
     func backImageName() -> String {

@@ -217,7 +217,7 @@ class FreePlaySettings: GameTypeSettings {
             ]),
             
             
-            Section(title: "Card Counting", rows: [
+            Section(title: "Strategy & Card Counting", rows: [
                 
                
             
@@ -259,15 +259,15 @@ class FreePlaySettings: GameTypeSettings {
                 
                 
                 
-                SwitchRow(
-                    text: "Show Discard Tray",
-                    switchValue: settings.showDiscardTray,
-                    customization:  { (cell, row) in
-                        self.discardTrayCell = cell
-                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.showDiscardTray, animated: false)
-                    },action: { row in
-                        self.settings.showDiscardTray = !self.settings.showDiscardTray
-                    }),
+//                SwitchRow(
+//                    text: "Show Discard Tray",
+//                    switchValue: settings.showDiscardTray,
+//                    customization:  { (cell, row) in
+//                        self.discardTrayCell = cell
+//                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.showDiscardTray, animated: false)
+//                    },action: { row in
+//                        self.settings.showDiscardTray = !self.settings.showDiscardTray
+//                    }),
                 
                 SwitchRow(
                     text: "Use Deviations",
@@ -296,10 +296,21 @@ class FreePlaySettings: GameTypeSettings {
                           return
                       }),
                 
+                SwitchRow(
+                    text: "Positive Count Bias",
+                    switchValue: settings.countBias,
+                      customization: { cell, row in
+                        self.countBiasCell = cell
+                        (self.countBiasCell.accessoryView as! UISwitch).setOn(self.settings.countBias, animated: false)
+                      },
+                      action: { _ in
+                        self.settings.countBias = !self.settings.countBias
+                      }),
+                
                 
             ]),
             
-            Section(title: "Betting", rows: [
+            Section(title: "Bets", rows: [
                 
                 SwitchRow(
                     text: "Place Bets",
@@ -327,7 +338,7 @@ class FreePlaySettings: GameTypeSettings {
             ]),
             
             
-            Section(title: "Miscellaneous", rows: [
+            //Section(title: "Miscellaneous", rows: [
 //                SwitchRow(
 //                    text: "Ghost Hand",
 //                    switchValue: settings.ghostHand,
@@ -338,17 +349,17 @@ class FreePlaySettings: GameTypeSettings {
 //                      action: { _ in
 //                        self.settings.ghostHand = !self.settings.ghostHand
 //                      }),
-                SwitchRow(
-                    text: "Positive Count Bias",
-                    switchValue: settings.countBias,
-                      customization: { cell, row in
-                        self.countBiasCell = cell
-                        (self.countBiasCell.accessoryView as! UISwitch).setOn(self.settings.countBias, animated: false)
-                      },
-                      action: { _ in
-                        self.settings.countBias = !self.settings.countBias
-                      }),
-            ]),
+//                SwitchRow(
+//                    text: "Positive Count Bias",
+//                    switchValue: settings.countBias,
+//                      customization: { cell, row in
+//                        self.countBiasCell = cell
+//                        (self.countBiasCell.accessoryView as! UISwitch).setOn(self.settings.countBias, animated: false)
+//                      },
+//                      action: { _ in
+//                        self.settings.countBias = !self.settings.countBias
+//                      }),
+//            ]),
             
             //countSection,
             
@@ -424,6 +435,7 @@ class FreePlaySettings: GameTypeSettings {
                         if self.discardTrayCell.isHidden {
                             self.settings.showDiscardTray = self.settings.defaults.showDiscardTray
                         }
+                        
                         
                         (self.surrenderCell.accessoryView as! UISwitch).setOn(self.settings.defaults.surrender, animated: true)
                         (self.surrenderCell.accessoryView as! UISwitch).sendActions(for: .valueChanged)
@@ -548,7 +560,17 @@ class FreePlaySettings: GameTypeSettings {
                       },
                       action: { _ in
                         self.settings.ghostHand = !self.settings.ghostHand
-                })
+                }),
+                
+                SwitchRow(
+                    text: "Show Discard Tray",
+                    switchValue: settings.showDiscardTray,
+                    customization:  { (cell, row) in
+                        self.discardTrayCell = cell
+                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.showDiscardTray, animated: false)
+                    },action: { row in
+                        self.settings.showDiscardTray = !self.settings.showDiscardTray
+                    }),
             ])
             sections.insert(tableSection, at: 1)
         }
@@ -568,7 +590,17 @@ class FreePlaySettings: GameTypeSettings {
                           vc.subSettingsGTS = sas
                           self.vc.navigationController?.pushViewController(vc, animated: true)
                         
-                })
+                }),
+                
+                SwitchRow(
+                    text: "Show Discard Tray",
+                    switchValue: settings.showDiscardTray,
+                    customization:  { (cell, row) in
+                        self.discardTrayCell = cell
+                        (self.discardTrayCell.accessoryView as! UISwitch).setOn(self.settings.showDiscardTray, animated: false)
+                    },action: { row in
+                        self.settings.showDiscardTray = !self.settings.showDiscardTray
+                    }),
              ])
             sections.insert(tableSection, at: 1)
         }

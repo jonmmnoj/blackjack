@@ -1,3 +1,14 @@
 #  <#Title#>
 
+
+- have flag for showing discard tray view, check when showing betting dialog, to remove discrad tray view first.
+
+
+- multi hands. last hand was blackjack, dealer had 10 face up, played the other hands, when at last hand, dealer didn't do the payout on the blackjack before dealing his hand, dealt hand then made payouts.
+
 - are you sure you want to quit this game? - when clicking back arrow
+- free pplay - use deviations - move this setting up one row
+
+- discard tray reset defaults odd behavior - because control off screen
+    - reproduce: turn off tray. reset defaults. turn off tray. (tray shows). turn on (tray hidden).
+

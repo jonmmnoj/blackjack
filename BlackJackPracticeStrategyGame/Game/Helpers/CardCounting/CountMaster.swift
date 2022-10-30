@@ -48,7 +48,10 @@ class CountMaster {
                 //Stats.shared.update(decision: decision)
                 
                 inputView.removeFromSuperview()
-                if Settings.shared.notifyMistakes {
+                // why is there a condition here?
+                if true {//Settings.shared.gameType != .freePlay || (Settings.shared.gameType == .freePlay && Settings.shared.notifyMistakes) {//Settings.shared.notifyMistakes) {
+                    
+                    
                     self.gameMaster!.delegate.presentBasicStrategyFeedbackView(isCorrect: isInputCorrect, playerAction: String(inputRC), correctAction: String(correctCount)) {
                         self.taskComplete()
                     }

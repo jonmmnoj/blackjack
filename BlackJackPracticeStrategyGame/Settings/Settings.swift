@@ -669,7 +669,7 @@ class Settings {
             if Settings.shared.gameType == .basicStrategy {
                 return false
             }
-            return true
+            return false
         }
         var numberOfRoundsBeforeAskRunningCount = CountRounds.oneRound.rawValue
         var numberOfRoundsBeforeAskTrueCount = CountRounds.onceAtEnd.rawValue
@@ -708,7 +708,7 @@ class Settings {
         //var betSpreadPos7: Int = 2500
         
         var tableColor = TableColor.Green
-        var buttonColor = TableColor.Green2
+        var buttonColor = TableColor.Black
         var cardColor = CardColor.Red
         
         var maxRunningCount: Int = 30
