@@ -567,7 +567,7 @@ extension GameMaster {
             revealFaceDownCard()
         } else if playerHasBlackjack {
             self.player.activatedHand!.set(state: .blackjack)
-            if player.activatedHand!.isLastHand {//player.activatedHand!.isFirstHand {
+            if player.activatedHand!.isLastHand && player.hands.count == 1 {//player.activatedHand!.isFirstHand {
                 self.delegate.playerInput(enabled: false)
                 revealFaceDownCard()
             } else {

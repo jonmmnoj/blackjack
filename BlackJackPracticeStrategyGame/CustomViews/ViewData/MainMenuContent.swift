@@ -26,13 +26,13 @@ class MainMenuContent {
             MainMenuCellContent(
                 gameType: .freePlay,
                 title: "Free Play",
-                detail: getAttrString(["Simulate a casino game.", "Feedback on play errors. Perfect counting skills.", "Customization for table rules, and skill level."]),
+                detail: getAttrString(["Simulate an authentic game", "Feedback on play errors. Perfect counting skills", "Customization for table rules, and skill level"]),
                 imageName: "Image"),
             
             MainMenuCellContent(
                 gameType: .basicStrategy,
                 title: "Basic Strategy",
-                detail: getAttrString(["Drill basic strategy knowledge.", "Improve basic strategy accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
+                detail: getAttrString(["Drill basic strategy knowledge", "Improve basic strategy accuracy and speed", "Customize table rules, hand type, and number of cards dealt"]),
                 imageName: "basicStrategy"),
             
             MainMenuCellContent(
@@ -44,37 +44,37 @@ class MainMenuContent {
             MainMenuCellContent(
                 gameType: .runningCount,
                 title: "Running Count #2",
-                detail: getAttrString(["Keep the running count during an automated game simulator.", "Improve running count accuracy and speed.", "Customize deal speed."]),
+                detail: getAttrString(["Keep the running count during an automated game simulator", "Improve running count accuracy and speed", "Customize deal speed"]),
                 imageName: "runCount"),
             
             MainMenuCellContent(
                 gameType: .deckRounding,
                 title: "Deck Estimation",
-                detail: getAttrString(["Drill decks remaining in the discard tray.", "Improve estimation accuracy and speed.", "Customize to skill level."]),
+                detail: getAttrString(["Drill decks remaining in the discard tray", "Improve estimation accuracy and speed", "Customize to skill level"]),
                 imageName: "downBox"),
             
             MainMenuCellContent(
                 gameType: .trueCount,
                 title: "True Count",
-                detail: getAttrString(["Drill deck estimation and true count conversion.", "Improve true count conversion accuracy and speed.", "Customize to skill level."]),
+                detail: getAttrString(["Drill deck estimation and true count conversion", "Improve true count conversion accuracy and speed", "Customize to skill level"]),
                 imageName: "divide"),
             
             MainMenuCellContent(
                 gameType: .deviations,
                 title: "Deviations #1",
-                detail: getAttrString(["Drill deviation knowledge.", "Improve deviation accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
+                detail: getAttrString(["Drill deviation knowledge", "Improve deviation accuracy and speed", "Customize table rules, hand type, and number of cards dealt"]),
                 imageName: "deviation"),
             
             MainMenuCellContent(
                 gameType: .deviations_v2,
                 title: "Deviations #2",
-                detail: getAttrString(["Drill deviations on basic strategy.", "Improve deviation accuracy and speed.", "Customize table rules, hand type, and number of cards dealt."]),
+                detail: getAttrString(["Drill deviations on basic strategy", "Improve deviation accuracy and speed", "Customize table rules, hand type, and number of cards dealt"]),
                 imageName: "change"), //scheme
             
             MainMenuCellContent(
                 gameType: .charts,
                 title: "Charts",
-                detail: getAttrString(["Review charts on basic strategy, hard 17, soft 17, and devations.", "Fill-in chart quizes with automated feedback on errors."]),
+                detail: getAttrString(["Review charts on basic strategy, hard 17, soft 17, and devations", "Future update: customize/modify charts, fill-in the blank quiz"]),
                 imageName: "table"),
             
     //        CellContent(

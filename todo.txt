@@ -1,6 +1,14 @@
 #  <#Title#>
 
+- "fill-in charts" - remove text in menu screen
+- running count - dialog - go again? after feedback on input
+- play chip sound for each hand when betting more than 2 hands - only plays 2 times although i'm betting 3 hands.
+- put reserved label on reserved spots
+- put player icon on player active spots
+- put computer icon on computer spots
 
+- computer split aces, was dealt 2, seemed to stand, on ace/2, second hand dealt a blackjack? don't remember. dealer hand a 5 up?
+- can't surrender after splitting. split 8s. was dealt an 8, chose to hit, notify mistake wanted me to surrender.
 - have flag for showing discard tray view, check when showing betting dialog, to remove discrad tray view first.
 
 
@@ -12,3 +20,5 @@
 - discard tray reset defaults odd behavior - because control off screen
     - reproduce: turn off tray. reset defaults. turn off tray. (tray shows). turn on (tray hidden).
 
+
+portrait - 2 hands - left hand doubled - at end of hand - shifted back to right hand and doubled card (turned side ways) moved a bit.

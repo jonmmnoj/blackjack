@@ -88,6 +88,7 @@ class RunningCountV2GameHelper: FreePlayGameTypeStrategy {
                     //card2.isDouble = true
                     //card2.rotationDegrees = card.rotationDegrees
                     card2.customDealDelay = card.customDealDelay
+                    card2.noShadow = true
                     cards.append(card2)
                 }
             }

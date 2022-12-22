@@ -160,6 +160,7 @@
 		FC0EE148276009AD00517546 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
 		FC0EE14A27600DFD00517546 /* clear2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = clear2.mp3; sourceTree = "<group>"; };
 		FC0EE14C27602C4600517546 /* CrashReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashReport.swift; sourceTree = "<group>"; };
+		FC209D3F2919EC6200C1EA91 /* changes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = changes.txt; sourceTree = "<group>"; };
 		FC24C98927094452008A0993 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		FC28958A27E827E800530F7B /* GestureView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GestureView.xib; sourceTree = "<group>"; };
 		FC28958C27E8280C00530F7B /* GestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureView.swift; sourceTree = "<group>"; };
@@ -584,6 +585,7 @@
 			isa = PBXGroup;
 			children = (
 				FC50E5F528FFAED500C8C610 /* todo.txt */,
+				FC209D3F2919EC6200C1EA91 /* changes.txt */,
 				FC7937692694D2E90000ACB7 /* BlackJackPracticeStrategyGame */,
 				FC36EB9327682B500028C3C4 /* ipad */,
 				FC7937682694D2E90000ACB7 /* Products */,
@@ -1188,6 +1190,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = SK8EUT8954;
 				INFOPLIST_FILE = BlackJackPracticeStrategyGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
@@ -1195,6 +1198,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.magdowski.jon.BlackJackPracticeStrategyGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1209,6 +1213,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = SK8EUT8954;
 				INFOPLIST_FILE = BlackJackPracticeStrategyGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
@@ -1216,6 +1221,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.magdowski.jon.BlackJackPracticeStrategyGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

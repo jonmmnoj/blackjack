@@ -81,6 +81,7 @@ class DeviationInputView: UIView {
         increase.tintColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         decrease.tintColor = UIColor(hex: TableColor(rawValue: Settings.shared.buttonColor)!.buttonCode)
         
+               
         textField.keyboardType = UIKeyboardType.numberPad
         textField.returnKeyType = UIReturnKeyType.done
         textField.addNumericAccessory(addPlusMinus: true)

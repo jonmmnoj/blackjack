@@ -1,0 +1,8 @@
+#  <#Title#>
+
+- Dealer attends to last hand if it's a blackjack and two or more hands are in play
+- Removed card shadows on running count drill #1
+- Changed button color option so the plus/minus buttons show when dark mode is on
+- Changed some wording in menu descriptions
+- Changed defaults setting. Action buttons are now on by default
+

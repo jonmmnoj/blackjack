@@ -510,7 +510,13 @@ class Settings {
             UserDefaults.standard.set(newValue, forKey: "cardsAskew")
         }
         get {
-            return UserDefaults.standard.object(forKey: "cardsAskew") as? Bool ?? defaults.cardsAskew
+            let games: [GameType] = [.runningCount_v2]
+            if games.contains(gameType) {
+                return true
+            }
+            
+            let value = UserDefaults.standard.object(forKey: "cardsAskew") as? Bool ?? defaults.cardsAskew
+            return value
         }
     }
     var rcDealInPairs: Bool {
@@ -714,7 +720,7 @@ class Settings {
         var maxRunningCount: Int = 30
         
         var useGestures = true
-        var useButtons = false
+        var useButtons = true
         var buttonsOnLeft = false
         var rcNumberOfPiles = 1
         var rcNumberOfCards = 52

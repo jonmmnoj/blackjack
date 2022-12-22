@@ -297,7 +297,7 @@ enum TableColor: String, CaseIterable {
         case .Yellow: return "#c19833"
         //case .Yellow2: return "#b29000"//#"
         case .Brown: return "#7d6833"
-        case .Black: return "#313131"
+        case .Black: return "#292929"//"#313131"
         case .Gray: return "#6f6f6f"
             
         }
